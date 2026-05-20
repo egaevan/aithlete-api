@@ -1,0 +1,5 @@
+.git/
+.env
+aithlete-api
+*.test
+AGENTS.md

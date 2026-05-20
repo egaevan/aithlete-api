@@ -1,0 +1,1867 @@
+{
+  "uuid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "name": "AITHLETE Mock API",
+  "endpointPrefix": "api",
+  "latency": 0,
+  "port": 3001,
+  "hostname": "",
+  "folders": [],
+  "routes": [
+    {
+      "uuid": "9a1ac4dd-e124-4ab1-894b-0794f9668be0",
+      "type": "http",
+      "documentation": "User login",
+      "method": "post",
+      "endpoint": "auth/login",
+      "responses": [
+        {
+          "uuid": "4134b3f8-f66a-4762-8363-dbc0589cc41d",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Login successful\"\n  },\n  \"data\": {\n    \"user\": {\n      \"id\": \"user-001\",\n      \"email\": \"{{body.email}}\",\n      \"name\": \"Alex Johnson\",\n      \"avatar\": \"https://api.dicebear.com/7.x/avataaars/svg?seed=Alex\",\n      \"createdAt\": \"2025-01-01T00:00:00.000Z\",\n      \"updatedAt\": \"2026-05-20T00:00:00.000Z\"\n    },\n    \"tokens\": {\n      \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mock_access_token\",\n      \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mock_refresh_token\",\n      \"expiresIn\": 3600\n    }\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "26ef9cbd-7cf6-4655-b966-4e3c6cab6fb4",
+      "type": "http",
+      "documentation": "User registration",
+      "method": "post",
+      "endpoint": "auth/register",
+      "responses": [
+        {
+          "uuid": "54c53779-f3fd-44ad-b5a9-e1c7aacfecd4",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Account created successfully\"\n  },\n  \"data\": {\n    \"user\": {\n      \"id\": \"user-002\",\n      \"email\": \"{{body.email}}\",\n      \"name\": \"{{body.name}}\",\n      \"avatar\": \"https://api.dicebear.com/7.x/avataaars/svg?seed={{body.name}}\",\n      \"createdAt\": \"2026-05-20T00:00:00.000Z\",\n      \"updatedAt\": \"2026-05-20T00:00:00.000Z\"\n    },\n    \"tokens\": {\n      \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mock_access_token\",\n      \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mock_refresh_token\",\n      \"expiresIn\": 3600\n    }\n  }\n}",
+          "latency": 0,
+          "statusCode": 201,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "1ab44cdf-526e-4821-8ecc-6caa771c8a8f",
+      "type": "http",
+      "documentation": "User logout",
+      "method": "post",
+      "endpoint": "auth/logout",
+      "responses": [
+        {
+          "uuid": "36c348d7-395c-4d72-81fb-3e5aa3dffda0",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Logged out successfully\"\n  },\n  \"data\": {}\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "9159be50-bcb6-49d2-a981-d21dcd627fe5",
+      "type": "http",
+      "documentation": "Get current user",
+      "method": "get",
+      "endpoint": "auth/me",
+      "responses": [
+        {
+          "uuid": "301d1847-ddb2-4ea3-ab27-1c8c8c53e5e5",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"id\": \"user-001\",\n    \"email\": \"alex@example.com\",\n    \"name\": \"Alex Johnson\",\n    \"avatar\": \"https://api.dicebear.com/7.x/avataaars/svg?seed=Alex\",\n    \"createdAt\": \"2025-01-01T00:00:00.000Z\",\n    \"updatedAt\": \"2026-05-20T00:00:00.000Z\",\n    \"birthday\": \"1995-06-15\",\n    \"gender\": \"male\"\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "a5a8641e-4752-42ab-b1ac-061982c9648b",
+      "type": "http",
+      "documentation": "Refresh access token",
+      "method": "post",
+      "endpoint": "auth/refresh",
+      "responses": [
+        {
+          "uuid": "7c80ace9-f571-409f-a621-cf110df46a83",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mock_new_access_token\",\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mock_new_refresh_token\"\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "604db8c9-b388-4b76-9e0e-a634cfbc03eb",
+      "type": "http",
+      "documentation": "Get workout history",
+      "method": "get",
+      "endpoint": "workouts",
+      "responses": [
+        {
+          "uuid": "08bb3146-955b-4271-81e5-52539186d817",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    {\n      \"id\": \"wo-001\",\n      \"name\": \"Upper Body Power\",\n      \"date\": \"2026-05-19\",\n      \"duration\": 52,\n      \"weightUnit\": \"lbs\",\n      \"exercises\": [\n        {\n          \"id\": \"we-001\",\n          \"exercise\": {\n            \"id\": \"ex-001\",\n            \"name\": \"Bench Press\",\n            \"description\": \"Barbell bench press for chest\",\n            \"muscleGroup\": \"chest\",\n            \"equipment\": \"barbell\",\n            \"difficulty\": \"intermediate\",\n            \"instructions\": [\n              \"Lie on bench\",\n              \"Grip barbell\",\n              \"Lower to chest\",\n              \"Press up\"\n            ],\n            \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n          },\n          \"sets\": [\n            {\n              \"id\": \"s-001\",\n              \"reps\": 10,\n              \"weight\": 135,\n              \"completed\": true,\n              \"rpe\": 7\n            },\n            {\n              \"id\": \"s-002\",\n              \"reps\": 8,\n              \"weight\": 155,\n              \"completed\": true,\n              \"rpe\": 8\n            },\n            {\n              \"id\": \"s-003\",\n              \"reps\": 6,\n              \"weight\": 175,\n              \"completed\": true,\n              \"rpe\": 9\n            }\n          ]\n        },\n        {\n          \"id\": \"we-002\",\n          \"exercise\": {\n            \"id\": \"ex-002\",\n            \"name\": \"Overhead Press\",\n            \"description\": \"Standing barbell overhead press\",\n            \"muscleGroup\": \"shoulders\",\n            \"equipment\": \"barbell\",\n            \"difficulty\": \"intermediate\",\n            \"instructions\": [\n              \"Stand with feet shoulder-width\",\n              \"Press bar overhead\",\n              \"Lower with control\"\n            ],\n            \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n          },\n          \"sets\": [\n            {\n              \"id\": \"s-004\",\n              \"reps\": 10,\n              \"weight\": 95,\n              \"completed\": true,\n              \"rpe\": 7\n            },\n            {\n              \"id\": \"s-005\",\n              \"reps\": 8,\n              \"weight\": 105,\n              \"completed\": true,\n              \"rpe\": 8\n            }\n          ]\n        }\n      ],\n      \"notes\": \"Felt strong today\",\n      \"completed\": true,\n      \"createdAt\": \"2026-05-19T18:00:00.000Z\",\n      \"updatedAt\": \"2026-05-19T19:00:00.000Z\",\n      \"calories\": 320,\n      \"avgHeartRate\": 142\n    },\n    {\n      \"id\": \"wo-002\",\n      \"name\": \"Leg Day\",\n      \"date\": \"2026-05-17\",\n      \"duration\": 65,\n      \"weightUnit\": \"lbs\",\n      \"exercises\": [\n        {\n          \"id\": \"we-003\",\n          \"exercise\": {\n            \"id\": \"ex-003\",\n            \"name\": \"Squat\",\n            \"description\": \"Barbell back squat\",\n            \"muscleGroup\": \"legs\",\n            \"equipment\": \"barbell\",\n            \"difficulty\": \"intermediate\",\n            \"instructions\": [\n              \"Position bar on back\",\n              \"Descend below parallel\",\n              \"Drive up\"\n            ],\n            \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n          },\n          \"sets\": [\n            {\n              \"id\": \"s-006\",\n              \"reps\": 8,\n              \"weight\": 185,\n              \"completed\": true,\n              \"rpe\": 7\n            },\n            {\n              \"id\": \"s-007\",\n              \"reps\": 8,\n              \"weight\": 205,\n              \"completed\": true,\n              \"rpe\": 8\n            },\n            {\n              \"id\": \"s-008\",\n              \"reps\": 6,\n              \"weight\": 225,\n              \"completed\": true,\n              \"rpe\": 9\n            }\n          ]\n        }\n      ],\n      \"completed\": true,\n      \"createdAt\": \"2026-05-17T10:00:00.000Z\",\n      \"updatedAt\": \"2026-05-17T11:05:00.000Z\",\n      \"calories\": 320,\n      \"avgHeartRate\": 142\n    },\n    {\n      \"id\": \"wo-003\",\n      \"name\": \"Back & Biceps\",\n      \"date\": \"2026-05-15\",\n      \"duration\": 48,\n      \"weightUnit\": \"lbs\",\n      \"exercises\": [\n        {\n          \"id\": \"we-005\",\n          \"exercise\": {\n            \"id\": \"ex-005\",\n            \"name\": \"Deadlift\",\n            \"description\": \"Conventional barbell deadlift\",\n            \"muscleGroup\": \"back\",\n            \"equipment\": \"barbell\",\n            \"difficulty\": \"advanced\",\n            \"instructions\": [\n              \"Stand close to bar\",\n              \"Grip bar\",\n              \"Drive through heels\",\n              \"Lock out at top\"\n            ],\n            \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n          },\n          \"sets\": [\n            {\n              \"id\": \"s-011\",\n              \"reps\": 5,\n              \"weight\": 225,\n              \"completed\": true,\n              \"rpe\": 7\n            },\n            {\n              \"id\": \"s-012\",\n              \"reps\": 5,\n              \"weight\": 255,\n              \"completed\": true,\n              \"rpe\": 8\n            },\n            {\n              \"id\": \"s-013\",\n              \"reps\": 3,\n              \"weight\": 275,\n              \"completed\": true,\n              \"rpe\": 9\n            }\n          ]\n        }\n      ],\n      \"completed\": true,\n      \"createdAt\": \"2026-05-15T07:00:00.000Z\",\n      \"updatedAt\": \"2026-05-15T07:48:00.000Z\",\n      \"calories\": 320,\n      \"avgHeartRate\": 142\n    }\n  ],\n  \"meta\": {\n    \"total\": 3,\n    \"page\": 1,\n    \"limit\": 10,\n    \"total_pages\": 1\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "2af326ae-4daf-42d9-a521-6de8eb3d071b",
+      "type": "http",
+      "documentation": "Get single workout",
+      "method": "get",
+      "endpoint": "workouts/:id",
+      "responses": [
+        {
+          "uuid": "5dff1161-460d-4358-b7af-b71eec0619e2",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"id\": \"{{urlParam.id}}\",\n    \"name\": \"Upper Body Power\",\n    \"date\": \"2026-05-19\",\n    \"duration\": 52,\n    \"weightUnit\": \"lbs\",\n    \"exercises\": [\n      {\n        \"id\": \"we-001\",\n        \"exercise\": {\n          \"id\": \"ex-001\",\n          \"name\": \"Bench Press\",\n          \"description\": \"Barbell bench press for chest\",\n          \"muscleGroup\": \"chest\",\n          \"equipment\": \"barbell\",\n          \"difficulty\": \"intermediate\",\n          \"instructions\": [\n            \"Lie on bench\",\n            \"Grip barbell\",\n            \"Lower to chest\",\n            \"Press up\"\n          ],\n          \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n        },\n        \"sets\": [\n          {\n            \"id\": \"s-001\",\n            \"reps\": 10,\n            \"weight\": 135,\n            \"completed\": true,\n            \"rpe\": 7\n          },\n          {\n            \"id\": \"s-002\",\n            \"reps\": 8,\n            \"weight\": 155,\n            \"completed\": true,\n            \"rpe\": 8\n          }\n        ]\n      }\n    ],\n    \"notes\": \"Felt strong today\",\n    \"completed\": true,\n    \"createdAt\": \"2026-05-19T18:00:00.000Z\",\n    \"updatedAt\": \"2026-05-19T19:00:00.000Z\",\n    \"calories\": 320,\n    \"avgHeartRate\": 142\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "5d6cf67c-c017-4c70-af28-434b2c6c7791",
+      "type": "http",
+      "documentation": "Create workout",
+      "method": "post",
+      "endpoint": "workouts",
+      "responses": [
+        {
+          "uuid": "a7766ffe-f449-468b-86b8-32953f648cad",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Workout created\"\n  },\n  \"data\": {\n    \"id\": \"wo-new-001\",\n    \"name\": \"{{body.name}}\",\n    \"date\": \"{{body.date}}\",\n    \"duration\": 0,\n    \"weightUnit\": \"{{body.weightUnit}}\",\n    \"exercises\": [],\n    \"notes\": \"{{body.notes}}\",\n    \"completed\": false,\n    \"createdAt\": \"{{now}}\",\n    \"updatedAt\": \"{{now}}\",\n    \"calories\": 320,\n    \"avgHeartRate\": 142\n  }\n}",
+          "latency": 0,
+          "statusCode": 201,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "a132d300-0cd9-4b4f-b08a-51c9e35843e3",
+      "type": "http",
+      "documentation": "Update workout",
+      "method": "put",
+      "endpoint": "workouts/:id",
+      "responses": [
+        {
+          "uuid": "b798bcdd-2d16-4973-aabb-f4cf2072bc89",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Workout updated\"\n  },\n  \"data\": {\n    \"id\": \"{{urlParam.id}}\",\n    \"name\": \"{{body.name}}\",\n    \"date\": \"{{body.date}}\",\n    \"duration\": 52,\n        \"weightUnit\": \"lbs\",\n    \"exercises\": [],\n    \"completed\": true,\n    \"createdAt\": \"2026-05-19T18:00:00.000Z\",\n    \"updatedAt\": \"{{now}}\"\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "5877e671-0c87-491a-b307-68c5a3e188a8",
+      "type": "http",
+      "documentation": "Delete workout",
+      "method": "delete",
+      "endpoint": "workouts/:id",
+      "responses": [
+        {
+          "uuid": "709f0a08-768f-4bbf-a7ba-9a5cdf449bef",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Workout deleted\"\n  },\n  \"data\": {}\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "e1db64ed-d8ea-4411-8c08-768cc7135007",
+      "type": "http",
+      "documentation": "Get workout statistics",
+      "method": "get",
+      "endpoint": "workouts/stats",
+      "responses": [
+        {
+          "uuid": "4c29522c-936f-4827-8496-367f294628ff",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"totalWorkouts\": 47,\n    \"totalVolume\": 285000,\n    \"avgDuration\": 54,\n    \"currentStreak\": 14\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "2ef2af35-382b-449a-810e-ca91a93fa8fe",
+      "type": "http",
+      "documentation": "Get exercises with filters",
+      "method": "get",
+      "endpoint": "exercises",
+      "responses": [
+        {
+          "uuid": "189c9658-12b3-440d-aa17-93e4faf73e75",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    {\n      \"id\": \"ex-001\",\n      \"name\": \"Bench Press\",\n      \"description\": \"Classic barbell bench press targeting the chest, shoulders, and triceps\",\n      \"muscleGroup\": \"chest\",\n      \"equipment\": \"barbell\",\n      \"difficulty\": \"intermediate\",\n      \"instructions\": [\"Lie flat on bench with eyes under bar\", \"Grip bar slightly wider than shoulder width\", \"Unrack and lower bar to mid-chest\", \"Press bar back up to full arm extension\"],\n      \"imageUrl\": \"https://example.com/bench-press.jpg\",\n      \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n    },\n    {\n      \"id\": \"ex-002\",\n      \"name\": \"Overhead Press\",\n      \"description\": \"Standing barbell overhead press for shoulder development\",\n      \"muscleGroup\": \"shoulders\",\n      \"equipment\": \"barbell\",\n      \"difficulty\": \"intermediate\",\n      \"instructions\": [\"Stand with feet shoulder-width apart\", \"Grip bar at shoulder width\", \"Press bar overhead until arms are fully extended\", \"Lower with control back to shoulders\"],\n      \"imageUrl\": \"https://example.com/ohp.jpg\",\n      \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n    },\n    {\n      \"id\": \"ex-003\",\n      \"name\": \"Squat\",\n      \"description\": \"Barbell back squat, the king of lower body exercises\",\n      \"muscleGroup\": \"legs\",\n      \"equipment\": \"barbell\",\n      \"difficulty\": \"intermediate\",\n      \"instructions\": [\"Position bar on upper back\", \"Stand with feet shoulder-width apart\", \"Descend by bending knees and hips\", \"Go below parallel\", \"Drive through heels to stand\"],\n      \"imageUrl\": \"https://example.com/squat.jpg\",\n      \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n    },\n    {\n      \"id\": \"ex-004\",\n      \"name\": \"Romanian Deadlift\",\n      \"description\": \"Hip hinge movement targeting hamstrings and glutes\",\n      \"muscleGroup\": \"legs\",\n      \"equipment\": \"barbell\",\n      \"difficulty\": \"intermediate\",\n      \"instructions\": [\"Hold barbell at hip level\", \"Keep slight knee bend\", \"Hinge at hips, lowering bar along legs\", \"Feel stretch in hamstrings\", \"Drive hips forward to return\"],\n      \"imageUrl\": \"https://example.com/rdl.jpg\",\n      \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n    },\n    {\n      \"id\": \"ex-005\",\n      \"name\": \"Deadlift\",\n      \"description\": \"Conventional barbell deadlift for total body strength\",\n      \"muscleGroup\": \"back\",\n      \"equipment\": \"barbell\",\n      \"difficulty\": \"advanced\",\n      \"instructions\": [\"Stand with feet hip-width apart, bar over mid-foot\", \"Bend down and grip bar just outside knees\", \"Brace core, flatten back\", \"Drive through floor, extending hips and knees\", \"Stand tall, lock out hips and shoulders\"],\n      \"imageUrl\": \"https://example.com/deadlift.jpg\",\n      \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n    },\n    {\n      \"id\": \"ex-006\",\n      \"name\": \"Pull-Up\",\n      \"description\": \"Bodyweight pull-up for back and bicep development\",\n      \"muscleGroup\": \"back\",\n      \"equipment\": \"bodyweight\",\n      \"difficulty\": \"intermediate\",\n      \"instructions\": [\"Hang from bar with overhand grip\", \"Pull yourself up until chin clears bar\", \"Lower with control to full arm extension\"],\n      \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n    },\n    {\n      \"id\": \"ex-007\",\n      \"name\": \"Dumbbell Curl\",\n      \"description\": \"Alternating dumbbell bicep curl\",\n      \"muscleGroup\": \"arms\",\n      \"equipment\": \"dumbbell\",\n      \"difficulty\": \"beginner\",\n      \"instructions\": [\"Stand holding dumbbells at sides\", \"Curl one dumbbell up, rotating palm up\", \"Lower with control\", \"Alternate arms\"],\n      \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n    },\n    {\n      \"id\": \"ex-008\",\n      \"name\": \"Cable Fly\",\n      \"description\": \"Cable crossover for chest isolation\",\n      \"muscleGroup\": \"chest\",\n      \"equipment\": \"cable\",\n      \"difficulty\": \"beginner\",\n      \"instructions\": [\"Set cables at chest height\", \"Grab handles and step forward\", \"Bring hands together in front of chest\", \"Return with control\"],\n      \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n    },\n    {\n      \"id\": \"ex-009\",\n      \"name\": \"Plank\",\n      \"description\": \"Isometric core exercise\",\n      \"muscleGroup\": \"core\",\n      \"equipment\": \"bodyweight\",\n      \"difficulty\": \"beginner\",\n      \"instructions\": [\"Position forearms on ground\", \"Extend legs behind you\", \"Keep body in straight line\", \"Hold position\"],\n      \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n    },\n    {\n      \"id\": \"ex-010\",\n      \"name\": \"Leg Press\",\n      \"description\": \"Machine leg press for quad development\",\n      \"muscleGroup\": \"legs\",\n      \"equipment\": \"machine\",\n      \"difficulty\": \"beginner\",\n      \"instructions\": [\"Sit in machine with feet on platform\", \"Lower weight by bending knees to 90 degrees\", \"Press platform away until legs are nearly straight\"],\n      \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n    }\n  ],\n  \"meta\": {\n    \"total\": 10,\n    \"page\": 1,\n    \"limit\": 10,\n    \"total_pages\": 1\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "93103540-32cf-4e78-9cb7-b6d9f9603335",
+      "type": "http",
+      "documentation": "Get single exercise",
+      "method": "get",
+      "endpoint": "exercises/:id",
+      "responses": [
+        {
+          "uuid": "052e6ebd-efd1-4f1d-b46b-05326be6117a",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"id\": \"{{urlParam.id}}\",\n    \"name\": \"Bench Press\",\n    \"description\": \"Classic barbell bench press targeting the chest, shoulders, and triceps\",\n    \"muscleGroup\": \"chest\",\n    \"equipment\": \"barbell\",\n    \"difficulty\": \"intermediate\",\n    \"instructions\": [\"Lie flat on bench with eyes under bar\", \"Grip bar slightly wider than shoulder width\", \"Unrack and lower bar to mid-chest\", \"Press bar back up to full arm extension\"],\n    \"imageUrl\": \"https://example.com/bench-press.jpg\",\n    \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "c0ac032a-d386-4d27-98ae-a9a3f81ad091",
+      "type": "http",
+      "documentation": "Get all muscle groups",
+      "method": "get",
+      "endpoint": "exercises/muscle-groups",
+      "responses": [
+        {
+          "uuid": "e49b36e4-9484-4a86-8faa-0fbfda695dc6",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    \"chest\",\n    \"back\",\n    \"legs\",\n    \"shoulders\",\n    \"arms\",\n    \"core\",\n    \"glutes\",\n    \"calves\",\n    \"forearms\",\n    \"traps\",\n    \"full-body\"\n  ],\n  \"meta\": {\n    \"total\": 11,\n    \"page\": 1,\n    \"limit\": 20,\n    \"total_pages\": 1\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "89aba100-4387-4c28-9941-63a487876588",
+      "type": "http",
+      "documentation": "Get body weight history",
+      "method": "get",
+      "endpoint": "progress/body-weight",
+      "responses": [
+        {
+          "uuid": "d5faedb9-a8fe-474d-a247-5cc98b425f3c",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    { \"id\": \"bw-001\", \"date\": \"2026-04-08\", \"weight\": 180.0, \"bodyFatPercentage\": 18.5 },\n    { \"id\": \"bw-002\", \"date\": \"2026-04-15\", \"weight\": 179.5, \"bodyFatPercentage\": 18.2 },\n    { \"id\": \"bw-003\", \"date\": \"2026-04-22\", \"weight\": 178.8, \"bodyFatPercentage\": 17.8 },\n    { \"id\": \"bw-004\", \"date\": \"2026-04-29\", \"weight\": 178.2, \"bodyFatPercentage\": 17.5 },\n    { \"id\": \"bw-005\", \"date\": \"2026-05-06\", \"weight\": 177.5, \"bodyFatPercentage\": 17.2 },\n    { \"id\": \"bw-006\", \"date\": \"2026-05-13\", \"weight\": 177.0, \"bodyFatPercentage\": 16.8 },\n    { \"id\": \"bw-007\", \"date\": \"2026-05-20\", \"weight\": 176.5, \"bodyFatPercentage\": 16.5 }\n  ],\n  \"meta\": {\n    \"total\": 7,\n    \"page\": 1,\n    \"limit\": 20,\n    \"total_pages\": 1\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "50202d54-e58c-4ae9-9f40-6f7abd209433",
+      "type": "http",
+      "documentation": "Add body weight entry",
+      "method": "post",
+      "endpoint": "progress/body-weight",
+      "responses": [
+        {
+          "uuid": "b23207bf-6669-4f04-b181-fda0663e3deb",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Body weight entry added\"\n  },\n  \"data\": {\n    \"id\": \"bw-new-001\",\n    \"date\": \"{{now}}\",\n    \"weight\": {{body.weight}},\n    \"bodyFatPercentage\": {{body.bodyFatPercentage}}\n  }\n}",
+          "latency": 0,
+          "statusCode": 201,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "8d8ac946-918e-4b83-a631-a37990e3be57",
+      "type": "http",
+      "documentation": "Get strength progression",
+      "method": "get",
+      "endpoint": "progress/strength",
+      "responses": [
+        {
+          "uuid": "6295122e-e0ee-4a5b-b236-67ae97cf4df1",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    { \"exercise\": \"Bench Press\", \"date\": \"2026-05-19\", \"oneRepMax\": 185, \"volume\": 4200 },\n    { \"exercise\": \"Squat\", \"date\": \"2026-05-17\", \"oneRepMax\": 225, \"volume\": 5800 },\n    { \"exercise\": \"Deadlift\", \"date\": \"2026-05-15\", \"oneRepMax\": 275, \"volume\": 4100 },\n    { \"exercise\": \"Overhead Press\", \"date\": \"2026-05-19\", \"oneRepMax\": 115, \"volume\": 2000 }\n  ],\n  \"meta\": {\n    \"total\": 4,\n    \"page\": 1,\n    \"limit\": 20,\n    \"total_pages\": 1\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "4dc1d891-e9d4-4936-82a3-4c4fcf019a55",
+      "type": "http",
+      "documentation": "Get workout consistency",
+      "method": "get",
+      "endpoint": "progress/consistency",
+      "responses": [
+        {
+          "uuid": "ea13fa6b-4cba-439c-8f0d-965e4b84b895",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    { \"week\": \"W1\", \"workoutsCompleted\": 4, \"workoutsPlanned\": 5, \"streak\": 4 },\n    { \"week\": \"W2\", \"workoutsCompleted\": 5, \"workoutsPlanned\": 5, \"streak\": 9 },\n    { \"week\": \"W3\", \"workoutsCompleted\": 3, \"workoutsPlanned\": 5, \"streak\": 3 },\n    { \"week\": \"W4\", \"workoutsCompleted\": 5, \"workoutsPlanned\": 5, \"streak\": 8 },\n    { \"week\": \"W5\", \"workoutsCompleted\": 4, \"workoutsPlanned\": 5, \"streak\": 4 },\n    { \"week\": \"W6\", \"workoutsCompleted\": 5, \"workoutsPlanned\": 5, \"streak\": 14 }\n  ],\n  \"meta\": {\n    \"total\": 6,\n    \"page\": 1,\n    \"limit\": 20,\n    \"total_pages\": 1\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "31416141-7e17-43d9-92d0-61f36bc5a90c",
+      "type": "http",
+      "documentation": "Get muscle volume data",
+      "method": "get",
+      "endpoint": "progress/muscle-volume",
+      "responses": [
+        {
+          "uuid": "dfbcd6ab-6a68-43b6-8211-a02bc065d12a",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    { \"muscleGroup\": \"Chest\", \"volume\": 4200, \"sessions\": 8, \"trend\": \"up\" },\n    { \"muscleGroup\": \"Back\", \"volume\": 3800, \"sessions\": 7, \"trend\": \"up\" },\n    { \"muscleGroup\": \"Legs\", \"volume\": 5100, \"sessions\": 6, \"trend\": \"stable\" },\n    { \"muscleGroup\": \"Shoulders\", \"volume\": 2800, \"sessions\": 5, \"trend\": \"up\" },\n    { \"muscleGroup\": \"Arms\", \"volume\": 3200, \"sessions\": 6, \"trend\": \"down\" },\n    { \"muscleGroup\": \"Core\", \"volume\": 1200, \"sessions\": 10, \"trend\": \"stable\" }\n  ],\n  \"meta\": {\n    \"total\": 6,\n    \"page\": 1,\n    \"limit\": 20,\n    \"total_pages\": 1\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "c12967a4-d76c-4bfe-a73f-cf040ad40e76",
+      "type": "http",
+      "documentation": "Get full progress overview",
+      "method": "get",
+      "endpoint": "progress/overview",
+      "responses": [
+        {
+          "uuid": "0a9f69ce-c572-4e31-acfc-1d70340b59d3",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"bodyWeight\": [\n      { \"id\": \"bw-001\", \"date\": \"2026-04-08\", \"weight\": 180.0 },\n      { \"id\": \"bw-002\", \"date\": \"2026-04-15\", \"weight\": 179.5 },\n      { \"id\": \"bw-003\", \"date\": \"2026-04-22\", \"weight\": 178.8 },\n      { \"id\": \"bw-004\", \"date\": \"2026-04-29\", \"weight\": 178.2 },\n      { \"id\": \"bw-005\", \"date\": \"2026-05-06\", \"weight\": 177.5 },\n      { \"id\": \"bw-006\", \"date\": \"2026-05-13\", \"weight\": 177.0 },\n      { \"id\": \"bw-007\", \"date\": \"2026-05-20\", \"weight\": 176.5 }\n    ],\n    \"strength\": [\n      { \"exercise\": \"Bench Press\", \"date\": \"2026-05-19\", \"oneRepMax\": 185, \"volume\": 4200 },\n      { \"exercise\": \"Squat\", \"date\": \"2026-05-17\", \"oneRepMax\": 225, \"volume\": 5800 },\n      { \"exercise\": \"Deadlift\", \"date\": \"2026-05-15\", \"oneRepMax\": 275, \"volume\": 4100 }\n    ],\n    \"consistency\": [\n      { \"week\": \"W1\", \"workoutsCompleted\": 4, \"workoutsPlanned\": 5, \"streak\": 4 },\n      { \"week\": \"W2\", \"workoutsCompleted\": 5, \"workoutsPlanned\": 5, \"streak\": 9 },\n      { \"week\": \"W3\", \"workoutsCompleted\": 3, \"workoutsPlanned\": 5, \"streak\": 3 },\n      { \"week\": \"W4\", \"workoutsCompleted\": 5, \"workoutsPlanned\": 5, \"streak\": 8 },\n      { \"week\": \"W5\", \"workoutsCompleted\": 4, \"workoutsPlanned\": 5, \"streak\": 4 },\n      { \"week\": \"W6\", \"workoutsCompleted\": 5, \"workoutsPlanned\": 5, \"streak\": 14 }\n    ],\n    \"muscleVolume\": [\n      { \"muscleGroup\": \"Chest\", \"volume\": 4200, \"sessions\": 8, \"trend\": \"up\" },\n      { \"muscleGroup\": \"Back\", \"volume\": 3800, \"sessions\": 7, \"trend\": \"up\" },\n      { \"muscleGroup\": \"Legs\", \"volume\": 5100, \"sessions\": 6, \"trend\": \"stable\" },\n      { \"muscleGroup\": \"Shoulders\", \"volume\": 2800, \"sessions\": 5, \"trend\": \"up\" },\n      { \"muscleGroup\": \"Arms\", \"volume\": 3200, \"sessions\": 6, \"trend\": \"down\" }\n    ]\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "7e58a96b-8952-4dd0-96c6-86c051bc53b4",
+      "type": "http",
+      "documentation": "Get AI recommendations",
+      "method": "get",
+      "endpoint": "ai/recommendations",
+      "responses": [
+        {
+          "uuid": "b70a8776-9a8e-4962-ad44-6d9768ce787e",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    {\n      \"id\": \"ai-rec-001\",\n      \"type\": \"workout\",\n      \"title\": \"Upper Body Power\",\n      \"description\": \"Based on your recovery data, I recommend focusing on upper body today. Your legs need another 24-48 hours of recovery. Consider a chest and back superset workout for maximum efficiency.\",\n      \"confidence\": 0.92,\n      \"createdAt\": \"2026-05-20T08:00:00.000Z\"\n    },\n    {\n      \"id\": \"ai-rec-002\",\n      \"type\": \"recovery\",\n      \"title\": \"Active Recovery Day\",\n      \"description\": \"Your fatigue levels suggest a lighter day tomorrow. Consider mobility work or light cardio.\",\n      \"confidence\": 0.85,\n      \"createdAt\": \"2026-05-20T08:00:00.000Z\"\n    },\n    {\n      \"id\": \"ai-rec-003\",\n      \"type\": \"nutrition\",\n      \"title\": \"Increase Protein Intake\",\n      \"description\": \"Based on your training volume, aim for 1.8g protein per kg bodyweight to support recovery.\",\n      \"confidence\": 0.78,\n      \"createdAt\": \"2026-05-20T08:00:00.000Z\"\n    }\n  ],\n  \"meta\": {\n    \"total\": 3,\n    \"page\": 1,\n    \"limit\": 20,\n    \"total_pages\": 1\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "947bbe36-bd4a-4796-98ee-b31a3ce17ca5",
+      "type": "http",
+      "documentation": "Create AI chat session",
+      "method": "post",
+      "endpoint": "ai/chat",
+      "responses": [
+        {
+          "uuid": "8a33433c-a580-498c-be05-d2809daf68d2",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"sessionId\": \"session-{{randomNumber 1000 9999}}\"\n  }\n}",
+          "latency": 0,
+          "statusCode": 201,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "9382ae80-6ef0-416e-aa5d-7278ed42c4ef",
+      "type": "http",
+      "documentation": "Get chat history",
+      "method": "get",
+      "endpoint": "ai/chat/:sessionId",
+      "responses": [
+        {
+          "uuid": "aedef8cb-669f-4cf3-a03c-559c7c4e3b2b",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    {\n      \"id\": \"msg-001\",\n      \"role\": \"assistant\",\n      \"content\": \"Hi Alex! I've analyzed your recent training data. Your upper body strength is improving nicely, but your legs could use more volume. How can I help you today?\",\n      \"timestamp\": \"2026-05-20T07:00:00.000Z\"\n    }\n  ],\n  \"meta\": {\n    \"total\": 1,\n    \"page\": 1,\n    \"limit\": 50,\n    \"total_pages\": 1\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "37bb8e29-8ecb-4722-a41f-12a137e0be0c",
+      "type": "http",
+      "documentation": "Send chat message",
+      "method": "post",
+      "endpoint": "ai/chat/:sessionId",
+      "responses": [
+        {
+          "uuid": "152ef0c4-4b71-474d-a3e6-0d04c8392820",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    {\n      \"id\": \"msg-002\",\n      \"role\": \"user\",\n      \"content\": \"{{body.message}}\",\n      \"timestamp\": \"{{now}}\"\n    },\n    {\n      \"id\": \"msg-003\",\n      \"role\": \"assistant\",\n      \"content\": \"Great question! Based on your current training phase, I'd recommend increasing your bench press volume by adding 2 more working sets. Your recovery data shows your chest is at 92% recovery, so you're well-prepared for additional volume. Try 4 sets of 6-8 reps at 80% of your 1RM.\",\n      \"timestamp\": \"{{now}}\"\n    }\n  ],\n  \"meta\": {\n    \"total\": 2,\n    \"page\": 1,\n    \"limit\": 50,\n    \"total_pages\": 1\n  }\n}",
+          "latency": 500,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "5db946a1-9b0e-42d4-b284-f25551c8cb6c",
+      "type": "http",
+      "documentation": "Get fatigue analysis",
+      "method": "get",
+      "endpoint": "ai/fatigue",
+      "responses": [
+        {
+          "uuid": "25bf4095-0316-4240-9769-33933d816772",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"overall\": 35,\n    \"central\": 40,\n    \"peripheral\": 30,\n    \"status\": \"moderate\",\n    \"factors\": [\n      { \"name\": \"Sleep Quality\", \"value\": 85, \"impact\": \"positive\" },\n      { \"name\": \"Training Volume\", \"value\": 65, \"impact\": \"negative\" },\n      { \"name\": \"Nutrition\", \"value\": 70, \"impact\": \"positive\" },\n      { \"name\": \"Stress Level\", \"value\": 55, \"impact\": \"negative\" },\n      { \"name\": \"Hydration\", \"value\": 80, \"impact\": \"positive\" }\n    ]\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "b496cc25-2755-4a68-a274-c256692bc5c1",
+      "type": "http",
+      "documentation": "Get recovery score",
+      "method": "get",
+      "endpoint": "ai/recovery",
+      "responses": [
+        {
+          "uuid": "6d7a0dd7-3061-4a60-a773-ca40d24d8409",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"overall\": 78,\n    \"sleep\": 85,\n    \"nutrition\": 72,\n    \"stress\": 68,\n    \"muscleRecovery\": [\n      { \"muscleGroup\": \"Chest\", \"recovery\": 92, \"readyForTraining\": true },\n      { \"muscleGroup\": \"Back\", \"recovery\": 78, \"readyForTraining\": true },\n      { \"muscleGroup\": \"Legs\", \"recovery\": 45, \"readyForTraining\": false },\n      { \"muscleGroup\": \"Arms\", \"recovery\": 88, \"readyForTraining\": true },\n      { \"muscleGroup\": \"Shoulders\", \"recovery\": 70, \"readyForTraining\": true },\n      { \"muscleGroup\": \"Core\", \"recovery\": 85, \"readyForTraining\": true }\n    ],\n    \"status\": \"good\"\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "f1f40786-ef14-46b2-8a57-76fb1d4c2566",
+      "type": "http",
+      "documentation": "Get plateau detection results",
+      "method": "get",
+      "endpoint": "ai/plateau",
+      "responses": [
+        {
+          "uuid": "11730d14-1eb8-4790-81bf-becdfe18f0f5",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    {\n      \"detected\": true,\n      \"exercise\": \"Overhead Press\",\n      \"metric\": \"oneRepMax\",\n      \"currentTrend\": \"stalled\",\n      \"weeksStalled\": 3,\n      \"suggestions\": [\n        \"Try a deload week at 60% volume\",\n        \"Switch to dumbbell variations for 2 weeks\",\n        \"Increase rest between sets to 3-4 minutes\"\n      ]\n    }\n  ],\n  \"meta\": {\n    \"total\": 1,\n    \"page\": 1,\n    \"limit\": 20,\n    \"total_pages\": 1\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "7847c1a4-a25d-4fe5-b003-4be96b66057b",
+      "type": "http",
+      "documentation": "Get dashboard overview",
+      "method": "get",
+      "endpoint": "analytics/dashboard",
+      "responses": [
+        {
+          "uuid": "0d07368a-ec07-4e64-97e0-04ab7a15a95a",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"stats\": {\n      \"caloriesBurned\": 2847,\n      \"caloriesTrend\": \"+12%\",\n      \"activeMinutes\": 382,\n      \"activeMinutesTrend\": \"+8%\",\n      \"goalsCompleted\": 1,\n      \"goalsTotal\": 5,\n      \"goalsTrend\": \"20%\",\n      \"avgHeartRate\": 72,\n      \"heartRateTrend\": \"Normal\"\n    },\n    \"weeklyProgress\": [\n      {\n        \"day\": \"Mon\",\n        \"calories\": 420,\n        \"duration\": 45\n      },\n      {\n        \"day\": \"Tue\",\n        \"calories\": 580,\n        \"duration\": 62\n      },\n      {\n        \"day\": \"Wed\",\n        \"calories\": 350,\n        \"duration\": 38\n      },\n      {\n        \"day\": \"Thu\",\n        \"calories\": 620,\n        \"duration\": 70\n      },\n      {\n        \"day\": \"Fri\",\n        \"calories\": 480,\n        \"duration\": 52\n      },\n      {\n        \"day\": \"Sat\",\n        \"calories\": 720,\n        \"duration\": 85\n      },\n      {\n        \"day\": \"Sun\",\n        \"calories\": 280,\n        \"duration\": 30\n      }\n    ],\n    \"streak\": {\n      \"current\": 14,\n      \"personalBest\": 21,\n      \"history\": [\n        true,\n        true,\n        true,\n        true,\n        true,\n        true,\n        true,\n        true,\n        true,\n        true,\n        true,\n        true,\n        true,\n        true\n      ]\n    },\n    \"recentActivity\": [\n      {\n        \"id\": \"act-001\",\n        \"type\": \"workout\",\n        \"title\": \"Upper Body Power completed\",\n        \"description\": \"52 minutes, 5 exercises\",\n        \"timestamp\": \"2026-05-19T19:00:00.000Z\"\n      },\n      {\n        \"id\": \"act-002\",\n        \"type\": \"achievement\",\n        \"title\": \"14 Day Streak!\",\n        \"description\": \"You've worked out 14 days in a row\",\n        \"timestamp\": \"2026-05-19T19:00:00.000Z\"\n      },\n      {\n        \"id\": \"act-003\",\n        \"type\": \"milestone\",\n        \"title\": \"New Bench Press PR\",\n        \"description\": \"175 lbs for 6 reps\",\n        \"timestamp\": \"2026-05-19T18:30:00.000Z\"\n      }\n    ],\n    \"muscleRecovery\": [\n      {\n        \"name\": \"Chest\",\n        \"recovery\": 92\n      },\n      {\n        \"name\": \"Back\",\n        \"recovery\": 78\n      },\n      {\n        \"name\": \"Legs\",\n        \"recovery\": 45\n      },\n      {\n        \"name\": \"Arms\",\n        \"recovery\": 88\n      },\n      {\n        \"name\": \"Core\",\n        \"recovery\": 65\n      }\n    ],\n    \"todaySchedule\": [\n      {\n        \"time\": \"6:30 AM\",\n        \"title\": \"Morning Run\",\n        \"duration\": \"30 min\",\n        \"completed\": true\n      },\n      {\n        \"time\": \"12:00 PM\",\n        \"title\": \"Core Workout\",\n        \"duration\": \"20 min\",\n        \"completed\": true\n      },\n      {\n        \"time\": \"6:00 PM\",\n        \"title\": \"Upper Body\",\n        \"duration\": \"45 min\",\n        \"completed\": false,\n        \"upcoming\": true\n      }\n    ]\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "e1275e2c-00b2-4949-afbb-76e1d1424ae7",
+      "type": "http",
+      "documentation": "Get weekly progress data",
+      "method": "get",
+      "endpoint": "analytics/weekly",
+      "responses": [
+        {
+          "uuid": "1a75a8ee-dd09-46da-bebf-45c296eac29b",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    { \"day\": \"Mon\", \"calories\": 420, \"duration\": 45 },\n    { \"day\": \"Tue\", \"calories\": 580, \"duration\": 62 },\n    { \"day\": \"Wed\", \"calories\": 350, \"duration\": 38 },\n    { \"day\": \"Thu\", \"calories\": 620, \"duration\": 70 },\n    { \"day\": \"Fri\", \"calories\": 480, \"duration\": 52 },\n    { \"day\": \"Sat\", \"calories\": 720, \"duration\": 85 },\n    { \"day\": \"Sun\", \"calories\": 280, \"duration\": 30 }\n  ],\n  \"meta\": {\n    \"total\": 7,\n    \"page\": 1,\n    \"limit\": 20,\n    \"total_pages\": 1\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "0d7e8e0f-cceb-4948-a6a6-7a6793824da1",
+      "type": "http",
+      "documentation": "Get workout streak",
+      "method": "get",
+      "endpoint": "analytics/streak",
+      "responses": [
+        {
+          "uuid": "023c982c-8dd7-4087-b11f-15ed0f20c577",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"current\": 14,\n    \"personalBest\": 21,\n    \"history\": [true, true, true, true, true, true, true, true, true, true, true, true, true, true]\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "752b81cb-89f3-44df-b3e6-c444347e6511",
+      "type": "http",
+      "documentation": "Update user profile",
+      "method": "put",
+      "endpoint": "profile",
+      "responses": [
+        {
+          "uuid": "804d25b8-7aaf-4178-a083-3f23f351917a",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Profile updated successfully\"\n  },\n  \"data\": {\n    \"id\": \"user-001\",\n    \"email\": \"alex@example.com\",\n    \"name\": \"{{body.name}}\",\n    \"avatar\": \"https://api.dicebear.com/7.x/avataaars/svg?seed={{body.name}}\",\n    \"birthday\": \"{{body.birthday}}\",\n    \"gender\": \"{{body.gender}}\",\n    \"createdAt\": \"2025-01-01T00:00:00.000Z\",\n    \"updatedAt\": \"{{now}}\"\n  }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Success",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "88ce08f1-dfbc-491c-afde-b6781a4f92aa",
+      "type": "http",
+      "documentation": "Get all schedules",
+      "method": "get",
+      "endpoint": "schedules",
+      "responses": [
+        {
+          "uuid": "6a6b840f-c331-48ed-9d0d-6209006d5e8b",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": 200,\n    \"status_desc\": \"OK\"\n  },\n  \"data\": [\n    {\n      \"id\": \"sched-1\",\n      \"date\": \"2026-05-20\",\n      \"time\": \"06:30\",\n      \"title\": \"Morning Run\",\n      \"duration\": \"30 min\",\n      \"type\": \"cardio\",\n      \"completed\": true,\n      \"notes\": \"\",\n      \"createdAt\": \"2026-05-19T10:00:00Z\",\n      \"updatedAt\": \"2026-05-20T06:30:00Z\"\n    },\n    {\n      \"id\": \"sched-2\",\n      \"date\": \"2026-05-20\",\n      \"time\": \"12:00\",\n      \"title\": \"Core Workout\",\n      \"duration\": \"20 min\",\n      \"type\": \"workout\",\n      \"completed\": true,\n      \"notes\": \"\",\n      \"createdAt\": \"2026-05-19T10:00:00Z\",\n      \"updatedAt\": \"2026-05-20T12:00:00Z\"\n    },\n    {\n      \"id\": \"sched-3\",\n      \"date\": \"2026-05-20\",\n      \"time\": \"18:00\",\n      \"title\": \"Upper Body\",\n      \"duration\": \"45 min\",\n      \"type\": \"workout\",\n      \"completed\": false,\n      \"notes\": \"Focus on chest\",\n      \"createdAt\": \"2026-05-19T10:00:00Z\",\n      \"updatedAt\": \"2026-05-19T10:00:00Z\"\n    },\n    {\n      \"id\": \"sched-4\",\n      \"date\": \"2026-05-21\",\n      \"time\": \"07:00\",\n      \"title\": \"Yoga Session\",\n      \"duration\": \"40 min\",\n      \"type\": \"stretching\",\n      \"completed\": false,\n      \"notes\": \"\",\n      \"createdAt\": \"2026-05-19T10:00:00Z\",\n      \"updatedAt\": \"2026-05-19T10:00:00Z\"\n    },\n    {\n      \"id\": \"sched-5\",\n      \"date\": \"2026-05-21\",\n      \"time\": \"17:00\",\n      \"title\": \"Leg Day\",\n      \"duration\": \"50 min\",\n      \"type\": \"workout\",\n      \"completed\": false,\n      \"notes\": \"\",\n      \"createdAt\": \"2026-05-19T10:00:00Z\",\n      \"updatedAt\": \"2026-05-19T10:00:00Z\"\n    },\n    {\n      \"id\": \"sched-6\",\n      \"date\": \"2026-05-22\",\n      \"time\": \"08:00\",\n      \"title\": \"Rest Day\",\n      \"duration\": \"all day\",\n      \"type\": \"rest\",\n      \"completed\": false,\n      \"notes\": \"Recovery\",\n      \"createdAt\": \"2026-05-19T10:00:00Z\",\n      \"updatedAt\": \"2026-05-19T10:00:00Z\"\n    }\n  ]\n}",
+          "label": "",
+          "headers": [],
+          "latency": 0,
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "statusCode": 200,
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "3dc4b394-e127-42db-8b26-768f5d20676e",
+      "type": "http",
+      "documentation": "Get today's schedules",
+      "method": "get",
+      "endpoint": "schedules/today",
+      "responses": [
+        {
+          "uuid": "9ade3848-a2a8-4bf5-a379-6dfb0a1ce3df",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": 200,\n    \"status_desc\": \"OK\"\n  },\n  \"data\": [\n    {\n      \"id\": \"sched-1\",\n      \"date\": \"2026-05-20\",\n      \"time\": \"06:30\",\n      \"title\": \"Morning Run\",\n      \"duration\": \"30 min\",\n      \"type\": \"cardio\",\n      \"completed\": true,\n      \"notes\": \"\",\n      \"createdAt\": \"2026-05-19T10:00:00Z\",\n      \"updatedAt\": \"2026-05-20T06:30:00Z\"\n    },\n    {\n      \"id\": \"sched-2\",\n      \"date\": \"2026-05-20\",\n      \"time\": \"12:00\",\n      \"title\": \"Core Workout\",\n      \"duration\": \"20 min\",\n      \"type\": \"workout\",\n      \"completed\": true,\n      \"notes\": \"\",\n      \"createdAt\": \"2026-05-19T10:00:00Z\",\n      \"updatedAt\": \"2026-05-20T12:00:00Z\"\n    },\n    {\n      \"id\": \"sched-3\",\n      \"date\": \"2026-05-20\",\n      \"time\": \"18:00\",\n      \"title\": \"Upper Body\",\n      \"duration\": \"45 min\",\n      \"type\": \"workout\",\n      \"completed\": false,\n      \"notes\": \"Focus on chest\",\n      \"createdAt\": \"2026-05-19T10:00:00Z\",\n      \"updatedAt\": \"2026-05-19T10:00:00Z\"\n    }\n  ]\n}",
+          "label": "",
+          "headers": [],
+          "latency": 0,
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "statusCode": 200,
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "008c491a-0a32-4aee-bd44-39e73cc44b38",
+      "type": "http",
+      "documentation": "Get schedule by ID",
+      "method": "get",
+      "endpoint": "schedules/:id",
+      "responses": [
+        {
+          "uuid": "d100430e-5741-4b23-82a5-e046978a6d9c",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": 200,\n    \"status_desc\": \"OK\"\n  },\n  \"data\": {\n    \"id\": \"sched-1\",\n    \"date\": \"2026-05-20\",\n    \"time\": \"06:30\",\n    \"title\": \"Morning Run\",\n    \"duration\": \"30 min\",\n    \"type\": \"cardio\",\n    \"completed\": true,\n    \"notes\": \"\",\n    \"createdAt\": \"2026-05-19T10:00:00Z\",\n    \"updatedAt\": \"2026-05-20T06:30:00Z\"\n  }\n}",
+          "label": "",
+          "headers": [],
+          "latency": 0,
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "statusCode": 200,
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "d65c59ae-0ea3-460f-bdeb-4023a1d9bfa8",
+      "type": "http",
+      "documentation": "Create new schedule",
+      "method": "post",
+      "endpoint": "schedules",
+      "responses": [
+        {
+          "uuid": "2fab9546-9f83-4614-8aec-e9752b01c69e",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": 201,\n    \"status_desc\": \"Created\"\n  },\n  \"data\": {\n    \"id\": \"sched-new\",\n    \"date\": \"{{body 'date'}}\",\n    \"time\": \"{{body 'time'}}\",\n    \"title\": \"{{body 'title'}}\",\n    \"duration\": \"{{body 'duration'}}\",\n    \"type\": \"{{body 'type'}}\",\n    \"completed\": false,\n    \"notes\": \"{{body 'notes' ''}}\",\n    \"createdAt\": \"2026-05-20T10:00:00Z\",\n    \"updatedAt\": \"2026-05-20T10:00:00Z\"\n  }\n}",
+          "label": "",
+          "headers": [],
+          "latency": 0,
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "statusCode": 200,
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "116f7f87-b428-4c09-8730-3f0a48bcfda5",
+      "type": "http",
+      "documentation": "Update schedule",
+      "method": "put",
+      "endpoint": "schedules/:id",
+      "responses": [
+        {
+          "uuid": "bc536f9b-bf62-4d09-94be-0b8ca6cf80a2",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": 200,\n    \"status_desc\": \"OK\"\n  },\n  \"data\": {\n    \"id\": \"{{urlparam 'id'}}\",\n    \"date\": \"{{body 'date' '2026-05-20'}}\",\n    \"time\": \"{{body 'time' '07:00'}}\",\n    \"title\": \"{{body 'title' 'Updated Schedule'}}\",\n    \"duration\": \"{{body 'duration' '30 min'}}\",\n    \"type\": \"{{body 'type' 'workout'}}\",\n    \"completed\": false,\n    \"notes\": \"{{body 'notes' ''}}\",\n    \"createdAt\": \"2026-05-19T10:00:00Z\",\n    \"updatedAt\": \"2026-05-20T10:00:00Z\"\n  }\n}",
+          "label": "",
+          "headers": [],
+          "latency": 0,
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "statusCode": 200,
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "964baed4-7dc7-4fda-9da0-cf1b74cb82a1",
+      "type": "http",
+      "documentation": "Delete schedule",
+      "method": "delete",
+      "endpoint": "schedules/:id",
+      "responses": [
+        {
+          "uuid": "eb557851-9aae-4714-a9ce-cc9e68b62e4c",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": 200,\n    \"status_desc\": \"Deleted\"\n  }\n}",
+          "label": "",
+          "headers": [],
+          "latency": 0,
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "statusCode": 200,
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "b3824896-d7ff-4565-9b91-ae08677edbf5",
+      "type": "http",
+      "documentation": "Toggle schedule completion",
+      "method": "patch",
+      "endpoint": "schedules/:id/toggle",
+      "responses": [
+        {
+          "uuid": "8f1c41d4-14c9-477f-8e1f-978552225b74",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": 200,\n    \"status_desc\": \"OK\"\n  },\n  \"data\": {\n    \"id\": \"{{urlparam 'id'}}\",\n    \"date\": \"2026-05-20\",\n    \"time\": \"07:00\",\n    \"title\": \"Updated Schedule\",\n    \"duration\": \"30 min\",\n    \"type\": \"workout\",\n    \"completed\": true,\n    \"notes\": \"\",\n    \"createdAt\": \"2026-05-19T10:00:00Z\",\n    \"updatedAt\": \"2026-05-20T10:00:00Z\"\n  }\n}",
+          "label": "",
+          "headers": [],
+          "latency": 0,
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "statusCode": 200,
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "b012db87-41b2-42a0-a719-c1e1e80fe6f2",
+      "type": "http",
+      "documentation": "Get analytics overview stats",
+      "method": "get",
+      "endpoint": "analytics/overview",
+      "responses": [
+        {
+          "uuid": "92326ec7-e1fb-4789-adc5-79a7fdbbdd9e",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": 200,\n    \"status_desc\": \"OK\"\n  },\n  \"data\": {\n    \"totalVolume\": 80100,\n    \"totalVolumeTrend\": \"+15%\",\n    \"avgSession\": 58,\n    \"avgSessionTrend\": \"+5 min\",\n    \"sessionsPerMonth\": 22,\n    \"sessionsPerMonthTrend\": \"+3\",\n    \"goalCompletion\": 20,\n    \"goalCompletionTrend\": \"+4%\"\n  }\n}",
+          "label": "",
+          "headers": [],
+          "latency": 0,
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "statusCode": 200,
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "b972f23c-2a91-455e-bfe5-66ddf4d2c4ca",
+      "type": "http",
+      "documentation": "Get weekly training volume",
+      "method": "get",
+      "endpoint": "analytics/volume/weekly",
+      "responses": [
+        {
+          "uuid": "6b47ac9e-e240-4116-a4e3-085bc1d8eea2",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": 200,\n    \"status_desc\": \"OK\"\n  },\n  \"data\": [\n    {\n      \"week\": \"W1\",\n      \"volume\": 12500\n    },\n    {\n      \"week\": \"W2\",\n      \"volume\": 14200\n    },\n    {\n      \"week\": \"W3\",\n      \"volume\": 13800\n    },\n    {\n      \"week\": \"W4\",\n      \"volume\": 15600\n    },\n    {\n      \"week\": \"W5\",\n      \"volume\": 16200\n    },\n    {\n      \"week\": \"W6\",\n      \"volume\": 17800\n    }\n  ]\n}",
+          "label": "",
+          "headers": [],
+          "latency": 0,
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "statusCode": 200,
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "b35ebc78-d75e-4c03-890c-ff016f7db55b",
+      "type": "http",
+      "documentation": "Get muscle group volume distribution",
+      "method": "get",
+      "endpoint": "analytics/volume/muscle",
+      "responses": [
+        {
+          "uuid": "3f41a1f6-a515-4e7f-8c14-6aef6a4a8cbb",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": 200,\n    \"status_desc\": \"OK\"\n  },\n  \"data\": [\n    {\n      \"muscle\": \"Chest\",\n      \"volume\": 4200\n    },\n    {\n      \"muscle\": \"Back\",\n      \"volume\": 3800\n    },\n    {\n      \"muscle\": \"Legs\",\n      \"volume\": 5100\n    },\n    {\n      \"muscle\": \"Shoulders\",\n      \"volume\": 2800\n    },\n    {\n      \"muscle\": \"Arms\",\n      \"volume\": 3200\n    }\n  ]\n}",
+          "label": "",
+          "headers": [],
+          "latency": 0,
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "statusCode": 200,
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "3691e804-482d-429d-8e4d-7781630e6a8e",
+      "type": "http",
+      "documentation": "Get all goals",
+      "method": "get",
+      "endpoint": "goals",
+      "responses": [
+        {
+          "uuid": "7e13f18a-b6d2-4420-b665-32667a8d06a9",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": 200,\n    \"status_desc\": \"OK\"\n  },\n  \"data\": [\n    {\n      \"id\": \"goal-1\",\n      \"title\": \"Complete 20 workouts this month\",\n      \"type\": \"workouts\",\n      \"target\": 20,\n      \"current\": 14,\n      \"unit\": \"sessions\",\n      \"period\": \"monthly\",\n      \"deadline\": \"2026-05-31\",\n      \"completed\": false,\n      \"createdAt\": \"2026-05-01T00:00:00Z\",\n      \"updatedAt\": \"2026-05-18T10:00:00Z\"\n    },\n    {\n      \"id\": \"goal-2\",\n      \"title\": \"Burn 10,000 calories this month\",\n      \"type\": \"calories\",\n      \"target\": 10000,\n      \"current\": 7200,\n      \"unit\": \"kcal\",\n      \"period\": \"monthly\",\n      \"deadline\": \"2026-05-31\",\n      \"completed\": false,\n      \"createdAt\": \"2026-05-01T00:00:00Z\",\n      \"updatedAt\": \"2026-05-18T10:00:00Z\"\n    },\n    {\n      \"id\": \"goal-3\",\n      \"title\": \"Lift 50,000 lbs total volume this week\",\n      \"type\": \"volume\",\n      \"target\": 50000,\n      \"current\": 50000,\n      \"unit\": \"lbs\",\n      \"period\": \"weekly\",\n      \"deadline\": \"2026-05-25\",\n      \"completed\": true,\n      \"createdAt\": \"2026-05-19T00:00:00Z\",\n      \"updatedAt\": \"2026-05-20T08:00:00Z\"\n    },\n    {\n      \"id\": \"goal-4\",\n      \"title\": \"Maintain 7-day workout streak\",\n      \"type\": \"streak\",\n      \"target\": 7,\n      \"current\": 5,\n      \"unit\": \"days\",\n      \"period\": \"one-time\",\n      \"deadline\": \"\",\n      \"completed\": false,\n      \"createdAt\": \"2026-05-16T00:00:00Z\",\n      \"updatedAt\": \"2026-05-20T06:30:00Z\"\n    },\n    {\n      \"id\": \"goal-5\",\n      \"title\": \"Run 100 miles this month\",\n      \"type\": \"custom\",\n      \"target\": 100,\n      \"current\": 62,\n      \"unit\": \"miles\",\n      \"period\": \"monthly\",\n      \"deadline\": \"2026-05-31\",\n      \"completed\": false,\n      \"createdAt\": \"2026-05-01T00:00:00Z\",\n      \"updatedAt\": \"2026-05-18T10:00:00Z\"\n    }\n  ]\n}",
+          "label": "",
+          "headers": [],
+          "latency": 0,
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "statusCode": 200,
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "8c58ab18-569b-4620-acb2-0c1fb9bd8414",
+      "type": "http",
+      "documentation": "Get goal by ID",
+      "method": "get",
+      "endpoint": "goals/:id",
+      "responses": [
+        {
+          "uuid": "2293bfc0-caeb-423a-9c18-7d68c36cdfc3",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": 200,\n    \"status_desc\": \"OK\"\n  },\n  \"data\": {\n    \"id\": \"goal-1\",\n    \"title\": \"Complete 20 workouts this month\",\n    \"type\": \"workouts\",\n    \"target\": 20,\n    \"current\": 14,\n    \"unit\": \"sessions\",\n    \"period\": \"monthly\",\n    \"deadline\": \"2026-05-31\",\n    \"completed\": false,\n    \"createdAt\": \"2026-05-01T00:00:00Z\",\n    \"updatedAt\": \"2026-05-18T10:00:00Z\"\n  }\n}",
+          "label": "",
+          "headers": [],
+          "latency": 0,
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "statusCode": 200,
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "02c2ae12-05f2-4d56-9cdd-faf7f1135221",
+      "type": "http",
+      "documentation": "Create new goal",
+      "method": "post",
+      "endpoint": "goals",
+      "responses": [
+        {
+          "uuid": "e0a084d2-0e85-4c65-b884-44750931f45e",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": 201,\n    \"status_desc\": \"Created\"\n  },\n  \"data\": {\n    \"id\": \"goal-new\",\n    \"title\": \"{{body 'title'}}\",\n    \"type\": \"{{body 'type'}}\",\n    \"target\": \"{{body 'target'}}\",\n    \"current\": 0,\n    \"unit\": \"{{body 'unit'}}\",\n    \"period\": \"{{body 'period'}}\",\n    \"deadline\": \"{{body 'deadline' ''}}\",\n    \"completed\": false,\n    \"createdAt\": \"2026-05-20T10:00:00Z\",\n    \"updatedAt\": \"2026-05-20T10:00:00Z\"\n  }\n}",
+          "label": "",
+          "headers": [],
+          "latency": 0,
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "statusCode": 200,
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "b7a8a9f3-5c95-4fab-865a-ae8fcc4cab53",
+      "type": "http",
+      "documentation": "Update goal",
+      "method": "put",
+      "endpoint": "goals/:id",
+      "responses": [
+        {
+          "uuid": "9c8dcdb4-6989-4e91-99e7-f92f495f988d",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": 200,\n    \"status_desc\": \"OK\"\n  },\n  \"data\": {\n    \"id\": \"{{urlparam 'id'}}\",\n    \"title\": \"{{body 'title' 'Updated Goal'}}\",\n    \"type\": \"{{body 'type' 'workouts'}}\",\n    \"target\": \"{{body 'target' 10}}\",\n    \"current\": \"{{body 'current' 0}}\",\n    \"unit\": \"{{body 'unit' 'sessions'}}\",\n    \"period\": \"{{body 'period' 'weekly'}}\",\n    \"deadline\": \"{{body 'deadline' ''}}\",\n    \"completed\": false,\n    \"createdAt\": \"2026-05-01T00:00:00Z\",\n    \"updatedAt\": \"2026-05-20T10:00:00Z\"\n  }\n}",
+          "label": "",
+          "headers": [],
+          "latency": 0,
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "statusCode": 200,
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "ec5827db-466e-479f-99da-49a9f7702143",
+      "type": "http",
+      "documentation": "Delete goal",
+      "method": "delete",
+      "endpoint": "goals/:id",
+      "responses": [
+        {
+          "uuid": "f5bff1f3-235f-4d8b-bf38-441e963e34fe",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": 200,\n    \"status_desc\": \"Deleted\"\n  }\n}",
+          "label": "",
+          "headers": [],
+          "latency": 0,
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "statusCode": 200,
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "d72e0b6c-06ad-48c2-9a46-f8499d37eb31",
+      "type": "http",
+      "documentation": "Toggle goal completion",
+      "method": "patch",
+      "endpoint": "goals/:id/toggle",
+      "responses": [
+        {
+          "uuid": "ae9c97c1-72cf-41ec-9c1d-ee69f4bbeaaa",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": 200,\n    \"status_desc\": \"OK\"\n  },\n  \"data\": {\n    \"id\": \"{{urlparam 'id'}}\",\n    \"title\": \"Updated Goal\",\n    \"type\": \"workouts\",\n    \"target\": 20,\n    \"current\": 20,\n    \"unit\": \"sessions\",\n    \"period\": \"monthly\",\n    \"deadline\": \"2026-05-31\",\n    \"completed\": true,\n    \"createdAt\": \"2026-05-01T00:00:00Z\",\n    \"updatedAt\": \"2026-05-20T10:00:00Z\"\n  }\n}",
+          "label": "",
+          "headers": [],
+          "latency": 0,
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "statusCode": 200,
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "4e7ba466-d21c-4a6b-9458-acec2b0af599",
+      "type": "http",
+      "documentation": "Update goal progress",
+      "method": "patch",
+      "endpoint": "goals/:id/progress",
+      "responses": [
+        {
+          "uuid": "c4712392-b7f6-40c7-803d-1ab8bc1d384e",
+          "body": "{\n  \"transaction\": {\n    \"status_code\": 200,\n    \"status_desc\": \"OK\"\n  },\n  \"data\": {\n    \"id\": \"{{urlparam 'id'}}\",\n    \"title\": \"Updated Goal\",\n    \"type\": \"workouts\",\n    \"target\": 20,\n    \"current\": \"{{body 'current' 15}}\",\n    \"unit\": \"sessions\",\n    \"period\": \"monthly\",\n    \"deadline\": \"2026-05-31\",\n    \"completed\": false,\n    \"createdAt\": \"2026-05-01T00:00:00Z\",\n    \"updatedAt\": \"2026-05-20T10:00:00Z\"\n  }\n}",
+          "label": "",
+          "headers": [],
+          "latency": 0,
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "statusCode": 200,
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    }
+  ],
+  "cors": true,
+  "data": [],
+  "callbacks": [],
+  "lastMigration": 33,
+  "rootChildren": [
+    {
+      "type": "route",
+      "uuid": "9a1ac4dd-e124-4ab1-894b-0794f9668be0"
+    },
+    {
+      "type": "route",
+      "uuid": "26ef9cbd-7cf6-4655-b966-4e3c6cab6fb4"
+    },
+    {
+      "type": "route",
+      "uuid": "1ab44cdf-526e-4821-8ecc-6caa771c8a8f"
+    },
+    {
+      "type": "route",
+      "uuid": "9159be50-bcb6-49d2-a981-d21dcd627fe5"
+    },
+    {
+      "type": "route",
+      "uuid": "a5a8641e-4752-42ab-b1ac-061982c9648b"
+    },
+    {
+      "type": "route",
+      "uuid": "604db8c9-b388-4b76-9e0e-a634cfbc03eb"
+    },
+    {
+      "type": "route",
+      "uuid": "2af326ae-4daf-42d9-a521-6de8eb3d071b"
+    },
+    {
+      "type": "route",
+      "uuid": "5d6cf67c-c017-4c70-af28-434b2c6c7791"
+    },
+    {
+      "type": "route",
+      "uuid": "a132d300-0cd9-4b4f-b08a-51c9e35843e3"
+    },
+    {
+      "type": "route",
+      "uuid": "5877e671-0c87-491a-b307-68c5a3e188a8"
+    },
+    {
+      "type": "route",
+      "uuid": "e1db64ed-d8ea-4411-8c08-768cc7135007"
+    },
+    {
+      "type": "route",
+      "uuid": "2ef2af35-382b-449a-810e-ca91a93fa8fe"
+    },
+    {
+      "type": "route",
+      "uuid": "93103540-32cf-4e78-9cb7-b6d9f9603335"
+    },
+    {
+      "type": "route",
+      "uuid": "c0ac032a-d386-4d27-98ae-a9a3f81ad091"
+    },
+    {
+      "type": "route",
+      "uuid": "89aba100-4387-4c28-9941-63a487876588"
+    },
+    {
+      "type": "route",
+      "uuid": "50202d54-e58c-4ae9-9f40-6f7abd209433"
+    },
+    {
+      "type": "route",
+      "uuid": "8d8ac946-918e-4b83-a631-a37990e3be57"
+    },
+    {
+      "type": "route",
+      "uuid": "4dc1d891-e9d4-4936-82a3-4c4fcf019a55"
+    },
+    {
+      "type": "route",
+      "uuid": "31416141-7e17-43d9-92d0-61f36bc5a90c"
+    },
+    {
+      "type": "route",
+      "uuid": "c12967a4-d76c-4bfe-a73f-cf040ad40e76"
+    },
+    {
+      "type": "route",
+      "uuid": "7e58a96b-8952-4dd0-96c6-86c051bc53b4"
+    },
+    {
+      "type": "route",
+      "uuid": "947bbe36-bd4a-4796-98ee-b31a3ce17ca5"
+    },
+    {
+      "type": "route",
+      "uuid": "9382ae80-6ef0-416e-aa5d-7278ed42c4ef"
+    },
+    {
+      "type": "route",
+      "uuid": "37bb8e29-8ecb-4722-a41f-12a137e0be0c"
+    },
+    {
+      "type": "route",
+      "uuid": "5db946a1-9b0e-42d4-b284-f25551c8cb6c"
+    },
+    {
+      "type": "route",
+      "uuid": "b496cc25-2755-4a68-a274-c256692bc5c1"
+    },
+    {
+      "type": "route",
+      "uuid": "f1f40786-ef14-46b2-8a57-76fb1d4c2566"
+    },
+    {
+      "type": "route",
+      "uuid": "7847c1a4-a25d-4fe5-b003-4be96b66057b"
+    },
+    {
+      "type": "route",
+      "uuid": "e1275e2c-00b2-4949-afbb-76e1d1424ae7"
+    },
+    {
+      "type": "route",
+      "uuid": "0d7e8e0f-cceb-4948-a6a6-7a6793824da1"
+    },
+    {
+      "type": "route",
+      "uuid": "752b81cb-89f3-44df-b3e6-c444347e6511"
+    },
+    {
+      "type": "route",
+      "uuid": "88ce08f1-dfbc-491c-afde-b6781a4f92aa"
+    },
+    {
+      "type": "route",
+      "uuid": "3dc4b394-e127-42db-8b26-768f5d20676e"
+    },
+    {
+      "type": "route",
+      "uuid": "008c491a-0a32-4aee-bd44-39e73cc44b38"
+    },
+    {
+      "type": "route",
+      "uuid": "d65c59ae-0ea3-460f-bdeb-4023a1d9bfa8"
+    },
+    {
+      "type": "route",
+      "uuid": "116f7f87-b428-4c09-8730-3f0a48bcfda5"
+    },
+    {
+      "type": "route",
+      "uuid": "964baed4-7dc7-4fda-9da0-cf1b74cb82a1"
+    },
+    {
+      "type": "route",
+      "uuid": "b3824896-d7ff-4565-9b91-ae08677edbf5"
+    },
+    {
+      "type": "route",
+      "uuid": "b012db87-41b2-42a0-a719-c1e1e80fe6f2"
+    },
+    {
+      "type": "route",
+      "uuid": "b972f23c-2a91-455e-bfe5-66ddf4d2c4ca"
+    },
+    {
+      "type": "route",
+      "uuid": "b35ebc78-d75e-4c03-890c-ff016f7db55b"
+    },
+    {
+      "type": "route",
+      "uuid": "3691e804-482d-429d-8e4d-7781630e6a8e"
+    },
+    {
+      "type": "route",
+      "uuid": "8c58ab18-569b-4620-acb2-0c1fb9bd8414"
+    },
+    {
+      "type": "route",
+      "uuid": "02c2ae12-05f2-4d56-9cdd-faf7f1135221"
+    },
+    {
+      "type": "route",
+      "uuid": "b7a8a9f3-5c95-4fab-865a-ae8fcc4cab53"
+    },
+    {
+      "type": "route",
+      "uuid": "ec5827db-466e-479f-99da-49a9f7702143"
+    },
+    {
+      "type": "route",
+      "uuid": "d72e0b6c-06ad-48c2-9a46-f8499d37eb31"
+    },
+    {
+      "type": "route",
+      "uuid": "4e7ba466-d21c-4a6b-9458-acec2b0af599"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "headers": [],
+  "proxyReqHeaders": [],
+  "proxyResHeaders": []
+}

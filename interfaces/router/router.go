@@ -5,6 +5,7 @@ import (
 	"github.com/aithlete/aithlete-api/infrastructure/logger"
 	"github.com/aithlete/aithlete-api/interfaces/http/handler"
 	"github.com/aithlete/aithlete-api/interfaces/http/handler/auth"
+	exercisehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/exercise"
 	goalhandler "github.com/aithlete/aithlete-api/interfaces/http/handler/goal"
 	progresshandler "github.com/aithlete/aithlete-api/interfaces/http/handler/progress"
 	profilehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/profile"
@@ -23,7 +24,7 @@ type Handlers struct {
 	Progress *progresshandler.Handler
 	Schedule *schedulehandler.Handler
 	Goal     *goalhandler.Handler
-	Exercise *handler.ExerciseHandler
+	Exercise *exercisehandler.Handler
 	AI       *handler.AIHandler
 	Analytics *handler.AnalyticsHandler
 }

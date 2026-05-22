@@ -11,15 +11,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (h *Handler) List(c echo.Context) error {
-	results, err := h.listExercisesUseCase.List(c.Request().Context())
-	if err != nil {
-		return response.InternalServerError(c, message.MsgInternalError)
-	}
-
-	return response.SuccessOK(c, http.StatusOK, code.Success, toExerciseResponseList(results))
-}
-
 func (h *Handler) Get(c echo.Context) error {
 	id := c.Param("id")
 
@@ -32,11 +23,4 @@ func (h *Handler) Get(c echo.Context) error {
 	}
 
 	return response.SuccessOK(c, http.StatusOK, code.Success, toExerciseResponse(result))
-}
-
-func (h *Handler) ListMuscleGroups(c echo.Context) error {
-	groups := h.listMuscleGroupsUseCase.ListMuscleGroups()
-	resp := toMuscleGroupResponseList(groups)
-	meta := response.NewMeta(len(resp), 1, 20)
-	return response.SuccessWithMeta(c, http.StatusOK, code.Success, message.MsgSuccess, resp, meta)
 }

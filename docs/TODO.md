@@ -2,6 +2,12 @@
 
 ## Principles
 
+### Database Migrations
+- Always create `.up.sql` and `.down.sql` migration files when implementing a new API (entity table)
+- Migration files go in `migrations/` directory, numbered sequentially (000001, 000002, ...)
+- Each migration file has a unique sequence number and a descriptive name (e.g., `000004_create_schedules_table.up.sql`)
+- Migrations must include proper indexes, foreign keys with `ON DELETE CASCADE`, and defaults
+
 ### Clean Architecture Dependency Rule
 - Domain layer: pure Go, zero external dependencies, no struct tags. **Defines all interfaces** (repository, services)
 - Application layer: depends only on domain layer (interfaces, not concrete implementations), **no json tags**
@@ -291,7 +297,7 @@ interfaces/http/handler/<domain>/<endpoint>_test.go         — Handler tests (h
   └── [x] `users` — `migrations/000001_create_users_table.up.sql` (id UUID, email, name, password, avatar, birthday, gender, timestamps)
   └── [x] `workouts` — `migrations/000002_create_workouts_tables.up.sql` (id UUID, user_id FK, name, date, duration, weight_unit, notes, completed, calories, avg_heart_rate, exercises JSONB, timestamps)
   └── [ ] `exercises` — `migrations/000003_create_exercises_table.up.sql` (id UUID, name, description, muscle_group, equipment, difficulty, instructions TEXT[], image_url, timestamps)
-  └── [ ] `schedules` — `migrations/000004_create_schedules_table.up.sql` (id UUID, user_id FK, date, time, title, duration, type, notes, completed, timestamps)
+  └── [x] `schedules` — `migrations/000004_create_schedules_table.up.sql` (id UUID, user_id FK, date, time, title, duration, type, notes, completed, timestamps)
   └── [ ] `goals` — `migrations/000005_create_goals_table.up.sql` (id UUID, user_id FK, title, type, target, unit, period, deadline, current, completed, timestamps)
   └── [ ] `progress` — `migrations/000006_create_progress_tables.up.sql` (body_weight: id UUID, user_id FK, weight, body_fat_percentage, date, timestamps; strength_progression: id UUID, user_id FK, exercise_id FK, weight, reps, date, timestamps; consistency: id UUID, user_id FK, date, worked_out BOOLEAN, timestamps)
   └── [ ] `ai` — `migrations/000007_create_ai_tables.up.sql` (chat_sessions: id UUID, user_id FK, title, messages JSONB, timestamps; recommendations: id UUID, user_id FK, type, title, description, priority, expires_at, timestamps)

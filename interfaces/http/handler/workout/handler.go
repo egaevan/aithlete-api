@@ -1,27 +1,27 @@
 package workout
 
-import "github.com/aithlete/aithlete-api/application/usecase"
+import "github.com/aithlete/aithlete-api/application/usecase/workout"
 
 type Handler struct {
-	createWorkoutUseCase    usecase.CreateWorkoutUseCase
-	getWorkoutUseCase       usecase.GetWorkoutUseCase
-	listWorkoutsUseCase     usecase.ListWorkoutsUseCase
-	updateWorkoutUseCase    usecase.UpdateWorkoutUseCase
-	deleteWorkoutUseCase    usecase.DeleteWorkoutUseCase
-	completeWorkoutUseCase  usecase.CompleteWorkoutUseCase
-	addExerciseUseCase      usecase.AddExerciseUseCase
-	updateSetUseCase        usecase.UpdateSetUseCase
+	createWorkoutUseCase    workout.CreateWorkoutUseCase
+	getWorkoutUseCase       workout.GetWorkoutUseCase
+	listWorkoutsUseCase     workout.ListWorkoutsUseCase
+	updateWorkoutUseCase    workout.UpdateWorkoutUseCase
+	deleteWorkoutUseCase    workout.DeleteWorkoutUseCase
+	completeWorkoutUseCase  workout.CompleteWorkoutUseCase
+	addExerciseUseCase      workout.AddExerciseUseCase
+	updateSetUseCase        workout.UpdateSetUseCase
 }
 
 func New(
-	create usecase.CreateWorkoutUseCase,
-	get usecase.GetWorkoutUseCase,
-	list usecase.ListWorkoutsUseCase,
-	update usecase.UpdateWorkoutUseCase,
-	delete usecase.DeleteWorkoutUseCase,
-	complete usecase.CompleteWorkoutUseCase,
-	addExercise usecase.AddExerciseUseCase,
-	updateSet usecase.UpdateSetUseCase,
+	create workout.CreateWorkoutUseCase,
+	get workout.GetWorkoutUseCase,
+	list workout.ListWorkoutsUseCase,
+	update workout.UpdateWorkoutUseCase,
+	delete workout.DeleteWorkoutUseCase,
+	complete workout.CompleteWorkoutUseCase,
+	addExercise workout.AddExerciseUseCase,
+	updateSet workout.UpdateSetUseCase,
 ) *Handler {
 	return &Handler{
 		createWorkoutUseCase:   create,

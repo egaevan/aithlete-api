@@ -1,25 +1,25 @@
 package goal
 
-import "github.com/aithlete/aithlete-api/application/usecase"
+import "github.com/aithlete/aithlete-api/application/usecase/goal"
 
 type Handler struct {
-	createGoalUseCase         usecase.CreateGoalUseCase
-	getGoalUseCase            usecase.GetGoalUseCase
-	listGoalsUseCase          usecase.ListGoalsUseCase
-	updateGoalUseCase         usecase.UpdateGoalUseCase
-	deleteGoalUseCase         usecase.DeleteGoalUseCase
-	toggleGoalUseCase         usecase.ToggleGoalUseCase
-	updateGoalProgressUseCase usecase.UpdateGoalProgressUseCase
+	createGoalUseCase         goal.CreateGoalUseCase
+	getGoalUseCase            goal.GetGoalUseCase
+	listGoalsUseCase          goal.ListGoalsUseCase
+	updateGoalUseCase         goal.UpdateGoalUseCase
+	deleteGoalUseCase         goal.DeleteGoalUseCase
+	toggleGoalUseCase         goal.ToggleGoalUseCase
+	updateGoalProgressUseCase goal.UpdateGoalProgressUseCase
 }
 
 func New(
-	create usecase.CreateGoalUseCase,
-	get usecase.GetGoalUseCase,
-	list usecase.ListGoalsUseCase,
-	update usecase.UpdateGoalUseCase,
-	delete usecase.DeleteGoalUseCase,
-	toggle usecase.ToggleGoalUseCase,
-	updateProgress usecase.UpdateGoalProgressUseCase,
+	create goal.CreateGoalUseCase,
+	get goal.GetGoalUseCase,
+	list goal.ListGoalsUseCase,
+	update goal.UpdateGoalUseCase,
+	delete goal.DeleteGoalUseCase,
+	toggle goal.ToggleGoalUseCase,
+	updateProgress goal.UpdateGoalProgressUseCase,
 ) *Handler {
 	return &Handler{
 		createGoalUseCase:         create,

@@ -1,25 +1,25 @@
 package schedule
 
-import "github.com/aithlete/aithlete-api/application/usecase"
+import "github.com/aithlete/aithlete-api/application/usecase/schedule"
 
 type Handler struct {
-	createScheduleUseCase      usecase.CreateScheduleUseCase
-	getScheduleUseCase         usecase.GetScheduleUseCase
-	listSchedulesUseCase       usecase.ListSchedulesUseCase
-	listSchedulesByDateUseCase usecase.ListSchedulesByDateUseCase
-	updateScheduleUseCase      usecase.UpdateScheduleUseCase
-	deleteScheduleUseCase      usecase.DeleteScheduleUseCase
-	toggleScheduleUseCase      usecase.ToggleScheduleUseCase
+	createScheduleUseCase      schedule.CreateScheduleUseCase
+	getScheduleUseCase         schedule.GetScheduleUseCase
+	listSchedulesUseCase       schedule.ListSchedulesUseCase
+	listSchedulesByDateUseCase schedule.ListSchedulesByDateUseCase
+	updateScheduleUseCase      schedule.UpdateScheduleUseCase
+	deleteScheduleUseCase      schedule.DeleteScheduleUseCase
+	toggleScheduleUseCase      schedule.ToggleScheduleUseCase
 }
 
 func New(
-	create usecase.CreateScheduleUseCase,
-	get usecase.GetScheduleUseCase,
-	list usecase.ListSchedulesUseCase,
-	listByDate usecase.ListSchedulesByDateUseCase,
-	update usecase.UpdateScheduleUseCase,
-	delete usecase.DeleteScheduleUseCase,
-	toggle usecase.ToggleScheduleUseCase,
+	create schedule.CreateScheduleUseCase,
+	get schedule.GetScheduleUseCase,
+	list schedule.ListSchedulesUseCase,
+	listByDate schedule.ListSchedulesByDateUseCase,
+	update schedule.UpdateScheduleUseCase,
+	delete schedule.DeleteScheduleUseCase,
+	toggle schedule.ToggleScheduleUseCase,
 ) *Handler {
 	return &Handler{
 		createScheduleUseCase:      create,

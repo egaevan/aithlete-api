@@ -54,6 +54,20 @@ interfaces/http/handler/<domain>/<endpoint>_test.go         — Handler tests (h
 
 ---
 
+## API Completion Checklist
+
+- [x] Auth API
+- [x] Workout API
+- [x] Schedule API
+- [x] Progress API
+- [x] Profile API
+- [ ] Goal API
+- [ ] AI API
+- [ ] Analytics API
+- [ ] Exercise API
+
+---
+
 ## High Priority Tasks
 
 ### Auth API
@@ -178,21 +192,21 @@ interfaces/http/handler/<domain>/<endpoint>_test.go         — Handler tests (h
 **Phase 1 — Domain Layer**
 
 - [x] Create Progress domain entities (BodyWeight, StrengthProgression, Consistency, etc.)
-- [ ] **TDD**: Write domain tests for Progress entities
+- [x] **TDD**: Write domain tests for Progress entities
 - [x] Define ProgressRepository interface in domain layer
 - [x] Define Progress domain errors (ErrNoData)
 
 **Phase 2 — Application Layer**
 
-- [ ] **TDD**: Write failing use case tests for ProgressUseCase
-- [ ] Define ProgressUseCase interface
-- [ ] Define Progress DTOs
-- [ ] Implement ProgressUseCase
+- [x] **TDD**: Write failing use case tests for ProgressUseCase
+- [x] Define ProgressUseCase interfaces
+- [x] Define Progress DTOs
+- [x] Implement ProgressUseCase
 
 **Phase 3 — Dependency Injection**
 
-- [ ] Implement ProgressRepository (infrastructure layer)
-- [ ] Replace mock provider with real ProgressUseCase in ProgressHandler
+- [x] Implement ProgressRepository (infrastructure layer — PostgreSQL + mock dev fallback)
+- [x] Replace mock provider with real ProgressUseCase in ProgressHandler
 
 ---
 
@@ -299,7 +313,7 @@ interfaces/http/handler/<domain>/<endpoint>_test.go         — Handler tests (h
   └── [ ] `exercises` — `migrations/000003_create_exercises_table.up.sql` (id UUID, name, description, muscle_group, equipment, difficulty, instructions TEXT[], image_url, timestamps)
   └── [x] `schedules` — `migrations/000004_create_schedules_table.up.sql` (id UUID, user_id FK, date, time, title, duration, type, notes, completed, timestamps)
   └── [ ] `goals` — `migrations/000005_create_goals_table.up.sql` (id UUID, user_id FK, title, type, target, unit, period, deadline, current, completed, timestamps)
-  └── [ ] `progress` — `migrations/000006_create_progress_tables.up.sql` (body_weight: id UUID, user_id FK, weight, body_fat_percentage, date, timestamps; strength_progression: id UUID, user_id FK, exercise_id FK, weight, reps, date, timestamps; consistency: id UUID, user_id FK, date, worked_out BOOLEAN, timestamps)
+  └── [x] `progress` — `migrations/000006_create_progress_tables.up.sql` (body_weight: id UUID, user_id FK, weight, body_fat_percentage, date, timestamps; strength_progression: id UUID, user_id FK, exercise_id FK, weight, reps, date, timestamps; consistency: id UUID, user_id FK, date, worked_out BOOLEAN, timestamps; muscle_volume: id UUID, user_id FK, date, muscle_group, total_volume, timestamps)
   └── [ ] `ai` — `migrations/000007_create_ai_tables.up.sql` (chat_sessions: id UUID, user_id FK, title, messages JSONB, timestamps; recommendations: id UUID, user_id FK, type, title, description, priority, expires_at, timestamps)
 - [x] Add authentication middleware for JWT verification
 - [ ] Add request validation middleware

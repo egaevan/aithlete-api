@@ -12,6 +12,7 @@ import (
 	"github.com/aithlete/aithlete-api/infrastructure/logger"
 	"github.com/aithlete/aithlete-api/interfaces/http/handler"
 	authhandler "github.com/aithlete/aithlete-api/interfaces/http/handler/auth"
+	progresshandler "github.com/aithlete/aithlete-api/interfaces/http/handler/progress"
 	profilehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/profile"
 	schedulehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/schedule"
 	workouthandler "github.com/aithlete/aithlete-api/interfaces/http/handler/workout"
@@ -81,6 +82,20 @@ func Bootstrap(l *logger.Logger) Dependencies {
 	deleteScheduleUC := usecase.NewDeleteScheduleUseCase(scheduleRepo)
 	toggleScheduleUC := usecase.NewToggleScheduleUseCase(scheduleRepo)
 
+	var progressRepo repository.ProgressRepository
+	if pool != nil {
+		progressRepo = database.NewProgressRepository(pool)
+	} else {
+		progressRepo = repository.NewMockProgressRepository()
+	}
+
+	getBodyWeightHistoryUC := usecase.NewGetBodyWeightHistoryUseCase(progressRepo)
+	addBodyWeightUC := usecase.NewAddBodyWeightUseCase(progressRepo)
+	getStrengthProgressionUC := usecase.NewGetStrengthProgressionUseCase(progressRepo)
+	getConsistencyUC := usecase.NewGetConsistencyUseCase(progressRepo)
+	getMuscleVolumeUC := usecase.NewGetMuscleVolumeUseCase(progressRepo)
+	getProgressOverviewUC := usecase.NewGetProgressOverviewUseCase(progressRepo)
+
 	provider := mock.NewMockProvider()
 
 	return Dependencies{
@@ -99,8 +114,11 @@ func Bootstrap(l *logger.Logger) Dependencies {
 				listSchedulesByDateUC, updateScheduleUC, deleteScheduleUC,
 				toggleScheduleUC,
 			),
+			Progress: progresshandler.New(
+				getBodyWeightHistoryUC, addBodyWeightUC, getStrengthProgressionUC,
+				getConsistencyUC, getMuscleVolumeUC, getProgressOverviewUC,
+			),
 			Exercise: handler.NewExerciseHandler(provider),
-			Progress: handler.NewProgressHandler(provider),
 			AI:       handler.NewAIHandler(provider),
 			Analytics: handler.NewAnalyticsHandler(provider),
 			Goal:     handler.NewGoalHandler(provider),

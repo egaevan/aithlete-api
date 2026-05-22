@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/aithlete/aithlete-api/interfaces/http/handler"
 	"github.com/aithlete/aithlete-api/interfaces/http/handler/auth"
+	progresshandler "github.com/aithlete/aithlete-api/interfaces/http/handler/progress"
 	profilehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/profile"
 	schedulehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/schedule"
 	workouthandler "github.com/aithlete/aithlete-api/interfaces/http/handler/workout"
@@ -37,7 +38,7 @@ func registerExerciseRoutes(g *echo.Group, h *handler.ExerciseHandler, authMw ec
 	exercises.GET("/:id", h.GetExercise)
 }
 
-func registerProgressRoutes(g *echo.Group, h *handler.ProgressHandler, authMw echo.MiddlewareFunc) {
+func registerProgressRoutes(g *echo.Group, h *progresshandler.Handler, authMw echo.MiddlewareFunc) {
 	progress := g.Group("/progress", authMw)
 	progress.GET("/body-weight", h.GetBodyWeightHistory)
 	progress.POST("/body-weight", h.AddBodyWeight)

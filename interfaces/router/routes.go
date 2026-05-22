@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/aithlete/aithlete-api/interfaces/http/handler"
+	analyticshandler "github.com/aithlete/aithlete-api/interfaces/http/handler/analytics"
 	"github.com/aithlete/aithlete-api/interfaces/http/handler/auth"
 	exercisehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/exercise"
 	goalhandler "github.com/aithlete/aithlete-api/interfaces/http/handler/goal"
@@ -61,7 +62,7 @@ func registerAIRoutes(g *echo.Group, h *handler.AIHandler, authMw echo.Middlewar
 	ai.GET("/plateau", h.GetPlateauDetection)
 }
 
-func registerAnalyticsRoutes(g *echo.Group, h *handler.AnalyticsHandler, authMw echo.MiddlewareFunc) {
+func registerAnalyticsRoutes(g *echo.Group, h *analyticshandler.Handler, authMw echo.MiddlewareFunc) {
 	analytics := g.Group("/analytics", authMw)
 	analytics.GET("/dashboard", h.GetDashboard)
 	analytics.GET("/weekly", h.GetWeeklyProgress)

@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 
+	analyticsuc "github.com/aithlete/aithlete-api/application/usecase/analytics"
 	authuc "github.com/aithlete/aithlete-api/application/usecase/auth"
 	exerciseuc "github.com/aithlete/aithlete-api/application/usecase/exercise"
 	goaluc "github.com/aithlete/aithlete-api/application/usecase/goal"
@@ -17,6 +18,7 @@ import (
 	"github.com/aithlete/aithlete-api/infrastructure/database"
 	"github.com/aithlete/aithlete-api/infrastructure/logger"
 	"github.com/aithlete/aithlete-api/interfaces/http/handler"
+	analyticshandler "github.com/aithlete/aithlete-api/interfaces/http/handler/analytics"
 	authhandler "github.com/aithlete/aithlete-api/interfaces/http/handler/auth"
 	exercisehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/exercise"
 	goalhandler "github.com/aithlete/aithlete-api/interfaces/http/handler/goal"
@@ -130,6 +132,20 @@ func Bootstrap(l *logger.Logger) Dependencies {
 	getExerciseUC := exerciseuc.NewGetExerciseUseCase(exerciseRepo)
 	listMuscleGroupsUC := exerciseuc.NewListMuscleGroupsUseCase()
 
+	var analyticsRepo repository.AnalyticsRepository
+	if pool != nil {
+		analyticsRepo = database.NewAnalyticsRepository(pool)
+	} else {
+		analyticsRepo = repository.NewMockAnalyticsRepository()
+	}
+
+	getDashboardUC := analyticsuc.NewGetDashboardUseCase(analyticsRepo)
+	getWeeklyProgressUC := analyticsuc.NewGetWeeklyProgressUseCase(analyticsRepo)
+	getStreakUC := analyticsuc.NewGetStreakUseCase(analyticsRepo)
+	getOverviewUC := analyticsuc.NewGetOverviewUseCase(analyticsRepo)
+	getWeeklyVolumeUC := analyticsuc.NewGetWeeklyVolumeUseCase(analyticsRepo)
+	getMuscleVolumeDistributionUC := analyticsuc.NewGetMuscleVolumeDistributionUseCase(analyticsRepo)
+
 	provider := mock.NewMockProvider()
 
 	return Dependencies{
@@ -159,7 +175,10 @@ func Bootstrap(l *logger.Logger) Dependencies {
 			),
 			Exercise: exercisehandler.New(listExercisesUC, getExerciseUC, listMuscleGroupsUC),
 			AI:       handler.NewAIHandler(provider),
-			Analytics: handler.NewAnalyticsHandler(provider),
+			Analytics: analyticshandler.New(
+				getDashboardUC, getWeeklyProgressUC, getStreakUC,
+				getOverviewUC, getWeeklyVolumeUC, getMuscleVolumeDistributionUC,
+			),
 		},
 	}
 }

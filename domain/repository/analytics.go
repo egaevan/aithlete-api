@@ -12,4 +12,5 @@ type AnalyticsRepository interface {
 	GetStreak(ctx context.Context, userID string) (*entity.Streak, error)
 	GetWeeklyVolume(ctx context.Context, userID string) ([]entity.WeeklyVolume, error)
 	GetMuscleVolumeDistribution(ctx context.Context, userID string) ([]entity.MuscleVolumeDistribution, error)
+	GetOverview(ctx context.Context, userID string) (*entity.AnalyticsOverview, error)
 }

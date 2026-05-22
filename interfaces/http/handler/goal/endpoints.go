@@ -1,6 +1,7 @@
 package goal
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/aithlete/aithlete-api/interfaces/http/request"
@@ -12,7 +13,7 @@ import (
 )
 
 func (h *Handler) List(c echo.Context) error {
-	userID := c.Get("userID").(string)
+	userID := c.Get("user_id").(string)
 
 	results, err := h.listGoalsUseCase.List(c.Request().Context(), userID)
 	if err != nil {
@@ -23,12 +24,12 @@ func (h *Handler) List(c echo.Context) error {
 }
 
 func (h *Handler) Get(c echo.Context) error {
-	userID := c.Get("userID").(string)
+	userID := c.Get("user_id").(string)
 	goalID := c.Param("id")
 
 	result, err := h.getGoalUseCase.Get(c.Request().Context(), userID, goalID)
 	if err != nil {
-		if err == domainerr.ErrGoalNotFound {
+		if errors.Is(err, domainerr.ErrGoalNotFound) {
 			return response.NotFound(c, message.MsgNotFound)
 		}
 		return response.InternalServerError(c, message.MsgInternalError)
@@ -38,7 +39,7 @@ func (h *Handler) Get(c echo.Context) error {
 }
 
 func (h *Handler) Create(c echo.Context) error {
-	userID := c.Get("userID").(string)
+	userID := c.Get("user_id").(string)
 
 	var req request.CreateGoalRequest
 	if err := c.Bind(&req); err != nil {
@@ -54,7 +55,7 @@ func (h *Handler) Create(c echo.Context) error {
 }
 
 func (h *Handler) Update(c echo.Context) error {
-	userID := c.Get("userID").(string)
+	userID := c.Get("user_id").(string)
 	goalID := c.Param("id")
 
 	var req request.UpdateGoalRequest
@@ -64,7 +65,7 @@ func (h *Handler) Update(c echo.Context) error {
 
 	result, err := h.updateGoalUseCase.Update(c.Request().Context(), userID, goalID, req.Title, req.Type, req.Target, req.Current, req.Unit, req.Period, req.Deadline)
 	if err != nil {
-		if err == domainerr.ErrGoalNotFound {
+		if errors.Is(err, domainerr.ErrGoalNotFound) {
 			return response.NotFound(c, message.MsgNotFound)
 		}
 		return response.InternalServerError(c, message.MsgInternalError)
@@ -74,12 +75,12 @@ func (h *Handler) Update(c echo.Context) error {
 }
 
 func (h *Handler) Delete(c echo.Context) error {
-	userID := c.Get("userID").(string)
+	userID := c.Get("user_id").(string)
 	goalID := c.Param("id")
 
 	err := h.deleteGoalUseCase.Delete(c.Request().Context(), userID, goalID)
 	if err != nil {
-		if err == domainerr.ErrGoalNotFound {
+		if errors.Is(err, domainerr.ErrGoalNotFound) {
 			return response.NotFound(c, message.MsgNotFound)
 		}
 		return response.InternalServerError(c, message.MsgInternalError)
@@ -89,12 +90,12 @@ func (h *Handler) Delete(c echo.Context) error {
 }
 
 func (h *Handler) Toggle(c echo.Context) error {
-	userID := c.Get("userID").(string)
+	userID := c.Get("user_id").(string)
 	goalID := c.Param("id")
 
 	result, err := h.toggleGoalUseCase.Toggle(c.Request().Context(), userID, goalID)
 	if err != nil {
-		if err == domainerr.ErrGoalNotFound {
+		if errors.Is(err, domainerr.ErrGoalNotFound) {
 			return response.NotFound(c, message.MsgNotFound)
 		}
 		return response.InternalServerError(c, message.MsgInternalError)
@@ -104,7 +105,7 @@ func (h *Handler) Toggle(c echo.Context) error {
 }
 
 func (h *Handler) UpdateProgress(c echo.Context) error {
-	userID := c.Get("userID").(string)
+	userID := c.Get("user_id").(string)
 	goalID := c.Param("id")
 
 	var req request.UpdateGoalProgressRequest
@@ -114,7 +115,7 @@ func (h *Handler) UpdateProgress(c echo.Context) error {
 
 	result, err := h.updateGoalProgressUseCase.UpdateProgress(c.Request().Context(), userID, goalID, req.Current)
 	if err != nil {
-		if err == domainerr.ErrGoalNotFound {
+		if errors.Is(err, domainerr.ErrGoalNotFound) {
 			return response.NotFound(c, message.MsgNotFound)
 		}
 		return response.InternalServerError(c, message.MsgInternalError)

@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/aithlete/aithlete-api/domain/entity"
 )
@@ -72,16 +73,43 @@ func (m *MockProgressRepository) UpsertConsistency(_ context.Context, userID, we
 	existing, ok := m.ConsistencyData[key]
 	if ok {
 		existing.WorkoutsCompleted += completed
-		existing.Streak = existing.WorkoutsCompleted
-	} else {
-		m.ConsistencyData[key] = &entity.Consistency{
-			Week:              week,
-			WorkoutsCompleted: completed,
-			WorkoutsPlanned:   0,
-			Streak:            completed,
+		return nil
+	}
+
+	newStreak := 1
+	for k, pc := range m.ConsistencyData {
+		uid, w, ok := strings.Cut(k, ":")
+		if ok && uid == userID && weeksAreConsecutive(w, week) {
+			newStreak = pc.Streak + completed
+			break
 		}
 	}
+
+	m.ConsistencyData[key] = &entity.Consistency{
+		Week:              week,
+		WorkoutsCompleted: completed,
+		WorkoutsPlanned:   0,
+		Streak:            newStreak,
+	}
 	return nil
+}
+
+func weeksAreConsecutive(a, b string) bool {
+	var ay, aw, by, bw int
+	if _, err := fmt.Sscanf(a, "%d-W%d", &ay, &aw); err != nil {
+		return false
+	}
+	if _, err := fmt.Sscanf(b, "%d-W%d", &by, &bw); err != nil {
+		return false
+	}
+
+	if by == ay && bw == aw+1 {
+		return true
+	}
+	if by == ay+1 && aw >= 52 && bw == 1 {
+		return true
+	}
+	return false
 }
 
 func (m *MockProgressRepository) FindMuscleVolume(_ context.Context, userID string) ([]entity.MuscleVolume, error) {

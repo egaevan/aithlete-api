@@ -103,17 +103,50 @@ func (r *ProgressRepository) AddStrengthRecord(ctx context.Context, sr *entity.S
 }
 
 func (r *ProgressRepository) UpsertConsistency(ctx context.Context, userID, week string, completed int) error {
-	_, err := r.pool.Exec(ctx, `
+	newStreak := 1
+
+	var prevWeek string
+	var prevStreak int
+	err := r.pool.QueryRow(ctx, `
+		SELECT week, streak
+		FROM consistency
+		WHERE user_id = $1 AND week < $2
+		ORDER BY week DESC
+		LIMIT 1
+	`, userID, week).Scan(&prevWeek, &prevStreak)
+	if err == nil && weeksAreConsecutive(prevWeek, week) {
+		newStreak = prevStreak + completed
+	}
+
+	_, err = r.pool.Exec(ctx, `
 		INSERT INTO consistency (user_id, week, workouts_completed, workouts_planned, streak)
-		VALUES ($1, $2, $3, 0, $3)
+		VALUES ($1, $2, $3, 0, $4)
 		ON CONFLICT ON CONSTRAINT consistency_user_week_idx
 		DO UPDATE SET workouts_completed = consistency.workouts_completed + $3,
-		              streak = consistency.streak + $3
-	`, userID, week, completed)
+		              streak = GREATEST(consistency.streak, $4)
+	`, userID, week, completed, newStreak)
 	if err != nil {
 		return fmt.Errorf("upsert consistency: %w", err)
 	}
 	return nil
+}
+
+func weeksAreConsecutive(a, b string) bool {
+	var ay, aw, by, bw int
+	if _, err := fmt.Sscanf(a, "%d-W%d", &ay, &aw); err != nil {
+		return false
+	}
+	if _, err := fmt.Sscanf(b, "%d-W%d", &by, &bw); err != nil {
+		return false
+	}
+
+	if by == ay && bw == aw+1 {
+		return true
+	}
+	if by == ay+1 && aw >= 52 && bw == 1 {
+		return true
+	}
+	return false
 }
 
 func (r *ProgressRepository) UpsertMuscleVolume(ctx context.Context, userID, muscleGroup string, volume float64) error {

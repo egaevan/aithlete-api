@@ -23,7 +23,11 @@ func main() {
 	e := router.New(log, deps.Handlers)
 
 	cfg := deps.Config.Server
-	addr := fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = fmt.Sprintf("%d", cfg.Port)
+	}
+	addr := fmt.Sprintf("%s:%s", cfg.Host, port)
 
 	go func() {
 		log.Info("Environment: %s", cfg.Env)

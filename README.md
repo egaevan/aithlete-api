@@ -9,32 +9,79 @@ Backend service for the AITHLETE AI fitness application.
 - **Architecture**: Clean Architecture + DDD
 - **Database**: PostgreSQL (future)
 
-## Getting Started
-
-### Prerequisites
+## Prerequisites
 
 - Go 1.21+
 - Make
-
-### Quick Start
+- PostgreSQL 15+ (for database features)
+- [golang-migrate](https://github.com/golang-migrate/migrate) CLI (for migrations)
 
 ```bash
-# Install dependencies
-make deps
-
-# Run the server
-make run
+brew install golang-migrate
 ```
 
-The server will start on `http://localhost:8080`.
+## Setup
 
-### Configuration
+### 1. Configuration
 
 Copy `.env.example` to `.env` and adjust values:
 
 ```bash
 cp .env.example .env
 ```
+
+### 2. Database
+
+Create the database and run migrations:
+
+```bash
+createdb aithlete
+make migrate-up
+```
+
+### 3. TLS Certificates (optional)
+
+For HTTPS, generate self-signed certificates:
+
+```bash
+mkdir -p certs
+openssl req -x509 -newkey rsa:4096 -keyout certs/key.pem -out certs/cert.pem \
+  -days 365 -nodes -subj "/CN=localhost"
+```
+
+Then set `TLS_ENABLED=true` in `.env`.
+
+### 4. Run
+
+```bash
+make run
+```
+
+The server starts on `http://localhost:8080` (or `https://localhost:8080` if TLS is enabled).
+
+## Development
+
+### Available Commands
+
+```bash
+make deps          # Install dependencies (go mod tidy)
+make run           # Run the server
+make build         # Build the binary
+make test          # Run tests
+make fmt           # Format code
+make lint          # Run golangci-lint
+make clean         # Clean build artifacts
+make migrate-up    # Run pending database migrations
+make migrate-down  # Rollback last migration
+make migrate-create# Create a new migration (prompts for name)
+```
+
+### Postman Collection
+
+Import `docs/AIthlete API.postman_collection.json` into Postman. All endpoints are pre-configured with:
+- `{{baseUrl}}` variable (default: `http://localhost:8080`)
+- `{{accessToken}}` auto-populated after Login
+- Auth headers on protected endpoints
 
 ## Database Migrations
 
@@ -221,13 +268,4 @@ To migrate from mock to real implementation:
 4. Add use cases in `application/usecase/`
 5. Update handlers to call use cases instead of mock provider
 
-## Available Commands
 
-```bash
-make deps     # Install dependencies
-make run      # Run the server
-make build    # Build the binary
-make test     # Run tests
-make fmt      # Format code
-make clean    # Clean build artifacts
-```

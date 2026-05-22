@@ -40,8 +40,8 @@ Tech Stack:
 ### 1. Clean Architecture
 Lapisan kode dipisahkan dengan **dependency rule**:
 - **Domain** — pure Go, zero dependencies, tidak ada struct tags/serialization logic
-- **Application** — depends on domain (menggunakan interface repository)
-- **Interfaces** — depends on application (injects use case via DI)
+- **Application** — depends on domain (menggunakan interface repository), **no json tags**
+- **Interfaces** — depends on application (injects use case via DI), **json tags here**
 - **Infrastructure** — implements domain repository interfaces
 
 ### 2. DDD (Domain-Driven Design)
@@ -49,7 +49,8 @@ Lapisan kode dipisahkan dengan **dependency rule**:
 - **Value Object**: objek immutabel tanpa identitas (Set, Weight)
 - **Repository**: interface akses data, didefinisikan di **domain layer**
 - **Use Case**: business rules spesifik aplikasi di **application layer**
-- **DTO**: data transfer object — hanya untuk input/output, tidak ada business logic
+- **DTO**: data transfer object — hanya untuk input/output, tidak ada business logic, **no json tags**
+- **Response Types**: struct dengan json tags didefinisikan di **handler layer** (bukan application layer)
 
 ### 3. Hexagonal Architecture (Ports & Adapters)
 - **Ports**: interfaces di domain/application layer
@@ -94,17 +95,21 @@ Untuk **setiap** fitur, tulis test **sebelum** implementation code:
 ## Test Structure
 
 ```text
-domain/<entity>/<entity>_test.go        — Unit tests (pure, no mocks, no deps)
-application/usecase/<name>_test.go      — Use case tests (mock repository interfaces)
-interfaces/http/handler/<handler>_test.go — Handler tests (httptest, mock use case)
-infrastructure/database/<repo>_test.go  — Repository tests (integration, test DB)
+domain/entity/<entity>_test.go                              — Unit tests (pure, no mocks, no deps)
+domain/repository/<repository>_mock.go                      — Mock repository implementations
+domain/service/<service>_mock.go                            — Mock service implementations
+application/usecase/<name>_test.go                          — Use case tests (mock repository interfaces)
+interfaces/http/handler/<domain>/<endpoint>_test.go         — Handler tests (httptest, per endpoint)
+infrastructure/database/<repo>_test.go                      — Repository tests (integration, test DB)
 ```
 
 ## Testing Principles
 - **Domain layer**: test behavior, business rules, invariants tanpa mock
 - **Application layer**: mock repository interfaces, test orchestrasi use case hanya dengan exported/public interfaces
+- **Mock files** ditempatkan di package yang sama dengan interface-nya, menggunakan suffix `_mock.go` (bukan `_test.go`) agar bisa diimport oleh test package lain
 - **No test utilities** seperti testify atau assertion library di domain layer test — cukup `testing.T` dan standard library
 - External dependencies hanya di-integrasikan di test infrastructure layer
+- Mocks dipisah berdasarkan konsep: `domain/repository/user_mock.go` untuk mock repository, `domain/service/token_mock.go` untuk mock service
 
 ---
 
@@ -116,50 +121,41 @@ cmd/                          — Application entry point
 config/                       — Configuration loading (Viper)
 
 domain/                       ── PURE GO, ZERO DEPENDENCIES ──
- ├── user/
- │   ├── user.go              — User entity (no tags)
- │   ├── errors.go            — Domain-specific errors
- │   └── repository.go        — UserRepository interface
- ├── workout/
- │   ├── workout.go           — Workout entity
- │   ├── exercise.go          — WorkoutExercise value object
- │   ├── set.go               — Set value object
- │   ├── errors.go
- │   └── repository.go
- ├── exercise/
- │   ├── exercise.go
- │   ├── errors.go
- │   └── repository.go
- ├── schedule/
- │   ├── schedule.go
- │   ├── errors.go
- │   └── repository.go
- ├── goal/
- │   ├── goal.go
- │   ├── errors.go
- │   └── repository.go
- ├── progress/
- │   ├── bodyweight.go
- │   ├── strength.go
- │   ├── consistency.go
- │   ├── errors.go
- │   └── repository.go
- ├── ai/
- │   ├── recommendation.go
- │   ├── chat.go
- │   ├── fatigue.go
- │   ├── recovery.go
- │   ├── errors.go
- │   └── repository.go
- └── analytics/
-     ├── dashboard.go
-     ├── volume.go
-     ├── errors.go
-     └── repository.go
+ ├── entity/                  — Domain entities (no tags, no deps)
+ │   ├── user.go              — User entity
+ │   ├── workout.go           — Workout entity + WorkoutExercise + Set value objects
+ │   ├── exercise.go          — Exercise entity + MuscleGroup value object
+ │   ├── schedule.go          — Schedule entity
+ │   ├── goal.go              — Goal entity
+ │   ├── progress.go          — BodyWeight, StrengthRecord entities
+ │   ├── ai.go                — Recommendation, ChatSession, FatigueAnalysis, etc.
+ │   └── analytics.go         — Dashboard, WeeklyVolume entities
+ ├── repository/              — Repository interfaces + mocks
+ │   ├── user.go              — UserRepository interface
+ │   ├── user_mock.go         — MockUserRepository
+ │   ├── workout.go           — WorkoutRepository interface
+ │   ├── workout_mock.go      — MockWorkoutRepository
+ │   ├── exercise.go          — ExerciseRepository interface
+ │   ├── exercise_mock.go     — MockExerciseRepository
+ │   ├── schedule.go          — ScheduleRepository interface
+ │   ├── schedule_mock.go     — MockScheduleRepository
+ │   ├── goal.go              — GoalRepository interface
+ │   ├── goal_mock.go         — MockGoalRepository
+ │   ├── progress.go          — ProgressRepository interface
+ │   ├── progress_mock.go     — MockProgressRepository
+ │   ├── ai.go                — AIRepository interface
+ │   ├── ai_mock.go           — MockAIRepository
+ │   ├── analytics.go         — AnalyticsRepository interface
+ │   └── analytics_mock.go    — MockAnalyticsRepository
+ └── service/                 — Domain service interfaces + mocks
+     ├── token.go             — TokenService interface
+     ├── token_mock.go        — MockTokenService
+     ├── password.go          — PasswordHasher interface
+     └── password_mock.go     — MockPasswordHasher
 
 application/                  ── DEPENDS ONLY ON DOMAIN ──
- ├── dto/
- │   ├── auth.go
+ ├── dto/                     ── pure data transfer (no json tags). Bridge between application & interfaces ──
+ │   ├── auth.go              — LoginResult, UserResult, TokenResult, AuthResponse, etc.
  │   ├── workout.go
  │   ├── schedule.go
  │   ├── goal.go
@@ -167,22 +163,29 @@ application/                  ── DEPENDS ONLY ON DOMAIN ──
  │   ├── ai.go
  │   ├── analytics.go
  │   └── exercise.go
- ├── usecase/
- │   ├── auth.go
- │   ├── workout.go
- │   ├── schedule.go
- │   ├── goal.go
- │   ├── progress.go
- │   ├── ai.go
- │   ├── analytics.go
- │   └── exercise.go
- └── ports/
-     └── mapper.go
+ ├── usecase/                 ── each file: exported interface + unexported implementation ──
+ │   ├── login.go             — LoginUseCase interface + loginUseCase
+ │   ├── register.go          — RegisterUseCase interface + registerUseCase
+ │   ├── refresh_token.go     — RefreshTokenUseCase interface + refreshTokenUseCase
+ │   ├── get_me.go            — GetMeUseCase interface + getMeUseCase
+ │   └── ...
+ ├── service/
+ │   └── auth.go              — GenerateAuthResult, IsNotFound (shared logic)
+ └── mapper/
+     └── user.go              — UserToResult (domain User → dto.UserResult)
 
 interfaces/                   ── DEPENDS ON APPLICATION ──
  ├── http/
  │   ├── handler/
- │   │   ├── auth.go
+ │   │   └── auth/            ── per-endpoint files, response types with json tags ──
+ │   │       ├── handler.go        — Handler struct + constructor
+ │   │       ├── response.go       — LoginResponse, UserResponse, TokenResponse (json tags)
+ │   │       ├── login.go          — POST /auth/login
+ │   │       ├── register.go       — POST /auth/register
+ │   │       ├── logout.go         — POST /auth/logout
+ │   │       ├── get_me.go         — GET /auth/me
+ │   │       └── refresh_token.go  — POST /auth/refresh
+ │   │   ├── workout.go
  │   │   ├── workout.go
  │   │   ├── exercise.go
  │   │   ├── schedule.go
@@ -202,7 +205,8 @@ interfaces/                   ── DEPENDS ON APPLICATION ──
 infrastructure/               ── IMPLEMENTS DOMAIN INTERFACES ──
  ├── database/
  │   ├── postgres.go
- │   ├── user_repo.go
+ │       ├── user_repo.go           — PostgreSQL implementation
+    ├── user_repo_memory.go    — In-memory implementation (dev fallback)
  │   ├── workout_repo.go
  │   ├── exercise_repo.go
  │   ├── schedule_repo.go
@@ -214,16 +218,20 @@ infrastructure/               ── IMPLEMENTS DOMAIN INTERFACES ──
  ├── ai/
  │   └── client.go
  ├── auth/
- │   ├── jwt.go
- │   └── hash.go
+ │   ├── token.go              — JWT TokenService
+ │   └── hash.go               — bcrypt PasswordHasher
  ├── logger/
  │   └── logger.go
  └── cache/
      └── redis.go
 
 pkg/                          — Shared utilities
+ ├── app/
+ │   └── app.go               — Bootstrap (composition root, wires all deps)
+ ├── code/
+ │   └── code.go              — Status code constants
  └── mock/
-     └── provider.go          — Temporary mock, to be removed
+     └── provider.go          — Temporary mock (Workout, Exercise, etc.), to be removed as each module gets wired with DI
 ```
 
 ---
@@ -239,37 +247,62 @@ Controller (interfaces/http/handler)
 Use Case (application/usecase)
     │  orchestrates business logic
     ▼
-Domain Entity (domain/)
+Domain Entity (domain/entity/)
     │  pure business rules, validates invariants
     ▼
-Repository Interface (domain/<entity>/repository.go)
+Repository Interface (domain/repository/)
     │  abstraction for data access
     ▼
 Repository Implementation (infrastructure/database/)
     │  concrete database operations
 ```
 
-## Dependency Injection Wire (cmd/)
+## Composition Root (`pkg/app`)
 
 ```go
-func main() {
-    // Infrastructure
-    db := postgres.New(cfg)
-    jwtSvc := auth.NewJWT(cfg)
-    hashSvc := auth.NewHasher()
+// pkg/app/app.go — Bootstrap semua dependency
+func Bootstrap(log *logger.Logger) Dependencies {
+    cfg      := config.Load()
+    hashSvc  := auth.NewPasswordHasher()       // infrastructure/auth
+    tokenSvc := auth.NewTokenService(cfg.Auth.JWTSecret, cfg.Auth.JWTExpiration)
 
-    // Repository (infra implements domain interface)
-    userRepo := database.NewUserRepository(db)
+    pool, err := database.NewPool(ctx, database.DSN(cfg.Database))
 
-    // Use Case (application depends on domain interface)
-    authUseCase := usecase.NewAuthUseCase(userRepo, jwtSvc, hashSvc)
+    var userRepo repository.UserRepository
+    if pool != nil {
+        userRepo = database.NewUserRepository(pool)
+    } else {
+        userRepo = database.NewInMemoryUserRepository()
+    }
 
-    // Handler (interfaces depends on use case)
-    authHandler := handler.NewAuthHandler(authUseCase)
+    return Dependencies{
+        Config: cfg,
+        Handlers: router.Handlers{
+            Auth: authhandler.New(
+                usecase.NewLoginUseCase(userRepo, hashSvc, tokenSvc),
+                usecase.NewRegisterUseCase(userRepo, hashSvc, tokenSvc),
+                usecase.NewRefreshTokenUseCase(tokenSvc),
+                usecase.NewGetMeUseCase(userRepo),
+            ),
+            Workout:   handler.NewWorkoutHandler(provider),  // temporary mock
+            ...
+        },
+    }
 }
 ```
 
----
+### Clean Architecture Dependency Rule
+
+| Layer | Knows About |
+|-------|-------------|
+| `cmd/` | everything (composition root) |
+| `pkg/app` | infrastructure, application, interfaces |
+| `interfaces/router` | only handler types (route registration) |
+| `interfaces/http/handler` | application use case interfaces |
+| `application/usecase` | domain interfaces (repository + service) |
+| `domain/entity` | nothing (pure Go) |
+| `domain/repository` | nothing (pure Go) — repository interfaces for data access |
+| `domain/service` | nothing (pure Go) — service interfaces for infrastructure concerns |
 
 # Development Sequence (TDD)
 

@@ -3,6 +3,8 @@ package response
 import (
 	"net/http"
 
+	"github.com/aithlete/aithlete-api/pkg/code"
+	"github.com/aithlete/aithlete-api/pkg/message"
 	"github.com/labstack/echo/v4"
 )
 
@@ -13,9 +15,9 @@ type Response struct {
 }
 
 type Transaction struct {
-	StatusCode  string `json:"status_code"`
-	StatusDesc  string `json:"status_desc"`
-	HTTPCode    int    `json:"-"`
+	StatusCode string `json:"status_code"`
+	StatusDesc string `json:"status_desc"`
+	HTTPCode   int    `json:"-"`
 }
 
 type Meta struct {
@@ -33,6 +35,10 @@ func Success(c echo.Context, httpCode int, statusCode string, statusDesc string,
 		},
 		Data: data,
 	})
+}
+
+func SuccessOK(c echo.Context, httpCode int, statusCode string, data any) error {
+	return Success(c, httpCode, statusCode, message.StatusDesc(statusCode), data)
 }
 
 func SuccessWithMeta(c echo.Context, httpCode int, statusCode string, statusDesc string, data any, meta *Meta) error {
@@ -56,16 +62,16 @@ func Error(c echo.Context, httpCode int, statusCode string, statusDesc string) e
 	})
 }
 
-func BadRequest(c echo.Context, message string) error {
-	return Error(c, http.StatusBadRequest, "40000", message)
+func BadRequest(c echo.Context, statusDesc string) error {
+	return Error(c, http.StatusBadRequest, code.BadRequest, statusDesc)
 }
 
-func InternalServerError(c echo.Context, message string) error {
-	return Error(c, http.StatusInternalServerError, "50000", message)
+func InternalServerError(c echo.Context, statusDesc string) error {
+	return Error(c, http.StatusInternalServerError, code.InternalServerError, statusDesc)
 }
 
-func NotFound(c echo.Context, message string) error {
-	return Error(c, http.StatusNotFound, "40400", message)
+func NotFound(c echo.Context, statusDesc string) error {
+	return Error(c, http.StatusNotFound, code.NotFound, statusDesc)
 }
 
 func NewMeta(total, page, limit int) *Meta {

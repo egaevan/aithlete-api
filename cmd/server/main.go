@@ -9,22 +9,22 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/aithlete/aithlete-api/infrastructure/config"
 	"github.com/aithlete/aithlete-api/infrastructure/logger"
 	"github.com/aithlete/aithlete-api/interfaces/router"
+	"github.com/aithlete/aithlete-api/pkg/app"
 )
 
 func main() {
 	log := logger.New()
-	cfg := config.Load()
+	deps := app.Bootstrap(log)
 
-	e := router.New(log)
+	e := router.New(log, deps.Handlers)
 
-	addr := fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port)
+	addr := fmt.Sprintf("%s:%d", deps.Config.Server.Host, deps.Config.Server.Port)
 
 	go func() {
 		log.Info("Starting server on %s", addr)
-		log.Info("Environment: %s", cfg.Server.Env)
+		log.Info("Environment: %s", deps.Config.Server.Env)
 		if err := e.Start(addr); err != nil && err != http.ErrServerClosed {
 			log.Error("Server failed to start: %v", err)
 			os.Exit(1)

@@ -2,6 +2,8 @@ package handler
 
 import (
 	"github.com/aithlete/aithlete-api/interfaces/http/response"
+	"github.com/aithlete/aithlete-api/pkg/code"
+	"github.com/aithlete/aithlete-api/pkg/message"
 	"github.com/aithlete/aithlete-api/pkg/mock"
 	"github.com/labstack/echo/v4"
 )
@@ -16,17 +18,17 @@ func NewExerciseHandler(provider *mock.MockProvider) *ExerciseHandler {
 
 func (h *ExerciseHandler) GetExercises(c echo.Context) error {
 	data := h.provider.GetExercises()
-	return response.Success(c, 200, "00000", "Success", data)
+	return response.SuccessOK(c, 200, code.Success, data)
 }
 
 func (h *ExerciseHandler) GetExercise(c echo.Context) error {
 	id := c.Param("id")
 	data := h.provider.GetExercise(id)
-	return response.Success(c, 200, "00000", "Success", data)
+	return response.SuccessOK(c, 200, code.Success, data)
 }
 
 func (h *ExerciseHandler) GetMuscleGroups(c echo.Context) error {
 	data := h.provider.GetMuscleGroups()
 	meta := response.NewMeta(len(data), 1, 20)
-	return response.SuccessWithMeta(c, 200, "00000", "Success", data, meta)
+	return response.SuccessWithMeta(c, 200, code.Success, message.MsgSuccess, data, meta)
 }

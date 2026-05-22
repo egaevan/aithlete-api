@@ -8,6 +8,12 @@ import (
 type Config struct {
 	Server   ServerConfig
 	Database DatabaseConfig
+	Auth     AuthConfig
+}
+
+type AuthConfig struct {
+	JWTSecret     string
+	JWTExpiration int
 }
 
 type ServerConfig struct {
@@ -39,6 +45,10 @@ func Load() *Config {
 			Password: getEnv("DB_PASSWORD", "postgres"),
 			DBName:   getEnv("DB_NAME", "aithlete"),
 			SSLMode:  getEnv("DB_SSLMODE", "disable"),
+		},
+		Auth: AuthConfig{
+			JWTSecret:     getEnv("JWT_SECRET", "dev-secret"),
+			JWTExpiration: getEnvAsInt("JWT_EXPIRATION_HOURS", 24),
 		},
 	}
 }

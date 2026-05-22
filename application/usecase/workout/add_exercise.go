@@ -10,6 +10,7 @@ import (
 	"github.com/aithlete/aithlete-api/domain/entity"
 	"github.com/aithlete/aithlete-api/domain/repository"
 	"github.com/aithlete/aithlete-api/pkg/domainerr"
+	"github.com/google/uuid"
 )
 
 type AddExerciseUseCase interface {
@@ -38,8 +39,13 @@ func (uc *addExerciseUseCase) AddExercise(ctx context.Context, userID, workoutID
 	}
 
 	we := entity.WorkoutExercise{
+		ID:       uuid.New().String(),
 		Exercise: exercise,
-		Sets:     sets,
+		Sets:     make([]entity.Set, len(sets)),
+	}
+	for i, s := range sets {
+		s.ID = uuid.New().String()
+		we.Sets[i] = s
 	}
 
 	if err := w.AddExercise(we); err != nil {

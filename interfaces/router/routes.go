@@ -3,6 +3,8 @@ package router
 import (
 	"github.com/aithlete/aithlete-api/interfaces/http/handler"
 	"github.com/aithlete/aithlete-api/interfaces/http/handler/auth"
+	profilehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/profile"
+	workouthandler "github.com/aithlete/aithlete-api/interfaces/http/handler/workout"
 	"github.com/labstack/echo/v4"
 )
 
@@ -15,14 +17,16 @@ func registerAuthRoutes(g *echo.Group, h *auth.Handler, authMw echo.MiddlewareFu
 	auth.GET("/me", h.GetMe, authMw)
 }
 
-func registerWorkoutRoutes(g *echo.Group, h *handler.WorkoutHandler, authMw echo.MiddlewareFunc) {
+func registerWorkoutRoutes(g *echo.Group, h *workouthandler.Handler, authMw echo.MiddlewareFunc) {
 	workouts := g.Group("/workouts", authMw)
-	workouts.GET("", h.GetWorkouts)
-	workouts.POST("", h.CreateWorkout)
-	workouts.GET("/stats", h.GetWorkoutStats)
-	workouts.GET("/:id", h.GetWorkout)
-	workouts.PUT("/:id", h.UpdateWorkout)
-	workouts.DELETE("/:id", h.DeleteWorkout)
+	workouts.GET("", h.List)
+	workouts.POST("", h.Create)
+	workouts.GET("/:id", h.Get)
+	workouts.PUT("/:id", h.Update)
+	workouts.DELETE("/:id", h.Delete)
+	workouts.POST("/:id/complete", h.Complete)
+	workouts.POST("/:id/exercises", h.AddExercise)
+	workouts.PUT("/:id/exercises/:exerciseId/sets/:setId", h.UpdateSet)
 }
 
 func registerExerciseRoutes(g *echo.Group, h *handler.ExerciseHandler, authMw echo.MiddlewareFunc) {
@@ -85,6 +89,6 @@ func registerGoalRoutes(g *echo.Group, h *handler.GoalHandler, authMw echo.Middl
 	goals.PATCH("/:id/progress", h.UpdateGoalProgress)
 }
 
-func registerProfileRoutes(g *echo.Group, h *handler.ProfileHandler, authMw echo.MiddlewareFunc) {
+func registerProfileRoutes(g *echo.Group, h *profilehandler.Handler, authMw echo.MiddlewareFunc) {
 	g.PUT("/profile", h.UpdateProfile, authMw)
 }

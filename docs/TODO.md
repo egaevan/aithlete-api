@@ -109,15 +109,15 @@ interfaces/http/handler/<domain>/<endpoint>_test.go         — Handler tests (h
 
 **Phase 2 — Application Layer**
 
-- [ ] **TDD**: Write failing use case tests for WorkoutUseCase (mock WorkoutRepository)
-- [ ] Define WorkoutUseCase interface
-- [ ] Define Workout DTOs (CreateWorkoutRequest, WorkoutResponse, etc.)
-- [ ] Implement WorkoutUseCase
+- [x] **TDD**: Write failing use case tests for WorkoutUseCase (mock WorkoutRepository)
+- [x] Define WorkoutUseCase interface
+- [x] Define Workout DTOs (CreateWorkoutRequest, WorkoutResponse, etc.)
+- [x] Implement WorkoutUseCase
 
 **Phase 3 — Dependency Injection**
 
-- [ ] Implement WorkoutRepository (infrastructure layer)
-- [ ] Replace mock provider with real WorkoutUseCase in WorkoutHandler
+- [x] Implement WorkoutRepository (infrastructure layer — PostgreSQL + in-memory dev fallback)
+- [x] Replace mock provider with real WorkoutUseCase in WorkoutHandler
 
 ---
 
@@ -268,15 +268,15 @@ interfaces/http/handler/<domain>/<endpoint>_test.go         — Handler tests (h
 
 **Phase 2 — Application Layer**
 
-- [ ] **TDD**: Write failing use case tests for ProfileUseCase
-- [ ] Define ProfileUseCase interface
-- [ ] Define Profile DTOs
-- [ ] Implement ProfileUseCase
+- [x] **TDD**: Write failing use case tests for ProfileUseCase
+- [x] Define ProfileUseCase interface
+- [x] Define Profile DTOs (reuses UserResult from auth)
+- [x] Implement ProfileUseCase
 
 **Phase 3 — Dependency Injection**
 
-- [ ] Reuse UserRepository for profile operations
-- [ ] Replace mock provider with real ProfileUseCase in ProfileHandler
+- [x] Reuse UserRepository for profile operations
+- [x] Replace mock provider with real ProfileUseCase in ProfileHandler
 
 ---
 
@@ -288,6 +288,13 @@ interfaces/http/handler/<domain>/<endpoint>_test.go         — Handler tests (h
 - [x] Implement TokenService (JWT) in infrastructure/auth
 - [x] Implement application-level validation
 - [ ] Implement database migrations for all entities
+  └── [x] `users` — `migrations/000001_create_users_table.up.sql` (id UUID, email, name, password, avatar, birthday, gender, timestamps)
+  └── [x] `workouts` — `migrations/000002_create_workouts_tables.up.sql` (id UUID, user_id FK, name, date, duration, weight_unit, notes, completed, calories, avg_heart_rate, exercises JSONB, timestamps)
+  └── [ ] `exercises` — `migrations/000003_create_exercises_table.up.sql` (id UUID, name, description, muscle_group, equipment, difficulty, instructions TEXT[], image_url, timestamps)
+  └── [ ] `schedules` — `migrations/000004_create_schedules_table.up.sql` (id UUID, user_id FK, date, time, title, duration, type, notes, completed, timestamps)
+  └── [ ] `goals` — `migrations/000005_create_goals_table.up.sql` (id UUID, user_id FK, title, type, target, unit, period, deadline, current, completed, timestamps)
+  └── [ ] `progress` — `migrations/000006_create_progress_tables.up.sql` (body_weight: id UUID, user_id FK, weight, body_fat_percentage, date, timestamps; strength_progression: id UUID, user_id FK, exercise_id FK, weight, reps, date, timestamps; consistency: id UUID, user_id FK, date, worked_out BOOLEAN, timestamps)
+  └── [ ] `ai` — `migrations/000007_create_ai_tables.up.sql` (chat_sessions: id UUID, user_id FK, title, messages JSONB, timestamps; recommendations: id UUID, user_id FK, type, title, description, priority, expires_at, timestamps)
 - [x] Add authentication middleware for JWT verification
 - [ ] Add request validation middleware
 - [ ] Add logging and monitoring for all API endpoints

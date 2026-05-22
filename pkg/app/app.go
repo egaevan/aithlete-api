@@ -12,6 +12,8 @@ import (
 	"github.com/aithlete/aithlete-api/infrastructure/logger"
 	"github.com/aithlete/aithlete-api/interfaces/http/handler"
 	authhandler "github.com/aithlete/aithlete-api/interfaces/http/handler/auth"
+	profilehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/profile"
+	workouthandler "github.com/aithlete/aithlete-api/interfaces/http/handler/workout"
 	"github.com/aithlete/aithlete-api/interfaces/router"
 	"github.com/aithlete/aithlete-api/pkg/mock"
 )
@@ -45,6 +47,23 @@ func Bootstrap(l *logger.Logger) Dependencies {
 	loginUC := usecase.NewLoginUseCase(userRepo, hashSvc, tokenSvc)
 	refreshUC := usecase.NewRefreshTokenUseCase(tokenSvc)
 	getMeUC := usecase.NewGetMeUseCase(userRepo)
+	updateProfileUC := usecase.NewUpdateProfileUseCase(userRepo)
+
+	var workoutRepo repository.WorkoutRepository
+	if pool != nil {
+		workoutRepo = database.NewWorkoutRepository(pool)
+	} else {
+		workoutRepo = repository.NewMockWorkoutRepository()
+	}
+
+	createWorkoutUC := usecase.NewCreateWorkoutUseCase(workoutRepo)
+	getWorkoutUC := usecase.NewGetWorkoutUseCase(workoutRepo)
+	listWorkoutsUC := usecase.NewListWorkoutsUseCase(workoutRepo)
+	updateWorkoutUC := usecase.NewUpdateWorkoutUseCase(workoutRepo)
+	deleteWorkoutUC := usecase.NewDeleteWorkoutUseCase(workoutRepo)
+	completeWorkoutUC := usecase.NewCompleteWorkoutUseCase(workoutRepo)
+	addExerciseUC := usecase.NewAddExerciseUseCase(workoutRepo)
+	updateSetUC := usecase.NewUpdateSetUseCase(workoutRepo)
 
 	provider := mock.NewMockProvider()
 
@@ -53,14 +72,18 @@ func Bootstrap(l *logger.Logger) Dependencies {
 		Handlers: router.Handlers{
 			TokenSvc: tokenSvc,
 			Auth:     authhandler.New(loginUC, registerUC, refreshUC, getMeUC),
-			Workout:  handler.NewWorkoutHandler(provider),
+			Workout: workouthandler.New(
+				createWorkoutUC, getWorkoutUC, listWorkoutsUC,
+				updateWorkoutUC, deleteWorkoutUC, completeWorkoutUC,
+				addExerciseUC, updateSetUC,
+			),
+			Profile:  profilehandler.New(updateProfileUC),
 			Exercise: handler.NewExerciseHandler(provider),
 			Progress: handler.NewProgressHandler(provider),
 			AI:       handler.NewAIHandler(provider),
 			Analytics: handler.NewAnalyticsHandler(provider),
 			Schedule: handler.NewScheduleHandler(provider),
 			Goal:     handler.NewGoalHandler(provider),
-			Profile:  handler.NewProfileHandler(provider),
 		},
 	}
 }

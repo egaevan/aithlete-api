@@ -804,69 +804,6 @@
           ]
         },
         {
-          "name": "Get Workout Stats",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{accessAithleteToken}}"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/api/v1/workouts/stats",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "workouts",
-                "stats"
-              ]
-            },
-            "description": "Get workout statistics"
-          },
-          "response": [
-            {
-              "name": "Success",
-              "originalRequest": {
-                "method": "GET",
-                "header": [
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{accessAithleteToken}}"
-                  }
-                ],
-                "url": {
-                  "raw": "{{baseUrl}}/api/v1/workouts/stats",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "workouts",
-                    "stats"
-                  ]
-                },
-                "description": "Get workout statistics"
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "Text",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"totalWorkouts\": 47,\n    \"totalVolume\": 285000,\n    \"avgDuration\": 54,\n    \"currentStreak\": 14\n  }\n}"
-            }
-          ]
-        },
-        {
           "name": "Get Workout By ID",
           "request": {
             "method": "GET",

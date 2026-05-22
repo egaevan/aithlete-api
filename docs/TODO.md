@@ -61,7 +61,7 @@ interfaces/http/handler/<domain>/<endpoint>_test.go         — Handler tests (h
 - [x] Schedule API
 - [x] Progress API
 - [x] Profile API
-- [ ] Goal API
+- [x] Goal API
 - [ ] AI API
 - [ ] Analytics API
 - [ ] Exercise API
@@ -175,15 +175,15 @@ interfaces/http/handler/<domain>/<endpoint>_test.go         — Handler tests (h
 
 **Phase 2 — Application Layer**
 
-- [ ] **TDD**: Write failing use case tests for GoalUseCase
-- [ ] Define GoalUseCase interface
-- [ ] Define Goal DTOs
-- [ ] Implement GoalUseCase
+- [x] **TDD**: Write failing use case tests for GoalUseCase
+- [x] Define GoalUseCase interfaces
+- [x] Define Goal DTOs
+- [x] Implement GoalUseCase
 
 **Phase 3 — Dependency Injection**
 
-- [ ] Implement GoalRepository (infrastructure layer)
-- [ ] Replace mock provider with real GoalUseCase in GoalHandler
+- [x] Implement GoalRepository (infrastructure layer — PostgreSQL + mock dev fallback)
+- [x] Replace mock provider with real GoalUseCase in GoalHandler
 
 ---
 
@@ -312,7 +312,7 @@ interfaces/http/handler/<domain>/<endpoint>_test.go         — Handler tests (h
   └── [x] `workouts` — `migrations/000002_create_workouts_tables.up.sql` (id UUID, user_id FK, name, date, duration, weight_unit, notes, completed, calories, avg_heart_rate, exercises JSONB, timestamps)
   └── [ ] `exercises` — `migrations/000003_create_exercises_table.up.sql` (id UUID, name, description, muscle_group, equipment, difficulty, instructions TEXT[], image_url, timestamps)
   └── [x] `schedules` — `migrations/000004_create_schedules_table.up.sql` (id UUID, user_id FK, date, time, title, duration, type, notes, completed, timestamps)
-  └── [ ] `goals` — `migrations/000005_create_goals_table.up.sql` (id UUID, user_id FK, title, type, target, unit, period, deadline, current, completed, timestamps)
+  └── [x] `goals` — `migrations/000005_create_goals_table.up.sql` (id UUID, user_id FK, title, type, target, unit, period, deadline, current, completed, timestamps)
   └── [x] `progress` — `migrations/000006_create_progress_tables.up.sql` (body_weight: id UUID, user_id FK, weight, body_fat_percentage, date, timestamps; strength_progression: id UUID, user_id FK, exercise_id FK, weight, reps, date, timestamps; consistency: id UUID, user_id FK, date, worked_out BOOLEAN, timestamps; muscle_volume: id UUID, user_id FK, date, muscle_group, total_volume, timestamps)
   └── [ ] `ai` — `migrations/000007_create_ai_tables.up.sql` (chat_sessions: id UUID, user_id FK, title, messages JSONB, timestamps; recommendations: id UUID, user_id FK, type, title, description, priority, expires_at, timestamps)
 - [x] Add authentication middleware for JWT verification

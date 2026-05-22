@@ -12,6 +12,7 @@ import (
 	"github.com/aithlete/aithlete-api/infrastructure/logger"
 	"github.com/aithlete/aithlete-api/interfaces/http/handler"
 	authhandler "github.com/aithlete/aithlete-api/interfaces/http/handler/auth"
+	goalhandler "github.com/aithlete/aithlete-api/interfaces/http/handler/goal"
 	progresshandler "github.com/aithlete/aithlete-api/interfaces/http/handler/progress"
 	profilehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/profile"
 	schedulehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/schedule"
@@ -96,6 +97,21 @@ func Bootstrap(l *logger.Logger) Dependencies {
 	getMuscleVolumeUC := usecase.NewGetMuscleVolumeUseCase(progressRepo)
 	getProgressOverviewUC := usecase.NewGetProgressOverviewUseCase(progressRepo)
 
+	var goalRepo repository.GoalRepository
+	if pool != nil {
+		goalRepo = database.NewGoalRepository(pool)
+	} else {
+		goalRepo = repository.NewMockGoalRepository()
+	}
+
+	createGoalUC := usecase.NewCreateGoalUseCase(goalRepo)
+	getGoalUC := usecase.NewGetGoalUseCase(goalRepo)
+	listGoalsUC := usecase.NewListGoalsUseCase(goalRepo)
+	updateGoalUC := usecase.NewUpdateGoalUseCase(goalRepo)
+	deleteGoalUC := usecase.NewDeleteGoalUseCase(goalRepo)
+	toggleGoalUC := usecase.NewToggleGoalUseCase(goalRepo)
+	updateGoalProgressUC := usecase.NewUpdateGoalProgressUseCase(goalRepo)
+
 	provider := mock.NewMockProvider()
 
 	return Dependencies{
@@ -118,10 +134,14 @@ func Bootstrap(l *logger.Logger) Dependencies {
 				getBodyWeightHistoryUC, addBodyWeightUC, getStrengthProgressionUC,
 				getConsistencyUC, getMuscleVolumeUC, getProgressOverviewUC,
 			),
+			Goal: goalhandler.New(
+				createGoalUC, getGoalUC, listGoalsUC,
+				updateGoalUC, deleteGoalUC, toggleGoalUC,
+				updateGoalProgressUC,
+			),
 			Exercise: handler.NewExerciseHandler(provider),
 			AI:       handler.NewAIHandler(provider),
 			Analytics: handler.NewAnalyticsHandler(provider),
-			Goal:     handler.NewGoalHandler(provider),
 		},
 	}
 }

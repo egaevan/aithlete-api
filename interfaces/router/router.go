@@ -5,6 +5,7 @@ import (
 	"github.com/aithlete/aithlete-api/infrastructure/logger"
 	"github.com/aithlete/aithlete-api/interfaces/http/handler"
 	"github.com/aithlete/aithlete-api/interfaces/http/handler/auth"
+	progresshandler "github.com/aithlete/aithlete-api/interfaces/http/handler/progress"
 	profilehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/profile"
 	schedulehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/schedule"
 	workouthandler "github.com/aithlete/aithlete-api/interfaces/http/handler/workout"
@@ -17,13 +18,13 @@ type Handlers struct {
 	TokenSvc service.TokenService
 	Auth     *auth.Handler
 	Workout  *workouthandler.Handler
+	Profile  *profilehandler.Handler
+	Progress *progresshandler.Handler
+	Schedule *schedulehandler.Handler
 	Exercise *handler.ExerciseHandler
-	Progress *handler.ProgressHandler
 	AI       *handler.AIHandler
 	Analytics *handler.AnalyticsHandler
-	Schedule *schedulehandler.Handler
 	Goal     *handler.GoalHandler
-	Profile  *profilehandler.Handler
 }
 
 func New(log *logger.Logger, h Handlers) *echo.Echo {

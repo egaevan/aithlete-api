@@ -22,12 +22,15 @@ func (r *AnalyticsRepository) GetDashboard(ctx context.Context, userID string) (
 	weekStart := now.AddDate(0, 0, -int(now.Weekday()))
 	weekStartStr := weekStart.Format("2006-01-02")
 
-	var caloriesBurned, activeMinutes int
+	var caloriesBurned, activeMinutes, avgHeartRate int
 	err := r.pool.QueryRow(ctx, `
-		SELECT COALESCE(SUM(calories), 0), COALESCE(SUM(duration), 0)
+		SELECT
+			COALESCE(SUM(calories), 0),
+			COALESCE(SUM(duration), 0),
+			COALESCE(ROUND(AVG(avg_heart_rate)), 0)
 		FROM workouts
 		WHERE user_id = $1 AND completed = true AND date >= $2
-	`, userID, weekStartStr).Scan(&caloriesBurned, &activeMinutes)
+	`, userID, weekStartStr).Scan(&caloriesBurned, &activeMinutes, &avgHeartRate)
 	if err != nil {
 		return nil, fmt.Errorf("query dashboard stats: %w", err)
 	}
@@ -39,6 +42,13 @@ func (r *AnalyticsRepository) GetDashboard(ctx context.Context, userID string) (
 	`, userID).Scan(&goalsCompleted, &goalsTotal)
 	if err != nil {
 		return nil, fmt.Errorf("query dashboard goals: %w", err)
+	}
+
+	var heartRateTrend string
+	if avgHeartRate > 0 {
+		heartRateTrend = "normal"
+	} else {
+		heartRateTrend = "0%"
 	}
 
 	weeklyProgress, err := r.getWeeklyProgress(ctx, userID, now)
@@ -60,8 +70,8 @@ func (r *AnalyticsRepository) GetDashboard(ctx context.Context, userID string) (
 			GoalsCompleted:     goalsCompleted,
 			GoalsTotal:         goalsTotal,
 			GoalsTrend:         "on track",
-			AvgHeartRate:       0,
-			HeartRateTrend:     "0%",
+			AvgHeartRate:       avgHeartRate,
+			HeartRateTrend:     heartRateTrend,
 		},
 		WeeklyProgress: weeklyProgress,
 		Streak:         *streak,
@@ -109,9 +119,11 @@ func (r *AnalyticsRepository) getWeeklyProgress(ctx context.Context, userID stri
 func (r *AnalyticsRepository) GetStreak(ctx context.Context, userID string) (*entity.Streak, error) {
 	var current int
 	err := r.pool.QueryRow(ctx, `
-		SELECT COALESCE(MAX(streak), 0)
+		SELECT COALESCE(streak, 0)
 		FROM consistency
 		WHERE user_id = $1
+		ORDER BY week DESC
+		LIMIT 1
 	`, userID).Scan(&current)
 	if err != nil {
 		return nil, domainerr.ErrNoAnalyticsData

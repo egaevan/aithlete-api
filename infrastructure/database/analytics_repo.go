@@ -20,17 +20,14 @@ func NewAnalyticsRepository(pool *Pool) *AnalyticsRepository {
 func (r *AnalyticsRepository) GetDashboard(ctx context.Context, userID string) (*entity.Dashboard, error) {
 	now := time.Now()
 	weekStart := now.AddDate(0, 0, -int(now.Weekday()))
+	weekStartStr := weekStart.Format("2006-01-02")
 
-	var (
-		caloriesBurned int
-		activeMinutes  int
-	)
+	var caloriesBurned, activeMinutes int
 	err := r.pool.QueryRow(ctx, `
-		SELECT COALESCE(SUM(c.duration * 10), 0), COALESCE(SUM(c.duration), 0)
-		FROM completions c
-		JOIN workouts w ON w.id = c.workout_id
-		WHERE w.user_id = $1 AND c.completed_at >= $2
-	`, userID, weekStart).Scan(&caloriesBurned, &activeMinutes)
+		SELECT COALESCE(SUM(calories), 0), COALESCE(SUM(duration), 0)
+		FROM workouts
+		WHERE user_id = $1 AND completed = true AND date >= $2
+	`, userID, weekStartStr).Scan(&caloriesBurned, &activeMinutes)
 	if err != nil {
 		return nil, fmt.Errorf("query dashboard stats: %w", err)
 	}
@@ -68,9 +65,6 @@ func (r *AnalyticsRepository) GetDashboard(ctx context.Context, userID string) (
 		},
 		WeeklyProgress: weeklyProgress,
 		Streak:         *streak,
-		RecentActivity: nil,
-		MuscleRecovery: nil,
-		TodaySchedule:  nil,
 	}, nil
 }
 
@@ -80,18 +74,18 @@ func (r *AnalyticsRepository) GetWeeklyProgress(ctx context.Context, userID stri
 
 func (r *AnalyticsRepository) getWeeklyProgress(ctx context.Context, userID string, now time.Time) ([]entity.WeeklyProgressDay, error) {
 	weekStart := now.AddDate(0, 0, -int(now.Weekday()))
+	weekStartStr := weekStart.Format("2006-01-02")
 
 	rows, err := r.pool.Query(ctx, `
 		SELECT
-			to_char(c.completed_at, 'Day') AS day,
-			COALESCE(SUM(c.duration * 10), 0) AS calories,
-			COALESCE(SUM(c.duration), 0) AS duration
-		FROM completions c
-		JOIN workouts w ON w.id = c.workout_id
-		WHERE w.user_id = $1 AND c.completed_at >= $2
-		GROUP BY to_char(c.completed_at, 'Day'), EXTRACT(DOW FROM c.completed_at)
-		ORDER BY EXTRACT(DOW FROM c.completed_at)
-	`, userID, weekStart)
+			to_char(date::date, 'Day') AS day,
+			COALESCE(SUM(calories), 0) AS calories,
+			COALESCE(SUM(duration), 0) AS duration
+		FROM workouts
+		WHERE user_id = $1 AND completed = true AND date >= $2
+		GROUP BY date::date
+		ORDER BY date::date
+	`, userID, weekStartStr)
 	if err != nil {
 		return nil, err
 	}
@@ -115,44 +109,39 @@ func (r *AnalyticsRepository) getWeeklyProgress(ctx context.Context, userID stri
 func (r *AnalyticsRepository) GetStreak(ctx context.Context, userID string) (*entity.Streak, error) {
 	var current int
 	err := r.pool.QueryRow(ctx, `
-		WITH daily AS (
-			SELECT DISTINCT DATE(c.completed_at) AS work_date
-			FROM completions c
-			JOIN workouts w ON w.id = c.workout_id
-			WHERE w.user_id = $1
-		),
-		streaks AS (
-			SELECT work_date,
-				work_date - ROW_NUMBER() OVER (ORDER BY work_date)::int AS grp
-			FROM daily
-		)
-		SELECT COUNT(*) AS current_streak
-		FROM streaks
-		GROUP BY grp
-		ORDER BY MAX(work_date) DESC
-		LIMIT 1
+		SELECT COALESCE(MAX(streak), 0)
+		FROM consistency
+		WHERE user_id = $1
 	`, userID).Scan(&current)
 	if err != nil {
 		return nil, domainerr.ErrNoAnalyticsData
 	}
 
+	var personalBest int
+	err = r.pool.QueryRow(ctx, `
+		SELECT COALESCE(MAX(streak), 0)
+		FROM consistency
+		WHERE user_id = $1
+	`, userID).Scan(&personalBest)
+	if err != nil {
+		personalBest = current
+	}
+
 	return &entity.Streak{
 		Current:      current,
-		PersonalBest: current,
-		History:      nil,
+		PersonalBest: personalBest,
 	}, nil
 }
 
 func (r *AnalyticsRepository) GetWeeklyVolume(ctx context.Context, userID string) ([]entity.WeeklyVolume, error) {
 	rows, err := r.pool.Query(ctx, `
 		SELECT
-			to_char(c.completed_at, 'IYYY"-W"IW') AS week,
-			COALESCE(SUM(c.volume), 0) AS volume
-		FROM completions c
-		JOIN workouts w ON w.id = c.workout_id
-		WHERE w.user_id = $1
-		GROUP BY to_char(c.completed_at, 'IYYY"-W"IW')
-		ORDER BY to_char(c.completed_at, 'IYYY"-W"IW') DESC
+			to_char(sp.date::date, 'IYYY"-W"IW') AS week,
+			COALESCE(SUM(sp.volume), 0) AS volume
+		FROM strength_progression sp
+		WHERE sp.user_id = $1
+		GROUP BY week
+		ORDER BY week DESC
 		LIMIT 12
 	`, userID)
 	if err != nil {
@@ -177,15 +166,10 @@ func (r *AnalyticsRepository) GetWeeklyVolume(ctx context.Context, userID string
 
 func (r *AnalyticsRepository) GetMuscleVolumeDistribution(ctx context.Context, userID string) ([]entity.MuscleVolumeDistribution, error) {
 	rows, err := r.pool.Query(ctx, `
-		SELECT
-			e.muscle_group,
-			COALESCE(SUM(ce.volume), 0) AS volume
-		FROM completions c
-		JOIN workouts w ON w.id = c.workout_id
-		JOIN completion_exercises ce ON ce.completion_id = c.id
-		JOIN exercises e ON e.id = ce.exercise_id
-		WHERE w.user_id = $1
-		GROUP BY e.muscle_group
+		SELECT muscle_group, COALESCE(SUM(volume), 0) AS volume
+		FROM muscle_volume
+		WHERE user_id = $1
+		GROUP BY muscle_group
 		ORDER BY volume DESC
 	`, userID)
 	if err != nil {
@@ -209,26 +193,30 @@ func (r *AnalyticsRepository) GetMuscleVolumeDistribution(ctx context.Context, u
 }
 
 func (r *AnalyticsRepository) GetOverview(ctx context.Context, userID string) (*entity.AnalyticsOverview, error) {
-	var (
-		totalVolume       int
-		avgSession        int
-		sessionsPerMonth  int
-		goalCompletion    int
-	)
+	var totalVolume int
 	err := r.pool.QueryRow(ctx, `
-		SELECT
-			COALESCE(SUM(c.volume), 0),
-			COALESCE(ROUND(AVG(c.duration)), 0),
-			COUNT(DISTINCT c.workout_id)
-		FROM completions c
-		JOIN workouts w ON w.id = c.workout_id
-		WHERE w.user_id = $1
-		  AND c.completed_at >= NOW() - INTERVAL '30 days'
-	`, userID).Scan(&totalVolume, &avgSession, &sessionsPerMonth)
+		SELECT COALESCE(SUM(sp.volume), 0)
+		FROM strength_progression sp
+		WHERE sp.user_id = $1
+	`, userID).Scan(&totalVolume)
 	if err != nil {
-		return nil, fmt.Errorf("query overview: %w", err)
+		return nil, fmt.Errorf("query total volume: %w", err)
 	}
 
+	var avgSession, sessionsPerMonth int
+	err = r.pool.QueryRow(ctx, `
+		SELECT
+			COALESCE(ROUND(AVG(duration)), 0),
+			COUNT(*)
+		FROM workouts
+		WHERE user_id = $1 AND completed = true
+		  AND date >= to_char(NOW() - INTERVAL '30 days', 'YYYY-MM-DD')
+	`, userID).Scan(&avgSession, &sessionsPerMonth)
+	if err != nil {
+		return nil, fmt.Errorf("query sessions: %w", err)
+	}
+
+	var goalCompletion int
 	err = r.pool.QueryRow(ctx, `
 		SELECT COALESCE(ROUND(AVG(CASE WHEN completed THEN 100.0 ELSE 0 END)), 0)
 		FROM goals WHERE user_id = $1
@@ -239,12 +227,12 @@ func (r *AnalyticsRepository) GetOverview(ctx context.Context, userID string) (*
 
 	return &entity.AnalyticsOverview{
 		TotalVolume:           totalVolume,
-		TotalVolumeTrend:     "0%",
+		TotalVolumeTrend:      "0%",
 		AvgSession:            avgSession,
-		AvgSessionTrend:      "0 min",
+		AvgSessionTrend:       "0 min",
 		SessionsPerMonth:      sessionsPerMonth,
 		SessionsPerMonthTrend: "0",
 		GoalCompletion:        goalCompletion,
-		GoalCompletionTrend:  "0%",
+		GoalCompletionTrend:   "0%",
 	}, nil
 }

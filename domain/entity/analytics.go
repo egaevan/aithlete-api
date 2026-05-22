@@ -76,3 +76,14 @@ type MuscleVolumeDistribution struct {
 	Muscle string
 	Volume float64
 }
+
+type AnalyticsOverview struct {
+	TotalVolume           int
+	TotalVolumeTrend      string
+	AvgSession            int
+	AvgSessionTrend       string
+	SessionsPerMonth      int
+	SessionsPerMonthTrend string
+	GoalCompletion        int
+	GoalCompletionTrend   string
+}

@@ -88,6 +88,48 @@ func (r *ProgressRepository) FindStrengthByUserID(ctx context.Context, userID st
 	return records, rows.Err()
 }
 
+func (r *ProgressRepository) AddStrengthRecord(ctx context.Context, sr *entity.StrengthRecord) error {
+	var id string
+	err := r.pool.QueryRow(ctx, `
+		INSERT INTO strength_progression (user_id, exercise, date, one_rep_max, volume)
+		VALUES ($1, $2, $3, $4, $5)
+		RETURNING id
+	`, sr.UserID, sr.Exercise, sr.Date, sr.OneRepMax, sr.Volume).Scan(&id)
+	if err != nil {
+		return fmt.Errorf("add strength record: %w", err)
+	}
+	sr.ID = id
+	return nil
+}
+
+func (r *ProgressRepository) UpsertConsistency(ctx context.Context, userID, week string, completed int) error {
+	_, err := r.pool.Exec(ctx, `
+		INSERT INTO consistency (user_id, week, workouts_completed, workouts_planned, streak)
+		VALUES ($1, $2, $3, 0, $3)
+		ON CONFLICT ON CONSTRAINT consistency_user_week_idx
+		DO UPDATE SET workouts_completed = consistency.workouts_completed + $3,
+		              streak = consistency.streak + $3
+	`, userID, week, completed)
+	if err != nil {
+		return fmt.Errorf("upsert consistency: %w", err)
+	}
+	return nil
+}
+
+func (r *ProgressRepository) UpsertMuscleVolume(ctx context.Context, userID, muscleGroup string, volume float64) error {
+	_, err := r.pool.Exec(ctx, `
+		INSERT INTO muscle_volume (user_id, muscle_group, volume, sessions, trend)
+		VALUES ($1, $2, $3, 1, 'up')
+		ON CONFLICT ON CONSTRAINT muscle_volume_user_muscle_idx
+		DO UPDATE SET volume = muscle_volume.volume + $3,
+		              sessions = muscle_volume.sessions + 1
+	`, userID, muscleGroup, volume)
+	if err != nil {
+		return fmt.Errorf("upsert muscle volume: %w", err)
+	}
+	return nil
+}
+
 func (r *ProgressRepository) FindConsistency(ctx context.Context, userID string) ([]entity.Consistency, error) {
 	rows, err := r.pool.Query(ctx, `
 		SELECT week, workouts_completed, workouts_planned, streak

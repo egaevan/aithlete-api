@@ -68,12 +68,19 @@ func Bootstrap(l *logger.Logger) Dependencies {
 		workoutRepo = repository.NewMockWorkoutRepository()
 	}
 
+	var progressRepo repository.ProgressRepository
+	if pool != nil {
+		progressRepo = database.NewProgressRepository(pool)
+	} else {
+		progressRepo = repository.NewMockProgressRepository()
+	}
+
 	createWorkoutUC := workoutuc.NewCreateWorkoutUseCase(workoutRepo)
 	getWorkoutUC := workoutuc.NewGetWorkoutUseCase(workoutRepo)
 	listWorkoutsUC := workoutuc.NewListWorkoutsUseCase(workoutRepo)
 	updateWorkoutUC := workoutuc.NewUpdateWorkoutUseCase(workoutRepo)
 	deleteWorkoutUC := workoutuc.NewDeleteWorkoutUseCase(workoutRepo)
-	completeWorkoutUC := workoutuc.NewCompleteWorkoutUseCase(workoutRepo)
+	completeWorkoutUC := workoutuc.NewCompleteWorkoutUseCase(workoutRepo, progressRepo)
 	addExerciseUC := workoutuc.NewAddExerciseUseCase(workoutRepo)
 	updateSetUC := workoutuc.NewUpdateSetUseCase(workoutRepo)
 
@@ -91,13 +98,6 @@ func Bootstrap(l *logger.Logger) Dependencies {
 	updateScheduleUC := scheduleuc.NewUpdateScheduleUseCase(scheduleRepo)
 	deleteScheduleUC := scheduleuc.NewDeleteScheduleUseCase(scheduleRepo)
 	toggleScheduleUC := scheduleuc.NewToggleScheduleUseCase(scheduleRepo)
-
-	var progressRepo repository.ProgressRepository
-	if pool != nil {
-		progressRepo = database.NewProgressRepository(pool)
-	} else {
-		progressRepo = repository.NewMockProgressRepository()
-	}
 
 	getBodyWeightHistoryUC := progressuc.NewGetBodyWeightHistoryUseCase(progressRepo)
 	addBodyWeightUC := progressuc.NewAddBodyWeightUseCase(progressRepo)

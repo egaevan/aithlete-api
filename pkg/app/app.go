@@ -2,9 +2,10 @@ package app
 
 import (
 	"context"
-	"log"
 
 	"github.com/aithlete/aithlete-api/application/usecase"
+	"github.com/aithlete/aithlete-api/domain/entity"
+	"github.com/aithlete/aithlete-api/domain/repository"
 	"github.com/aithlete/aithlete-api/infrastructure/auth"
 	"github.com/aithlete/aithlete-api/infrastructure/config"
 	"github.com/aithlete/aithlete-api/infrastructure/database"
@@ -28,10 +29,17 @@ func Bootstrap(l *logger.Logger) Dependencies {
 
 	pool, err := database.NewPool(context.Background(), database.DSN(cfg.Database))
 	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
+		l.Warn("Database unavailable, using mock repo: %v", err)
 	}
 
-	userRepo := database.NewUserRepository(pool)
+	var userRepo repository.UserRepository
+	if pool != nil {
+		dbRepo := database.NewUserRepository(pool)
+		seedDefaultUser(dbRepo, hashSvc, l)
+		userRepo = dbRepo
+	} else {
+		userRepo = repository.NewMockUserRepository()
+	}
 
 	registerUC := usecase.NewRegisterUseCase(userRepo, hashSvc, tokenSvc)
 	loginUC := usecase.NewLoginUseCase(userRepo, hashSvc, tokenSvc)
@@ -45,14 +53,37 @@ func Bootstrap(l *logger.Logger) Dependencies {
 		Handlers: router.Handlers{
 			TokenSvc: tokenSvc,
 			Auth:     authhandler.New(loginUC, registerUC, refreshUC, getMeUC),
-			Workout:   handler.NewWorkoutHandler(provider),
-			Exercise:  handler.NewExerciseHandler(provider),
-			Progress:  handler.NewProgressHandler(provider),
-			AI:        handler.NewAIHandler(provider),
+			Workout:  handler.NewWorkoutHandler(provider),
+			Exercise: handler.NewExerciseHandler(provider),
+			Progress: handler.NewProgressHandler(provider),
+			AI:       handler.NewAIHandler(provider),
 			Analytics: handler.NewAnalyticsHandler(provider),
-			Schedule:  handler.NewScheduleHandler(provider),
-			Goal:      handler.NewGoalHandler(provider),
-			Profile:   handler.NewProfileHandler(provider),
+			Schedule: handler.NewScheduleHandler(provider),
+			Goal:     handler.NewGoalHandler(provider),
+			Profile:  handler.NewProfileHandler(provider),
 		},
 	}
+}
+
+func seedDefaultUser(repo repository.UserRepository, hashSvc *auth.PasswordHasher, l *logger.Logger) {
+	const defaultEmail = "alex@example.com"
+
+	_, err := repo.FindByEmail(context.Background(), defaultEmail)
+	if err == nil {
+		return
+	}
+
+	hashed, err := hashSvc.Hash(defaultEmail)
+	if err != nil {
+		l.Warn("Failed to hash default password: %v", err)
+		return
+	}
+
+	u := entity.NewUser(defaultEmail, "Alex Johnson", hashed)
+	if err := repo.Create(context.Background(), u); err != nil {
+		l.Warn("Failed to seed default user: %v", err)
+		return
+	}
+
+	l.Info("Seeded default user: alex@example.com / alex@example.com")
 }

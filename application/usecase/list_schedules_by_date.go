@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/aithlete/aithlete-api/application/dto"
 	"github.com/aithlete/aithlete-api/application/mapper"
@@ -22,6 +23,10 @@ func NewListSchedulesByDateUseCase(scheduleRepo repository.ScheduleRepository) L
 }
 
 func (uc *listSchedulesByDateUseCase) ListByDate(ctx context.Context, userID, date string) ([]dto.ScheduleResult, error) {
+	if date == "" {
+		date = time.Now().Format("2006-01-02")
+	}
+
 	schedules, err := uc.scheduleRepo.FindByUserIDAndDate(ctx, userID, date)
 	if err != nil {
 		return nil, fmt.Errorf("list schedules by date: %w", err)

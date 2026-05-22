@@ -36,6 +36,32 @@ Copy `.env.example` to `.env` and adjust values:
 cp .env.example .env
 ```
 
+## Database Migrations
+
+This project uses [golang-migrate/migrate](https://github.com/golang-migrate/migrate) for database migrations.
+
+### Prerequisites
+
+```bash
+# Install the migrate CLI
+brew install golang-migrate
+```
+
+### Commands
+
+```bash
+# Run all pending migrations
+make migrate-up
+
+# Rollback the last migration
+make migrate-down
+
+# Create a new migration
+make migrate-create  # prompts for a name
+```
+
+Migrations are stored in the `migrations/` directory. The `DATABASE_URL` env var (e.g. `postgres://user:pass@localhost:5432/aithlete?sslmode=disable`) is read from `.env`.
+
 ## API Endpoints
 
 All endpoints are prefixed with `/api/v1`.

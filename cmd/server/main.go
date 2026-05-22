@@ -12,22 +12,33 @@ import (
 	"github.com/aithlete/aithlete-api/infrastructure/logger"
 	"github.com/aithlete/aithlete-api/interfaces/router"
 	"github.com/aithlete/aithlete-api/pkg/app"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	_ = godotenv.Load()
 	log := logger.New()
 	deps := app.Bootstrap(log)
 
 	e := router.New(log, deps.Handlers)
 
-	addr := fmt.Sprintf("%s:%d", deps.Config.Server.Host, deps.Config.Server.Port)
+	cfg := deps.Config.Server
+	addr := fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)
 
 	go func() {
-		log.Info("Starting server on %s", addr)
-		log.Info("Environment: %s", deps.Config.Server.Env)
-		if err := e.Start(addr); err != nil && err != http.ErrServerClosed {
-			log.Error("Server failed to start: %v", err)
-			os.Exit(1)
+		log.Info("Environment: %s", cfg.Env)
+		if cfg.TLS.Enabled {
+			log.Info("Starting server with TLS on %s", addr)
+			if err := e.StartTLS(addr, cfg.TLS.CertFile, cfg.TLS.KeyFile); err != nil && err != http.ErrServerClosed {
+				log.Error("Server failed to start: %v", err)
+				os.Exit(1)
+			}
+		} else {
+			log.Info("Starting server on %s", addr)
+			if err := e.Start(addr); err != nil && err != http.ErrServerClosed {
+				log.Error("Server failed to start: %v", err)
+				os.Exit(1)
+			}
 		}
 	}()
 

@@ -17,9 +17,16 @@ type AuthConfig struct {
 }
 
 type ServerConfig struct {
-	Host string
-	Port int
-	Env  string
+	Host     string
+	Port     int
+	Env      string
+	TLS      TLSConfig
+}
+
+type TLSConfig struct {
+	Enabled  bool
+	CertFile string
+	KeyFile  string
 }
 
 type DatabaseConfig struct {
@@ -37,6 +44,11 @@ func Load() *Config {
 			Host: getEnv("SERVER_HOST", "0.0.0.0"),
 			Port: getEnvAsInt("SERVER_PORT", 8080),
 			Env:  getEnv("APP_ENV", "development"),
+			TLS: TLSConfig{
+				Enabled:  getEnv("TLS_ENABLED", "false") == "true",
+				CertFile: getEnv("TLS_CERT_FILE", "./cert.pem"),
+				KeyFile:  getEnv("TLS_KEY_FILE", "./key.pem"),
+			},
 		},
 		Database: DatabaseConfig{
 			Host:     getEnv("DB_HOST", "localhost"),

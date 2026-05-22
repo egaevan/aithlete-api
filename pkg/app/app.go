@@ -2,9 +2,9 @@ package app
 
 import (
 	"context"
+	"log"
 
 	"github.com/aithlete/aithlete-api/application/usecase"
-	"github.com/aithlete/aithlete-api/domain/repository"
 	"github.com/aithlete/aithlete-api/infrastructure/auth"
 	"github.com/aithlete/aithlete-api/infrastructure/config"
 	"github.com/aithlete/aithlete-api/infrastructure/database"
@@ -20,7 +20,7 @@ type Dependencies struct {
 	Handlers router.Handlers
 }
 
-func Bootstrap(log *logger.Logger) Dependencies {
+func Bootstrap(l *logger.Logger) Dependencies {
 	cfg := config.Load()
 
 	hashSvc := auth.NewPasswordHasher()
@@ -28,15 +28,10 @@ func Bootstrap(log *logger.Logger) Dependencies {
 
 	pool, err := database.NewPool(context.Background(), database.DSN(cfg.Database))
 	if err != nil {
-		log.Warn("Database not available, falling back to in-memory store: %v", err)
+		log.Fatalf("Failed to connect to database: %v", err)
 	}
 
-	var userRepo repository.UserRepository
-	if pool != nil {
-		userRepo = database.NewUserRepository(pool)
-	} else {
-		userRepo = database.NewInMemoryUserRepository()
-	}
+	userRepo := database.NewUserRepository(pool)
 
 	registerUC := usecase.NewRegisterUseCase(userRepo, hashSvc, tokenSvc)
 	loginUC := usecase.NewLoginUseCase(userRepo, hashSvc, tokenSvc)
@@ -48,7 +43,8 @@ func Bootstrap(log *logger.Logger) Dependencies {
 	return Dependencies{
 		Config: cfg,
 		Handlers: router.Handlers{
-			Auth:      authhandler.New(loginUC, registerUC, refreshUC, getMeUC),
+			TokenSvc: tokenSvc,
+			Auth:     authhandler.New(loginUC, registerUC, refreshUC, getMeUC),
 			Workout:   handler.NewWorkoutHandler(provider),
 			Exercise:  handler.NewExerciseHandler(provider),
 			Progress:  handler.NewProgressHandler(provider),

@@ -159,7 +159,7 @@ func (r *AnalyticsRepository) GetWeeklyVolume(ctx context.Context, userID string
 	}
 
 	if results == nil {
-		return nil, domainerr.ErrNoAnalyticsData
+		results = []entity.WeeklyVolume{}
 	}
 	return results, nil
 }
@@ -187,7 +187,7 @@ func (r *AnalyticsRepository) GetMuscleVolumeDistribution(ctx context.Context, u
 	}
 
 	if results == nil {
-		return nil, domainerr.ErrNoAnalyticsData
+		results = []entity.MuscleVolumeDistribution{}
 	}
 	return results, nil
 }

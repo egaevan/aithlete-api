@@ -1,23 +1,23 @@
 package progress
 
-import "github.com/aithlete/aithlete-api/application/usecase"
+import "github.com/aithlete/aithlete-api/application/usecase/progress"
 
 type Handler struct {
-	getBodyWeightHistoryUseCase usecase.GetBodyWeightHistoryUseCase
-	addBodyWeightUseCase        usecase.AddBodyWeightUseCase
-	getStrengthProgressionUseCase usecase.GetStrengthProgressionUseCase
-	getConsistencyUseCase       usecase.GetConsistencyUseCase
-	getMuscleVolumeUseCase      usecase.GetMuscleVolumeUseCase
-	getProgressOverviewUseCase  usecase.GetProgressOverviewUseCase
+	getBodyWeightHistoryUseCase progress.GetBodyWeightHistoryUseCase
+	addBodyWeightUseCase        progress.AddBodyWeightUseCase
+	getStrengthProgressionUseCase progress.GetStrengthProgressionUseCase
+	getConsistencyUseCase       progress.GetConsistencyUseCase
+	getMuscleVolumeUseCase      progress.GetMuscleVolumeUseCase
+	getProgressOverviewUseCase  progress.GetProgressOverviewUseCase
 }
 
 func New(
-	getBodyWeightHistory usecase.GetBodyWeightHistoryUseCase,
-	addBodyWeight usecase.AddBodyWeightUseCase,
-	getStrengthProgression usecase.GetStrengthProgressionUseCase,
-	getConsistency usecase.GetConsistencyUseCase,
-	getMuscleVolume usecase.GetMuscleVolumeUseCase,
-	getProgressOverview usecase.GetProgressOverviewUseCase,
+	getBodyWeightHistory progress.GetBodyWeightHistoryUseCase,
+	addBodyWeight progress.AddBodyWeightUseCase,
+	getStrengthProgression progress.GetStrengthProgressionUseCase,
+	getConsistency progress.GetConsistencyUseCase,
+	getMuscleVolume progress.GetMuscleVolumeUseCase,
+	getProgressOverview progress.GetProgressOverviewUseCase,
 ) *Handler {
 	return &Handler{
 		getBodyWeightHistoryUseCase:   getBodyWeightHistory,

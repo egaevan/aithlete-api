@@ -1,12 +1,12 @@
 package profile
 
-import "github.com/aithlete/aithlete-api/application/usecase"
+import "github.com/aithlete/aithlete-api/application/usecase/profile"
 
 type Handler struct {
-	updateProfileUseCase usecase.UpdateProfileUseCase
+	updateProfileUseCase profile.UpdateProfileUseCase
 }
 
-func New(updateProfile usecase.UpdateProfileUseCase) *Handler {
+func New(updateProfile profile.UpdateProfileUseCase) *Handler {
 	return &Handler{
 		updateProfileUseCase: updateProfile,
 	}

@@ -30,6 +30,7 @@ const (
 
 	MsgBadRequest        = "Invalid request body"
 	MsgInternalError     = "Internal server error"
+	MsgNotFound          = "Not found"
 	MsgInvalidToken      = "Invalid or expired token"
 	MsgInvalidAuthHeader = "Invalid authorization format"
 	MsgMissingAuthHeader = "Missing authorization header"

@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/aithlete/aithlete-api/interfaces/http/handler"
 	"github.com/aithlete/aithlete-api/interfaces/http/handler/auth"
+	goalhandler "github.com/aithlete/aithlete-api/interfaces/http/handler/goal"
 	progresshandler "github.com/aithlete/aithlete-api/interfaces/http/handler/progress"
 	profilehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/profile"
 	schedulehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/schedule"
@@ -80,15 +81,15 @@ func registerScheduleRoutes(g *echo.Group, h *schedulehandler.Handler, authMw ec
 	schedules.PATCH("/:id/toggle", h.Toggle)
 }
 
-func registerGoalRoutes(g *echo.Group, h *handler.GoalHandler, authMw echo.MiddlewareFunc) {
+func registerGoalRoutes(g *echo.Group, h *goalhandler.Handler, authMw echo.MiddlewareFunc) {
 	goals := g.Group("/goals", authMw)
-	goals.GET("", h.GetGoals)
-	goals.POST("", h.CreateGoal)
-	goals.GET("/:id", h.GetGoal)
-	goals.PUT("/:id", h.UpdateGoal)
-	goals.DELETE("/:id", h.DeleteGoal)
-	goals.PATCH("/:id/toggle", h.ToggleGoal)
-	goals.PATCH("/:id/progress", h.UpdateGoalProgress)
+	goals.GET("", h.List)
+	goals.POST("", h.Create)
+	goals.GET("/:id", h.Get)
+	goals.PUT("/:id", h.Update)
+	goals.DELETE("/:id", h.Delete)
+	goals.PATCH("/:id/toggle", h.Toggle)
+	goals.PATCH("/:id/progress", h.UpdateProgress)
 }
 
 func registerProfileRoutes(g *echo.Group, h *profilehandler.Handler, authMw echo.MiddlewareFunc) {

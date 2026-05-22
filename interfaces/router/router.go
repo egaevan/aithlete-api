@@ -5,6 +5,7 @@ import (
 	"github.com/aithlete/aithlete-api/infrastructure/logger"
 	"github.com/aithlete/aithlete-api/interfaces/http/handler"
 	"github.com/aithlete/aithlete-api/interfaces/http/handler/auth"
+	goalhandler "github.com/aithlete/aithlete-api/interfaces/http/handler/goal"
 	progresshandler "github.com/aithlete/aithlete-api/interfaces/http/handler/progress"
 	profilehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/profile"
 	schedulehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/schedule"
@@ -21,10 +22,10 @@ type Handlers struct {
 	Profile  *profilehandler.Handler
 	Progress *progresshandler.Handler
 	Schedule *schedulehandler.Handler
+	Goal     *goalhandler.Handler
 	Exercise *handler.ExerciseHandler
 	AI       *handler.AIHandler
 	Analytics *handler.AnalyticsHandler
-	Goal     *handler.GoalHandler
 }
 
 func New(log *logger.Logger, h Handlers) *echo.Echo {

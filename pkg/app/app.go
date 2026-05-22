@@ -3,7 +3,12 @@ package app
 import (
 	"context"
 
-	"github.com/aithlete/aithlete-api/application/usecase"
+	authuc "github.com/aithlete/aithlete-api/application/usecase/auth"
+	goaluc "github.com/aithlete/aithlete-api/application/usecase/goal"
+	profileuc "github.com/aithlete/aithlete-api/application/usecase/profile"
+	progressuc "github.com/aithlete/aithlete-api/application/usecase/progress"
+	scheduleuc "github.com/aithlete/aithlete-api/application/usecase/schedule"
+	workoutuc "github.com/aithlete/aithlete-api/application/usecase/workout"
 	"github.com/aithlete/aithlete-api/domain/entity"
 	"github.com/aithlete/aithlete-api/domain/repository"
 	"github.com/aithlete/aithlete-api/infrastructure/auth"
@@ -12,6 +17,7 @@ import (
 	"github.com/aithlete/aithlete-api/infrastructure/logger"
 	"github.com/aithlete/aithlete-api/interfaces/http/handler"
 	authhandler "github.com/aithlete/aithlete-api/interfaces/http/handler/auth"
+	goalhandler "github.com/aithlete/aithlete-api/interfaces/http/handler/goal"
 	progresshandler "github.com/aithlete/aithlete-api/interfaces/http/handler/progress"
 	profilehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/profile"
 	schedulehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/schedule"
@@ -45,11 +51,11 @@ func Bootstrap(l *logger.Logger) Dependencies {
 		userRepo = repository.NewMockUserRepository()
 	}
 
-	registerUC := usecase.NewRegisterUseCase(userRepo, hashSvc, tokenSvc)
-	loginUC := usecase.NewLoginUseCase(userRepo, hashSvc, tokenSvc)
-	refreshUC := usecase.NewRefreshTokenUseCase(tokenSvc)
-	getMeUC := usecase.NewGetMeUseCase(userRepo)
-	updateProfileUC := usecase.NewUpdateProfileUseCase(userRepo)
+	registerUC := authuc.NewRegisterUseCase(userRepo, hashSvc, tokenSvc)
+	loginUC := authuc.NewLoginUseCase(userRepo, hashSvc, tokenSvc)
+	refreshUC := authuc.NewRefreshTokenUseCase(tokenSvc)
+	getMeUC := authuc.NewGetMeUseCase(userRepo)
+	updateProfileUC := profileuc.NewUpdateProfileUseCase(userRepo)
 
 	var workoutRepo repository.WorkoutRepository
 	if pool != nil {
@@ -58,14 +64,14 @@ func Bootstrap(l *logger.Logger) Dependencies {
 		workoutRepo = repository.NewMockWorkoutRepository()
 	}
 
-	createWorkoutUC := usecase.NewCreateWorkoutUseCase(workoutRepo)
-	getWorkoutUC := usecase.NewGetWorkoutUseCase(workoutRepo)
-	listWorkoutsUC := usecase.NewListWorkoutsUseCase(workoutRepo)
-	updateWorkoutUC := usecase.NewUpdateWorkoutUseCase(workoutRepo)
-	deleteWorkoutUC := usecase.NewDeleteWorkoutUseCase(workoutRepo)
-	completeWorkoutUC := usecase.NewCompleteWorkoutUseCase(workoutRepo)
-	addExerciseUC := usecase.NewAddExerciseUseCase(workoutRepo)
-	updateSetUC := usecase.NewUpdateSetUseCase(workoutRepo)
+	createWorkoutUC := workoutuc.NewCreateWorkoutUseCase(workoutRepo)
+	getWorkoutUC := workoutuc.NewGetWorkoutUseCase(workoutRepo)
+	listWorkoutsUC := workoutuc.NewListWorkoutsUseCase(workoutRepo)
+	updateWorkoutUC := workoutuc.NewUpdateWorkoutUseCase(workoutRepo)
+	deleteWorkoutUC := workoutuc.NewDeleteWorkoutUseCase(workoutRepo)
+	completeWorkoutUC := workoutuc.NewCompleteWorkoutUseCase(workoutRepo)
+	addExerciseUC := workoutuc.NewAddExerciseUseCase(workoutRepo)
+	updateSetUC := workoutuc.NewUpdateSetUseCase(workoutRepo)
 
 	var scheduleRepo repository.ScheduleRepository
 	if pool != nil {
@@ -74,13 +80,13 @@ func Bootstrap(l *logger.Logger) Dependencies {
 		scheduleRepo = repository.NewMockScheduleRepository()
 	}
 
-	createScheduleUC := usecase.NewCreateScheduleUseCase(scheduleRepo)
-	getScheduleUC := usecase.NewGetScheduleUseCase(scheduleRepo)
-	listSchedulesUC := usecase.NewListSchedulesUseCase(scheduleRepo)
-	listSchedulesByDateUC := usecase.NewListSchedulesByDateUseCase(scheduleRepo)
-	updateScheduleUC := usecase.NewUpdateScheduleUseCase(scheduleRepo)
-	deleteScheduleUC := usecase.NewDeleteScheduleUseCase(scheduleRepo)
-	toggleScheduleUC := usecase.NewToggleScheduleUseCase(scheduleRepo)
+	createScheduleUC := scheduleuc.NewCreateScheduleUseCase(scheduleRepo)
+	getScheduleUC := scheduleuc.NewGetScheduleUseCase(scheduleRepo)
+	listSchedulesUC := scheduleuc.NewListSchedulesUseCase(scheduleRepo)
+	listSchedulesByDateUC := scheduleuc.NewListSchedulesByDateUseCase(scheduleRepo)
+	updateScheduleUC := scheduleuc.NewUpdateScheduleUseCase(scheduleRepo)
+	deleteScheduleUC := scheduleuc.NewDeleteScheduleUseCase(scheduleRepo)
+	toggleScheduleUC := scheduleuc.NewToggleScheduleUseCase(scheduleRepo)
 
 	var progressRepo repository.ProgressRepository
 	if pool != nil {
@@ -89,12 +95,27 @@ func Bootstrap(l *logger.Logger) Dependencies {
 		progressRepo = repository.NewMockProgressRepository()
 	}
 
-	getBodyWeightHistoryUC := usecase.NewGetBodyWeightHistoryUseCase(progressRepo)
-	addBodyWeightUC := usecase.NewAddBodyWeightUseCase(progressRepo)
-	getStrengthProgressionUC := usecase.NewGetStrengthProgressionUseCase(progressRepo)
-	getConsistencyUC := usecase.NewGetConsistencyUseCase(progressRepo)
-	getMuscleVolumeUC := usecase.NewGetMuscleVolumeUseCase(progressRepo)
-	getProgressOverviewUC := usecase.NewGetProgressOverviewUseCase(progressRepo)
+	getBodyWeightHistoryUC := progressuc.NewGetBodyWeightHistoryUseCase(progressRepo)
+	addBodyWeightUC := progressuc.NewAddBodyWeightUseCase(progressRepo)
+	getStrengthProgressionUC := progressuc.NewGetStrengthProgressionUseCase(progressRepo)
+	getConsistencyUC := progressuc.NewGetConsistencyUseCase(progressRepo)
+	getMuscleVolumeUC := progressuc.NewGetMuscleVolumeUseCase(progressRepo)
+	getProgressOverviewUC := progressuc.NewGetProgressOverviewUseCase(progressRepo)
+
+	var goalRepo repository.GoalRepository
+	if pool != nil {
+		goalRepo = database.NewGoalRepository(pool)
+	} else {
+		goalRepo = repository.NewMockGoalRepository()
+	}
+
+	createGoalUC := goaluc.NewCreateGoalUseCase(goalRepo)
+	getGoalUC := goaluc.NewGetGoalUseCase(goalRepo)
+	listGoalsUC := goaluc.NewListGoalsUseCase(goalRepo)
+	updateGoalUC := goaluc.NewUpdateGoalUseCase(goalRepo)
+	deleteGoalUC := goaluc.NewDeleteGoalUseCase(goalRepo)
+	toggleGoalUC := goaluc.NewToggleGoalUseCase(goalRepo)
+	updateGoalProgressUC := goaluc.NewUpdateGoalProgressUseCase(goalRepo)
 
 	provider := mock.NewMockProvider()
 
@@ -118,10 +139,14 @@ func Bootstrap(l *logger.Logger) Dependencies {
 				getBodyWeightHistoryUC, addBodyWeightUC, getStrengthProgressionUC,
 				getConsistencyUC, getMuscleVolumeUC, getProgressOverviewUC,
 			),
+			Goal: goalhandler.New(
+				createGoalUC, getGoalUC, listGoalsUC,
+				updateGoalUC, deleteGoalUC, toggleGoalUC,
+				updateGoalProgressUC,
+			),
 			Exercise: handler.NewExerciseHandler(provider),
 			AI:       handler.NewAIHandler(provider),
 			Analytics: handler.NewAnalyticsHandler(provider),
-			Goal:     handler.NewGoalHandler(provider),
 		},
 	}
 }

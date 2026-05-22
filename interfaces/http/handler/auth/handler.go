@@ -1,15 +1,15 @@
 package auth
 
-import "github.com/aithlete/aithlete-api/application/usecase"
+import "github.com/aithlete/aithlete-api/application/usecase/auth"
 
 type Handler struct {
-	loginUseCase    usecase.LoginUseCase
-	registerUseCase usecase.RegisterUseCase
-	refreshUseCase  usecase.RefreshTokenUseCase
-	getMeUseCase    usecase.GetMeUseCase
+	loginUseCase    auth.LoginUseCase
+	registerUseCase auth.RegisterUseCase
+	refreshUseCase  auth.RefreshTokenUseCase
+	getMeUseCase    auth.GetMeUseCase
 }
 
-func New(login usecase.LoginUseCase, register usecase.RegisterUseCase, refresh usecase.RefreshTokenUseCase, getMe usecase.GetMeUseCase) *Handler {
+func New(login auth.LoginUseCase, register auth.RegisterUseCase, refresh auth.RefreshTokenUseCase, getMe auth.GetMeUseCase) *Handler {
 	return &Handler{
 		loginUseCase:    login,
 		registerUseCase: register,

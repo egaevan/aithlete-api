@@ -132,15 +132,15 @@ interfaces/http/handler/<domain>/<endpoint>_test.go         — Handler tests (h
 
 **Phase 2 — Application Layer**
 
-- [ ] **TDD**: Write failing use case tests for ScheduleUseCase
-- [ ] Define ScheduleUseCase interface
-- [ ] Define Schedule DTOs
-- [ ] Implement ScheduleUseCase
+- [x] **TDD**: Write failing use case tests for ScheduleUseCase
+- [x] Define ScheduleUseCase interface
+- [x] Define Schedule DTOs
+- [x] Implement ScheduleUseCase
 
 **Phase 3 — Dependency Injection**
 
-- [ ] Implement ScheduleRepository (infrastructure layer)
-- [ ] Replace mock provider with real ScheduleUseCase in ScheduleHandler
+- [x] Implement ScheduleRepository (infrastructure layer)
+- [x] Replace mock provider with real ScheduleUseCase in ScheduleHandler
 
 ---
 

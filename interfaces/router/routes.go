@@ -4,6 +4,7 @@ import (
 	"github.com/aithlete/aithlete-api/interfaces/http/handler"
 	"github.com/aithlete/aithlete-api/interfaces/http/handler/auth"
 	profilehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/profile"
+	schedulehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/schedule"
 	workouthandler "github.com/aithlete/aithlete-api/interfaces/http/handler/workout"
 	"github.com/labstack/echo/v4"
 )
@@ -67,15 +68,15 @@ func registerAnalyticsRoutes(g *echo.Group, h *handler.AnalyticsHandler, authMw 
 	analytics.GET("/volume/muscle", h.GetMuscleVolumeDistribution)
 }
 
-func registerScheduleRoutes(g *echo.Group, h *handler.ScheduleHandler, authMw echo.MiddlewareFunc) {
+func registerScheduleRoutes(g *echo.Group, h *schedulehandler.Handler, authMw echo.MiddlewareFunc) {
 	schedules := g.Group("/schedules", authMw)
-	schedules.GET("", h.GetSchedules)
-	schedules.GET("/today", h.GetTodaySchedules)
-	schedules.POST("", h.CreateSchedule)
-	schedules.GET("/:id", h.GetSchedule)
-	schedules.PUT("/:id", h.UpdateSchedule)
-	schedules.DELETE("/:id", h.DeleteSchedule)
-	schedules.PATCH("/:id/toggle", h.ToggleSchedule)
+	schedules.GET("", h.List)
+	schedules.GET("/today", h.ListToday)
+	schedules.POST("", h.Create)
+	schedules.GET("/:id", h.Get)
+	schedules.PUT("/:id", h.Update)
+	schedules.DELETE("/:id", h.Delete)
+	schedules.PATCH("/:id/toggle", h.Toggle)
 }
 
 func registerGoalRoutes(g *echo.Group, h *handler.GoalHandler, authMw echo.MiddlewareFunc) {

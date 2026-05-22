@@ -13,6 +13,7 @@ import (
 	"github.com/aithlete/aithlete-api/interfaces/http/handler"
 	authhandler "github.com/aithlete/aithlete-api/interfaces/http/handler/auth"
 	profilehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/profile"
+	schedulehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/schedule"
 	workouthandler "github.com/aithlete/aithlete-api/interfaces/http/handler/workout"
 	"github.com/aithlete/aithlete-api/interfaces/router"
 	"github.com/aithlete/aithlete-api/pkg/mock"
@@ -65,6 +66,21 @@ func Bootstrap(l *logger.Logger) Dependencies {
 	addExerciseUC := usecase.NewAddExerciseUseCase(workoutRepo)
 	updateSetUC := usecase.NewUpdateSetUseCase(workoutRepo)
 
+	var scheduleRepo repository.ScheduleRepository
+	if pool != nil {
+		scheduleRepo = database.NewScheduleRepository(pool)
+	} else {
+		scheduleRepo = repository.NewMockScheduleRepository()
+	}
+
+	createScheduleUC := usecase.NewCreateScheduleUseCase(scheduleRepo)
+	getScheduleUC := usecase.NewGetScheduleUseCase(scheduleRepo)
+	listSchedulesUC := usecase.NewListSchedulesUseCase(scheduleRepo)
+	listSchedulesByDateUC := usecase.NewListSchedulesByDateUseCase(scheduleRepo)
+	updateScheduleUC := usecase.NewUpdateScheduleUseCase(scheduleRepo)
+	deleteScheduleUC := usecase.NewDeleteScheduleUseCase(scheduleRepo)
+	toggleScheduleUC := usecase.NewToggleScheduleUseCase(scheduleRepo)
+
 	provider := mock.NewMockProvider()
 
 	return Dependencies{
@@ -78,11 +94,15 @@ func Bootstrap(l *logger.Logger) Dependencies {
 				addExerciseUC, updateSetUC,
 			),
 			Profile:  profilehandler.New(updateProfileUC),
+			Schedule: schedulehandler.New(
+				createScheduleUC, getScheduleUC, listSchedulesUC,
+				listSchedulesByDateUC, updateScheduleUC, deleteScheduleUC,
+				toggleScheduleUC,
+			),
 			Exercise: handler.NewExerciseHandler(provider),
 			Progress: handler.NewProgressHandler(provider),
 			AI:       handler.NewAIHandler(provider),
 			Analytics: handler.NewAnalyticsHandler(provider),
-			Schedule: handler.NewScheduleHandler(provider),
 			Goal:     handler.NewGoalHandler(provider),
 		},
 	}

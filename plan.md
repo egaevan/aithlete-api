@@ -21,7 +21,7 @@ Tech Stack:
 | Component | Technology |
 |---|---|
 | Language | Golang |
-| Framework | Echo / Fiber |
+| Framework | Echo |
 | Database | PostgreSQL |
 | ORM | sqlc / bun |
 | Auth | JWT |
@@ -35,110 +35,429 @@ Tech Stack:
 
 # Architecture
 
-Recommended:
-- Clean Architecture
-- DDD (Domain Driven Design)
-- Hexagonal Architecture
+## Three Pillars
+
+### 1. Clean Architecture
+Lapisan kode dipisahkan dengan **dependency rule**:
+- **Domain** — pure Go, zero dependencies, tidak ada struct tags/serialization logic
+- **Application** — depends on domain (menggunakan interface repository), **no json tags**
+- **Interfaces** — depends on application (injects use case via DI), **json tags here**
+- **Infrastructure** — implements domain repository interfaces
+
+### 2. DDD (Domain-Driven Design)
+- **Entity**: objek dengan identity unik (User, Workout). Equality based on ID, bukan field values
+- **Value Object**: objek immutabel tanpa identitas (Set, Weight)
+- **Repository**: interface akses data, didefinisikan di **domain layer**
+- **Use Case**: business rules spesifik aplikasi di **application layer**
+- **DTO**: data transfer object — hanya untuk input/output, tidak ada business logic, **no json tags**
+- **Response Types**: struct dengan json tags didefinisikan di **handler layer** (bukan application layer)
+
+### 3. Hexagonal Architecture (Ports & Adapters)
+- **Ports**: interfaces di domain/application layer
+- **Adapters**: implementations di infrastructure layer (PostgreSQL, AI service, etc.)
+- Core aplikasi tidak tahu menahu tentang database atau framework HTTP
+
+---
+
+# TDD (Test-Driven Development)
+
+## Workflow — Red/Green/Refactor
+
+Untuk **setiap** fitur, tulis test **sebelum** implementation code:
+
+```
+┌────────────────────────────────────────────┐
+│              1. RED                         │
+│   Write a failing test first                │
+│   Domain test: pure unit test, no mock      │
+│   Use case test: mock repository interface  │
+│   → Test fails (feature not yet implemented)│
+└──────────────────────┬─────────────────────┘
+                       │
+                       ▼
+┌────────────────────────────────────────────┐
+│              2. GREEN                       │
+│   Write minimum code to pass test           │
+│   Domain: implement entity logic            │
+│   Application: implement use case           │
+│   → Test passes                             │
+└──────────────────────┬─────────────────────┘
+                       │
+                       ▼
+┌────────────────────────────────────────────┐
+│              3. REFACTOR                    │
+│   Clean code, extract methods, rename       │
+│   No behavior changes — tests still green   │
+│   → Test still passes                       │
+└────────────────────────────────────────────┘
+```
+
+## Test Structure
+
+```text
+domain/entity/<entity>_test.go                              — Unit tests (pure, no mocks, no deps)
+domain/repository/<repository>_mock.go                      — Mock repository implementations
+domain/service/<service>_mock.go                            — Mock service implementations
+application/usecase/<name>_test.go                          — Use case tests (mock repository interfaces)
+interfaces/http/handler/<domain>/<endpoint>_test.go         — Handler tests (httptest, per endpoint)
+infrastructure/database/<repo>_test.go                      — Repository tests (integration, test DB)
+```
+
+## Testing Principles
+- **Domain layer**: test behavior, business rules, invariants tanpa mock
+- **Application layer**: mock repository interfaces, test orchestrasi use case hanya dengan exported/public interfaces
+- **Mock files** ditempatkan di package yang sama dengan interface-nya, menggunakan suffix `_mock.go` (bukan `_test.go`) agar bisa diimport oleh test package lain
+- **No test utilities** seperti testify atau assertion library di domain layer test — cukup `testing.T` dan standard library
+- External dependencies hanya di-integrasikan di test infrastructure layer
+- Mocks dipisah berdasarkan konsep: `domain/repository/user_mock.go` untuk mock repository, `domain/service/token_mock.go` untuk mock service
 
 ---
 
 # Folder Structure
 
 ```text
-cmd/
+cmd/                          — Application entry point
 
-config/
+config/                       — Configuration loading (Viper)
 
-domain/
- ├── user/
- ├── workout/
- ├── exercise/
- ├── ai/
- └── analytics/
+domain/                       ── PURE GO, ZERO DEPENDENCIES ──
+ ├── entity/                  — Domain entities (no tags, no deps)
+ │   ├── user.go              — User entity
+ │   ├── workout.go           — Workout entity + WorkoutExercise + Set value objects
+ │   ├── exercise.go          — Exercise entity + MuscleGroup value object
+ │   ├── schedule.go          — Schedule entity
+ │   ├── goal.go              — Goal entity
+ │   ├── progress.go          — BodyWeight, StrengthRecord entities
+ │   ├── ai.go                — Recommendation, ChatSession, FatigueAnalysis, etc.
+ │   └── analytics.go         — Dashboard, WeeklyVolume entities
+ ├── repository/              — Repository interfaces + mocks
+ │   ├── user.go              — UserRepository interface
+ │   ├── user_mock.go         — MockUserRepository
+ │   ├── workout.go           — WorkoutRepository interface
+ │   ├── workout_mock.go      — MockWorkoutRepository
+ │   ├── exercise.go          — ExerciseRepository interface
+ │   ├── exercise_mock.go     — MockExerciseRepository
+ │   ├── schedule.go          — ScheduleRepository interface
+ │   ├── schedule_mock.go     — MockScheduleRepository
+ │   ├── goal.go              — GoalRepository interface
+ │   ├── goal_mock.go         — MockGoalRepository
+ │   ├── progress.go          — ProgressRepository interface
+ │   ├── progress_mock.go     — MockProgressRepository
+ │   ├── ai.go                — AIRepository interface
+ │   ├── ai_mock.go           — MockAIRepository
+ │   ├── analytics.go         — AnalyticsRepository interface
+ │   └── analytics_mock.go    — MockAnalyticsRepository
+ └── service/                 — Domain service interfaces + mocks
+     ├── token.go             — TokenService interface
+     ├── token_mock.go        — MockTokenService
+     ├── password.go          — PasswordHasher interface
+     └── password_mock.go     — MockPasswordHasher
 
-application/
- ├── dto/
- ├── usecase/
- ├── mapper/
- └── ports/
+application/                  ── DEPENDS ONLY ON DOMAIN ──
+ ├── dto/                     ── pure data transfer (no json tags). Bridge between application & interfaces ──
+ │   ├── auth.go              — LoginResult, UserResult, TokenResult, AuthResponse, etc.
+ │   ├── workout.go
+ │   ├── schedule.go
+ │   ├── goal.go
+ │   ├── progress.go
+ │   ├── ai.go
+ │   ├── analytics.go
+ │   └── exercise.go
+ ├── usecase/                 ── each file: exported interface + unexported implementation ──
+ │   ├── login.go             — LoginUseCase interface + loginUseCase
+ │   ├── register.go          — RegisterUseCase interface + registerUseCase
+ │   ├── refresh_token.go     — RefreshTokenUseCase interface + refreshTokenUseCase
+ │   ├── get_me.go            — GetMeUseCase interface + getMeUseCase
+ │   └── ...
+ ├── service/
+ │   └── auth.go              — GenerateAuthResult, IsNotFound (shared logic)
+ └── mapper/
+     └── user.go              — UserToResult (domain User → dto.UserResult)
 
-interfaces/
+interfaces/                   ── DEPENDS ON APPLICATION ──
  ├── http/
+ │   ├── handler/
+ │   │   └── auth/            ── per-endpoint files, response types with json tags ──
+ │   │       ├── handler.go        — Handler struct + constructor
+ │   │       ├── response.go       — LoginResponse, UserResponse, TokenResponse (json tags)
+ │   │       ├── login.go          — POST /auth/login
+ │   │       ├── register.go       — POST /auth/register
+ │   │       ├── logout.go         — POST /auth/logout
+ │   │       ├── get_me.go         — GET /auth/me
+ │   │       └── refresh_token.go  — POST /auth/refresh
+ │   │   ├── workout.go
+ │   │   ├── workout.go
+ │   │   ├── exercise.go
+ │   │   ├── schedule.go
+ │   │   ├── goal.go
+ │   │   ├── progress.go
+ │   │   ├── ai.go
+ │   │   ├── analytics.go
+ │   │   └── profile.go
+ │   ├── request/request.go
+ │   └── response/response.go
  ├── middleware/
- ├── repository/
- └── router/
+ │   ├── cors.go
+ │   ├── auth.go
+ │   └── logger.go
+ └── router/router.go
 
-infrastructure/
+infrastructure/               ── IMPLEMENTS DOMAIN INTERFACES ──
  ├── database/
+ │   ├── postgres.go
+ │       ├── user_repo.go           — PostgreSQL implementation
+    ├── user_repo_memory.go    — In-memory implementation (dev fallback)
+ │   ├── workout_repo.go
+ │   ├── exercise_repo.go
+ │   ├── schedule_repo.go
+ │   ├── goal_repo.go
+ │   ├── progress_repo.go
+ │   ├── ai_repo.go
+ │   └── migrations/
+ │       └── 001_init.sql
  ├── ai/
+ │   └── client.go
+ ├── auth/
+ │   ├── token.go              — JWT TokenService
+ │   └── hash.go               — bcrypt PasswordHasher
  ├── logger/
+ │   └── logger.go
  └── cache/
+     └── redis.go
 
-pkg/
+pkg/                          — Shared utilities
+ ├── app/
+ │   └── app.go               — Bootstrap (composition root, wires all deps)
+ ├── code/
+ │   └── code.go              — Status code constants
+ └── mock/
+     └── provider.go          — Temporary mock (Workout, Exercise, etc.), to be removed as each module gets wired with DI
 ```
+
+---
+
+---
+
+# Dependency Flow
+
+```
+Controller (interfaces/http/handler)
+    │  receives DTO request
+    ▼
+Use Case (application/usecase)
+    │  orchestrates business logic
+    ▼
+Domain Entity (domain/entity/)
+    │  pure business rules, validates invariants
+    ▼
+Repository Interface (domain/repository/)
+    │  abstraction for data access
+    ▼
+Repository Implementation (infrastructure/database/)
+    │  concrete database operations
+```
+
+## Composition Root (`pkg/app`)
+
+```go
+// pkg/app/app.go — Bootstrap semua dependency
+func Bootstrap(log *logger.Logger) Dependencies {
+    cfg      := config.Load()
+    hashSvc  := auth.NewPasswordHasher()       // infrastructure/auth
+    tokenSvc := auth.NewTokenService(cfg.Auth.JWTSecret, cfg.Auth.JWTExpiration)
+
+    pool, err := database.NewPool(ctx, database.DSN(cfg.Database))
+
+    var userRepo repository.UserRepository
+    if pool != nil {
+        userRepo = database.NewUserRepository(pool)
+    } else {
+        userRepo = database.NewInMemoryUserRepository()
+    }
+
+    return Dependencies{
+        Config: cfg,
+        Handlers: router.Handlers{
+            Auth: authhandler.New(
+                usecase.NewLoginUseCase(userRepo, hashSvc, tokenSvc),
+                usecase.NewRegisterUseCase(userRepo, hashSvc, tokenSvc),
+                usecase.NewRefreshTokenUseCase(tokenSvc),
+                usecase.NewGetMeUseCase(userRepo),
+            ),
+            Workout:   handler.NewWorkoutHandler(provider),  // temporary mock
+            ...
+        },
+    }
+}
+```
+
+### Clean Architecture Dependency Rule
+
+| Layer | Knows About |
+|-------|-------------|
+| `cmd/` | everything (composition root) |
+| `pkg/app` | infrastructure, application, interfaces |
+| `interfaces/router` | only handler types (route registration) |
+| `interfaces/http/handler` | application use case interfaces |
+| `application/usecase` | domain interfaces (repository + service) |
+| `domain/entity` | nothing (pure Go) |
+| `domain/repository` | nothing (pure Go) — repository interfaces for data access |
+| `domain/service` | nothing (pure Go) — service interfaces for infrastructure concerns |
+
+# Development Sequence (TDD)
+
+**Iterasi per modul**, urutan pengerjaan setiap modul:
+
+1. **Domain Layer (TDD)**:
+   - Tulis domain test (RED)
+   - Implementasi entity, value object, domain errors (GREEN)
+   - Refactor domain code (REFACTOR)
+   - Test tetap hijau
+
+2. **Repository Interface (TDD)**:
+   - Definisikan interface repository di domain layer
+   - Tidak perlu test untuk interface (Go interfaces implicit)
+
+3. **Application Layer (TDD)**:
+   - Tulis use case test dengan mock repository (RED)
+   - Implementasi use case dengan DTOs (GREEN)
+   - Refactor (REFACTOR)
+   - Test tetap hijau
+
+4. **Infrastructure Layer**:
+   - Implementasi concrete repository (PostgreSQL)
+   - Repository integration test (test database)
+
+5. **Interface Layer**:
+   - Implementasi handler
+   - Handler test (httptest)
+   - Inject use case ke handler
+
+6. **Wire DI**:
+   - Hubungkan semua layer di cmd/main.go
 
 ---
 
 # Modules
 
-# User Module
+## User Module
 - Register
 - Login
 - Refresh token
 - User profile
-- User goals
 
-Entities:
-- User
-- Profile
+### Domain Layer
+- **Entity**: User — aggregate root
+- **Value Object**: — (none, User membawa semua data)
+- **Repository Interface**: UserRepository (FindByEmail, FindByID, Create, Update)
+- **Domain Errors**: ErrEmailAlreadyExists, ErrInvalidCredentials, ErrUserNotFound
+
+### Domain Behavior (test-first)
+- Register: validasi email unik, hash password, create user
+- Login: verifikasi password, generate token
+- Update profile: validasi field opsional (birthday, gender)
 
 ---
 
-# Workout Module
+## Workout Module
 - Create workout
 - Add exercise set
 - Workout history
 - Workout summary
 - Weekly volume
 
-Entities:
-- Workout
-- WorkoutSet
-- WorkoutExercise
+### Domain Layer
+- **Entity**: Workout — aggregate root
+- **Value Object**: WorkoutExercise, Set
+- **Repository Interface**: WorkoutRepository (FindByID, FindByUserID, Create, Update, Delete)
+- **Domain Errors**: ErrWorkoutNotFound, ErrEmptyWorkout, ErrDuplicateExercise
+
+### Domain Behavior (test-first)
+- Create workout: default completed=false, update timestamps
+- Add exercise: validasi exercise belum ada di workout
+- Update set: validasi reps dan weight positive
+- Calculate total volume: sum(reps × weight)
+- Complete workout: validasi semua set terisi
 
 ---
 
-# Exercise Module
+## Exercise Module
 - Exercise list
 - Muscle group category
 - Exercise metadata
 
-Entities:
-- Exercise
-- ExerciseCategory
+### Domain Layer
+- **Entity**: Exercise
+- **Value Object**: MuscleGroup
+- **Repository Interface**: ExerciseRepository (FindAll, FindByID, FindMuscleGroups)
+- **Domain Errors**: ErrExerciseNotFound
 
 ---
 
-# AI Module
+## Schedule Module
+- List schedules
+- Create schedule
+- Toggle complete
+
+### Domain Layer
+- **Entity**: Schedule
+- **Repository Interface**: ScheduleRepository (FindByUserID, FindByID, Create, Update, Delete)
+- **Domain Errors**: ErrScheduleNotFound, ErrScheduleConflict
+
+---
+
+## Goal Module
+- List goals
+- Create goal
+- Track progress
+
+### Domain Layer
+- **Entity**: Goal
+- **Repository Interface**: GoalRepository (FindByUserID, FindByID, Create, Update, Delete)
+- **Domain Errors**: ErrGoalNotFound, ErrGoalAlreadyCompleted
+
+---
+
+## Progress Module
+- Body weight history
+- Strength progression
+- Consistency tracking
+- Muscle volume
+
+### Domain Layer
+- **Entity**: BodyWeight, StrengthRecord
+- **Value Object**: Consistency, MuscleVolume
+- **Repository Interface**: ProgressRepository (FindBodyWeightByUserID, FindStrengthByUserID, FindConsistency, FindMuscleVolume)
+- **Domain Errors**: ErrNoData
+
+---
+
+## AI Module
 - Workout recommendation
 - Recovery recommendation
 - AI chat
 - Progressive overload logic
+- Fatigue analysis
+- Recovery score
+- Plateau detection
 
-Entities:
-- AIRecommendation
-- AIConversation
+### Domain Layer
+- **Entity**: Recommendation, ChatSession, FatigueAnalysis, RecoveryScore, PlateauDetection
+- **Repository Interface**: AIRepository (GetRecommendations, CreateChatSession, GetChatHistory, SendChatMessage, GetFatigueAnalysis, GetRecoveryScore, GetPlateauDetection)
+- **Domain Errors**: ErrSessionNotFound
 
 ---
 
-# Analytics Module
-- Weekly volume analysis
-- Plateau detection
-- Strength progression
-- Recovery scoring
+## Analytics Module
+- Dashboard overview
+- Weekly volume
+- Streak tracking
+- Muscle volume distribution
 
-Entities:
-- AnalyticsSnapshot
+### Domain Layer
+- **Entity**: Dashboard, WeeklyVolume
+- **Repository Interface**: AnalyticsRepository (GetDashboard, GetWeeklyProgress, GetStreak, GetWeeklyVolume, GetMuscleVolumeDistribution)
+- **Domain Errors**: ErrNoData
 
 ---
 

@@ -1,0 +1,3544 @@
+{
+  "info": {
+    "_postman_id": "db484012-8af2-413a-ad86-030dac0f5c65",
+    "name": "AIthlete API",
+    "description": "Complete AIthlete API collection organized by domain",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46986544"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Check API health status"
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/health",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "health"
+                  ]
+                },
+                "description": "Check API health status"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"status\": \"healthy\",\n    \"service\": \"aithlete-api\",\n    \"version\": \"0.1.0\"\n  }\n}"
+            }
+          ]
+        }
+      ],
+      "description": "Health check endpoint"
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('accessAithleteToken', jsonData.data.tokens.accessToken);",
+                  "    pm.collectionVariables.set('refreshAithleteToken', jsonData.data.tokens.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"newuser@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Authenticate with email and password"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/auth/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Login successful\"\n  },\n  \"data\": {\n    \"user\": {\n      \"id\": \"d1a2b3c4-e5f6-7890-abcd-ef1234567890\",\n      \"email\": \"user@example.com\",\n      \"name\": \"User\",\n      \"avatar\": \"\",\n      \"birthday\": \"\",\n      \"gender\": \"\",\n      \"createdAt\": \"2024-01-01T00:00:00Z\",\n      \"updatedAt\": \"2024-01-01T00:00:00Z\"\n    },\n    \"tokens\": {\n      \"accessToken\": \"eyJhbGciOiJIUzI1NiIs...\",\n      \"refreshToken\": \"eyJhbGciOiJIUzI1NiIs...\",\n      \"expiresIn\": 24\n    }\n  }\n}"
+            },
+            {
+              "name": "Invalid Credentials",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"newuser@example.com\",\n  \"password\": \"password123\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/auth/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Authenticate with email and password"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"40001\",\n    \"status_desc\": \"Invalid email or password\"\n  },\n  \"data\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New User\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Create a new user account"
+          },
+          "response": [
+            {
+              "name": "Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"New User\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"password123\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/auth/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Registration successful\"\n  },\n  \"data\": {\n    \"user\": {\n      \"id\": \"e5f6a7b8-c9d0-1234-ef56-7890abcdef12\",\n      \"email\": \"newuser@example.com\",\n      \"name\": \"New User\",\n      \"avatar\": \"\",\n      \"birthday\": \"\",\n      \"gender\": \"\",\n      \"createdAt\": \"2024-01-01T00:00:00Z\",\n      \"updatedAt\": \"2024-01-01T00:00:00Z\"\n    },\n    \"tokens\": {\n      \"accessToken\": \"eyJhbGciOiJIUzI1NiIs...\",\n      \"refreshToken\": \"eyJhbGciOiJIUzI1NiIs...\",\n      \"expiresIn\": 24\n    }\n  }\n}"
+            },
+            {
+              "name": "Email Exists",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"New User\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"password123\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/auth/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Create a new user account"
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"40009\",\n    \"status_desc\": \"Email already registered\"\n  },\n  \"data\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "logout"
+              ]
+            },
+            "description": "Logout current session"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/auth/logout",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "logout"
+                  ]
+                },
+                "description": "Logout current session"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Logout successful\"\n  },\n  \"data\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Me",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessAithleteToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "me"
+              ]
+            },
+            "description": "Get currently authenticated user profile"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/auth/me",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "me"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"id\": \"d1a2b3c4-e5f6-7890-abcd-ef1234567890\",\n    \"email\": \"user@example.com\",\n    \"name\": \"User\",\n    \"avatar\": \"\",\n    \"birthday\": \"\",\n    \"gender\": \"\",\n    \"createdAt\": \"2024-01-01T00:00:00Z\",\n    \"updatedAt\": \"2024-01-01T00:00:00Z\"\n  }\n}"
+            },
+            {
+              "name": "Unauthorized",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessAithleteToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/auth/me",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "me"
+                  ]
+                },
+                "description": "Get currently authenticated user profile"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"40001\",\n    \"status_desc\": \"Missing authorization header\"\n  },\n  \"data\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('accessAithleteToken', jsonData.data.accessToken);",
+                  "    pm.collectionVariables.set('refreshAithleteToken', jsonData.data.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshAithleteToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "refresh"
+              ]
+            },
+            "description": "Refresh access token using refresh token"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"refreshToken\": \"eyJhbGciOiJIUzI1NiIs...\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/auth/refresh",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "refresh"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiIs...\",\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIs...\",\n    \"expiresIn\": 24\n  }\n}"
+            },
+            {
+              "name": "Token Expired",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"refreshToken\": \"{{refreshAithleteToken}}\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/auth/refresh",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "refresh"
+                  ]
+                },
+                "description": "Refresh access token using refresh token"
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"40001\",\n    \"status_desc\": \"Refresh token has expired\"\n  },\n  \"data\": {}\n}"
+            }
+          ]
+        }
+      ],
+      "description": "Authentication endpoints"
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Alex Johnson\",\n  \"birthday\": \"1995-06-15\",\n  \"gender\": \"male\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "profile"
+              ]
+            },
+            "description": "Update user profile information"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Alex Johnson\",\n  \"birthday\": \"1995-06-15\",\n  \"gender\": \"male\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/profile",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "profile"
+                  ]
+                },
+                "description": "Update user profile information"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Profile updated successfully\"\n  },\n  \"data\": {\n    \"id\": \"user-001\",\n    \"email\": \"alex@example.com\",\n    \"name\": \"Alex Johnson\",\n    \"avatar\": \"https://api.dicebear.com/7.x/avataaars/svg?seed=Alex\",\n    \"birthday\": \"1995-06-15\",\n    \"gender\": \"male\",\n    \"createdAt\": \"2025-01-01T00:00:00.000Z\",\n    \"updatedAt\": \"2026-05-22T00:00:00.000Z\"\n  }\n}"
+            }
+          ]
+        }
+      ],
+      "description": "User profile endpoints"
+    },
+    {
+      "name": "Workouts",
+      "item": [
+        {
+          "name": "Get Workouts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/workouts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "workouts"
+              ]
+            },
+            "description": "Get workout history"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/workouts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "workouts"
+                  ]
+                },
+                "description": "Get workout history"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    {\n      \"id\": \"wo-001\",\n      \"name\": \"Upper Body Power\",\n      \"date\": \"2026-05-19\",\n      \"duration\": 52,\n      \"weightUnit\": \"lbs\",\n      \"exercises\": [\n        {\n          \"id\": \"we-001\",\n          \"exercise\": {\n            \"id\": \"ex-001\",\n            \"name\": \"Bench Press\",\n            \"description\": \"Barbell bench press for chest\",\n            \"muscleGroup\": \"chest\",\n            \"equipment\": \"barbell\",\n            \"difficulty\": \"intermediate\",\n            \"instructions\": [\"Lie on bench\", \"Grip barbell\", \"Lower to chest\", \"Press up\"],\n            \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n          },\n          \"sets\": [\n            { \"id\": \"s-001\", \"reps\": 10, \"weight\": 135, \"completed\": true, \"rpe\": 7 },\n            { \"id\": \"s-002\", \"reps\": 8, \"weight\": 155, \"completed\": true, \"rpe\": 8 },\n            { \"id\": \"s-003\", \"reps\": 6, \"weight\": 175, \"completed\": true, \"rpe\": 9 }\n          ]\n        },\n        {\n          \"id\": \"we-002\",\n          \"exercise\": {\n            \"id\": \"ex-002\",\n            \"name\": \"Overhead Press\",\n            \"description\": \"Standing barbell overhead press\",\n            \"muscleGroup\": \"shoulders\",\n            \"equipment\": \"barbell\",\n            \"difficulty\": \"intermediate\",\n            \"instructions\": [\"Stand with feet shoulder-width\", \"Press bar overhead\", \"Lower with control\"],\n            \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n          },\n          \"sets\": [\n            { \"id\": \"s-004\", \"reps\": 8, \"weight\": 95, \"completed\": true, \"rpe\": 7 },\n            { \"id\": \"s-005\", \"reps\": 6, \"weight\": 105, \"completed\": true, \"rpe\": 8 }\n          ]\n        }\n      ],\n      \"notes\": \"Felt strong today\",\n      \"completed\": true,\n      \"createdAt\": \"2026-05-19T18:00:00.000Z\",\n      \"updatedAt\": \"2026-05-19T19:00:00.000Z\",\n      \"calories\": 320,\n      \"avgHeartRate\": 142\n    },\n    {\n      \"id\": \"wo-002\",\n      \"name\": \"Lower Body Strength\",\n      \"date\": \"2026-05-17\",\n      \"duration\": 65,\n      \"weightUnit\": \"lbs\",\n      \"exercises\": [\n        {\n          \"id\": \"we-003\",\n          \"exercise\": {\n            \"id\": \"ex-003\",\n            \"name\": \"Squat\",\n            \"description\": \"Barbell back squat\",\n            \"muscleGroup\": \"legs\",\n            \"equipment\": \"barbell\",\n            \"difficulty\": \"intermediate\",\n            \"instructions\": [\"Position bar on upper back\", \"Descend below parallel\", \"Drive through heels\"],\n            \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n          },\n          \"sets\": [\n            { \"id\": \"s-006\", \"reps\": 5, \"weight\": 225, \"completed\": true, \"rpe\": 8 },\n            { \"id\": \"s-007\", \"reps\": 5, \"weight\": 235, \"completed\": true, \"rpe\": 9 }\n          ]\n        }\n      ],\n      \"notes\": \"Heavy day\",\n      \"completed\": true,\n      \"createdAt\": \"2026-05-17T17:00:00.000Z\",\n      \"updatedAt\": \"2026-05-17T18:00:00.000Z\",\n      \"calories\": 450,\n      \"avgHeartRate\": 155\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Workout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Upper Body Power\",\n  \"date\": \"2026-05-22\",\n  \"duration\": 45,\n  \"calories\": 320,\n  \"avgHeartRate\": 142,\n  \"weightUnit\": \"lbs\",\n  \"notes\": \"Felt strong today\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/workouts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "workouts"
+              ]
+            },
+            "description": "Create a new workout"
+          },
+          "response": [
+            {
+              "name": "Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Upper Body Power\",\n  \"date\": \"2026-05-22\",\n  \"duration\": 45,\n  \"calories\": 320,\n  \"avgHeartRate\": 142,\n  \"weightUnit\": \"lbs\",\n  \"notes\": \"Felt strong today\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/workouts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "workouts"
+                  ]
+                },
+                "description": "Create a new workout"
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Workout created successfully\"\n  },\n  \"data\": {\n    \"id\": \"wo-new-001\",\n    \"name\": \"Upper Body Power\",\n    \"date\": \"2026-05-22\",\n    \"duration\": 0,\n    \"weightUnit\": \"lbs\",\n    \"exercises\": [],\n    \"notes\": \"Felt strong today\",\n    \"completed\": false,\n    \"createdAt\": \"2026-05-22T00:00:00Z\",\n    \"updatedAt\": \"2026-05-22T00:00:00Z\",\n    \"calories\": 320,\n    \"avgHeartRate\": 142\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Workout Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/workouts/stats",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "workouts",
+                "stats"
+              ]
+            },
+            "description": "Get workout statistics"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/workouts/stats",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "workouts",
+                    "stats"
+                  ]
+                },
+                "description": "Get workout statistics"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"totalWorkouts\": 47,\n    \"totalVolume\": 285000,\n    \"avgDuration\": 54,\n    \"currentStreak\": 14\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Workout By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/workouts/{{workoutId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "workouts",
+                "{{workoutId}}"
+              ]
+            },
+            "description": "Get a single workout by ID"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/workouts/{{workoutId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "workouts",
+                    "{{workoutId}}"
+                  ]
+                },
+                "description": "Get a single workout by ID"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"id\": \"wo-001\",\n    \"name\": \"Upper Body Power\",\n    \"date\": \"2026-05-19\",\n    \"duration\": 52,\n    \"weightUnit\": \"lbs\",\n    \"exercises\": [\n      {\n        \"id\": \"we-001\",\n        \"exercise\": {\n          \"id\": \"ex-001\",\n          \"name\": \"Bench Press\",\n          \"description\": \"Barbell bench press for chest\",\n          \"muscleGroup\": \"chest\",\n          \"equipment\": \"barbell\",\n          \"difficulty\": \"intermediate\",\n          \"instructions\": [\"Lie on bench\", \"Grip barbell\", \"Lower to chest\", \"Press up\"],\n          \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n        },\n        \"sets\": [\n          { \"id\": \"s-001\", \"reps\": 10, \"weight\": 135, \"completed\": true, \"rpe\": 7 },\n          { \"id\": \"s-002\", \"reps\": 8, \"weight\": 155, \"completed\": true, \"rpe\": 8 }\n        ]\n      }\n    ],\n    \"notes\": \"Felt strong today\",\n    \"completed\": true,\n    \"createdAt\": \"2026-05-19T18:00:00.000Z\",\n    \"updatedAt\": \"2026-05-19T19:00:00.000Z\",\n    \"calories\": 320,\n    \"avgHeartRate\": 142\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Workout",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Upper Body Power (Updated)\",\n  \"date\": \"2026-05-22\",\n  \"duration\": 55,\n  \"completed\": true,\n  \"calories\": 350,\n  \"avgHeartRate\": 145,\n  \"notes\": \"Updated notes\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/workouts/{{workoutId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "workouts",
+                "{{workoutId}}"
+              ]
+            },
+            "description": "Update an existing workout"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Upper Body Power (Updated)\",\n  \"date\": \"2026-05-22\",\n  \"duration\": 55,\n  \"completed\": true,\n  \"calories\": 350,\n  \"avgHeartRate\": 145,\n  \"notes\": \"Updated notes\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/workouts/{{workoutId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "workouts",
+                    "{{workoutId}}"
+                  ]
+                },
+                "description": "Update an existing workout"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Workout updated successfully\"\n  },\n  \"data\": {\n    \"id\": \"wo-001\",\n    \"name\": \"Upper Body Power (Updated)\",\n    \"date\": \"2026-05-22\",\n    \"duration\": 52,\n    \"weightUnit\": \"lbs\",\n    \"exercises\": [],\n    \"completed\": true,\n    \"createdAt\": \"2026-05-19T18:00:00.000Z\",\n    \"updatedAt\": \"2026-05-22T00:00:00Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Workout",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/workouts/{{workoutId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "workouts",
+                "{{workoutId}}"
+              ]
+            },
+            "description": "Delete a workout"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/workouts/{{workoutId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "workouts",
+                    "{{workoutId}}"
+                  ]
+                },
+                "description": "Delete a workout"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Workout deleted successfully\"\n  },\n  \"data\": {}\n}"
+            }
+          ]
+        }
+      ],
+      "description": "Workout management endpoints"
+    },
+    {
+      "name": "Exercises",
+      "item": [
+        {
+          "name": "Get Exercises",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/exercises",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "exercises"
+              ]
+            },
+            "description": "Get all exercises"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/exercises",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "exercises"
+                  ]
+                },
+                "description": "Get all exercises"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    {\n      \"id\": \"ex-001\",\n      \"name\": \"Bench Press\",\n      \"description\": \"Classic barbell bench press targeting the chest, shoulders, and triceps\",\n      \"muscleGroup\": \"chest\",\n      \"equipment\": \"barbell\",\n      \"difficulty\": \"intermediate\",\n      \"instructions\": [\"Lie flat on bench with eyes under bar\", \"Grip bar slightly wider than shoulder width\", \"Unrack and lower bar to mid-chest\", \"Press bar back up to full arm extension\"],\n      \"imageUrl\": \"https://example.com/bench-press.jpg\",\n      \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n    },\n    {\n      \"id\": \"ex-002\",\n      \"name\": \"Overhead Press\",\n      \"description\": \"Standing barbell overhead press for shoulder development\",\n      \"muscleGroup\": \"shoulders\",\n      \"equipment\": \"barbell\",\n      \"difficulty\": \"intermediate\",\n      \"instructions\": [\"Stand with feet shoulder-width apart\", \"Grip bar at shoulder width\", \"Press bar overhead until arms are fully extended\", \"Lower with control back to shoulders\"],\n      \"imageUrl\": \"https://example.com/ohp.jpg\",\n      \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n    },\n    {\n      \"id\": \"ex-003\",\n      \"name\": \"Squat\",\n      \"description\": \"Barbell back squat, the king of lower body exercises\",\n      \"muscleGroup\": \"legs\",\n      \"equipment\": \"barbell\",\n      \"difficulty\": \"intermediate\",\n      \"instructions\": [\"Position bar on upper back\", \"Stand with feet shoulder-width apart\", \"Descend by bending knees and hips\", \"Go below parallel\", \"Drive through heels to stand\"],\n      \"imageUrl\": \"https://example.com/squat.jpg\",\n      \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Exercise By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/exercises/{{exerciseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "exercises",
+                "{{exerciseId}}"
+              ]
+            },
+            "description": "Get a single exercise by ID"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/exercises/{{exerciseId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "exercises",
+                    "{{exerciseId}}"
+                  ]
+                },
+                "description": "Get a single exercise by ID"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"id\": \"ex-001\",\n    \"name\": \"Bench Press\",\n    \"description\": \"Classic barbell bench press targeting the chest, shoulders, and triceps\",\n    \"muscleGroup\": \"chest\",\n    \"equipment\": \"barbell\",\n    \"difficulty\": \"intermediate\",\n    \"instructions\": [\"Lie flat on bench with eyes under bar\", \"Grip bar slightly wider than shoulder width\", \"Unrack and lower bar to mid-chest\", \"Press bar back up to full arm extension\"],\n    \"imageUrl\": \"https://example.com/bench-press.jpg\",\n    \"createdAt\": \"2025-01-01T00:00:00.000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Muscle Groups",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/exercises/muscle-groups",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "exercises",
+                "muscle-groups"
+              ]
+            },
+            "description": "Get all muscle group categories"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/exercises/muscle-groups",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "exercises",
+                    "muscle-groups"
+                  ]
+                },
+                "description": "Get all muscle group categories"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\"chest\", \"back\", \"legs\", \"shoulders\", \"arms\", \"core\", \"glutes\", \"calves\", \"forearms\", \"traps\", \"full-body\"],\n  \"meta\": {\n    \"total\": 11,\n    \"page\": 1,\n    \"limit\": 20,\n    \"total_pages\": 1\n  }\n}"
+            }
+          ]
+        }
+      ],
+      "description": "Exercise catalog endpoints"
+    },
+    {
+      "name": "Progress",
+      "item": [
+        {
+          "name": "Get Progress Overview",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/progress/overview",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "progress",
+                "overview"
+              ]
+            },
+            "description": "Get full progress overview"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/progress/overview",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "progress",
+                    "overview"
+                  ]
+                },
+                "description": "Get full progress overview"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"bodyWeight\": [\n      { \"id\": \"bw-001\", \"date\": \"2026-04-08\", \"weight\": 180.0 },\n      { \"id\": \"bw-002\", \"date\": \"2026-04-15\", \"weight\": 179.5 }\n    ],\n    \"strength\": [\n      { \"exercise\": \"Bench Press\", \"date\": \"2026-05-19\", \"oneRepMax\": 185, \"volume\": 4200 }\n    ],\n    \"consistency\": [\n      { \"week\": \"W1\", \"workoutsCompleted\": 4, \"workoutsPlanned\": 5, \"streak\": 4 }\n    ],\n    \"muscleVolume\": [\n      { \"muscleGroup\": \"Chest\", \"volume\": 4200, \"sessions\": 8, \"trend\": \"up\" }\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Body Weight History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/progress/body-weight",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "progress",
+                "body-weight"
+              ]
+            },
+            "description": "Get body weight history"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/progress/body-weight",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "progress",
+                    "body-weight"
+                  ]
+                },
+                "description": "Get body weight history"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    { \"id\": \"bw-001\", \"date\": \"2026-04-08\", \"weight\": 180.0, \"bodyFatPercentage\": 18.5 },\n    { \"id\": \"bw-002\", \"date\": \"2026-04-15\", \"weight\": 179.5, \"bodyFatPercentage\": 18.2 },\n    { \"id\": \"bw-003\", \"date\": \"2026-04-22\", \"weight\": 178.8, \"bodyFatPercentage\": 17.8 },\n    { \"id\": \"bw-004\", \"date\": \"2026-04-29\", \"weight\": 178.2, \"bodyFatPercentage\": 17.5 },\n    { \"id\": \"bw-005\", \"date\": \"2026-05-06\", \"weight\": 177.5, \"bodyFatPercentage\": 17.2 },\n    { \"id\": \"bw-006\", \"date\": \"2026-05-13\", \"weight\": 177.0, \"bodyFatPercentage\": 16.8 },\n    { \"id\": \"bw-007\", \"date\": \"2026-05-20\", \"weight\": 176.5, \"bodyFatPercentage\": 16.5 }\n  ],\n  \"meta\": {\n    \"total\": 7,\n    \"page\": 1,\n    \"limit\": 20,\n    \"total_pages\": 1\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Add Body Weight",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"weight\": 176.0,\n  \"bodyFatPercentage\": 16.2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/progress/body-weight",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "progress",
+                "body-weight"
+              ]
+            },
+            "description": "Add a body weight entry"
+          },
+          "response": [
+            {
+              "name": "Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"weight\": 176.0,\n  \"bodyFatPercentage\": 16.2\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/progress/body-weight",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "progress",
+                    "body-weight"
+                  ]
+                },
+                "description": "Add a body weight entry"
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Body weight added successfully\"\n  },\n  \"data\": {\n    \"id\": \"bw-new-001\",\n    \"date\": \"2026-05-22T00:00:00Z\",\n    \"weight\": 176.0,\n    \"bodyFatPercentage\": 16.2\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Strength Progression",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/progress/strength",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "progress",
+                "strength"
+              ]
+            },
+            "description": "Get strength progression data"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/progress/strength",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "progress",
+                    "strength"
+                  ]
+                },
+                "description": "Get strength progression data"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    { \"exercise\": \"Bench Press\", \"date\": \"2026-05-19\", \"oneRepMax\": 185, \"volume\": 4200 },\n    { \"exercise\": \"Squat\", \"date\": \"2026-05-17\", \"oneRepMax\": 225, \"volume\": 5800 },\n    { \"exercise\": \"Deadlift\", \"date\": \"2026-05-15\", \"oneRepMax\": 275, \"volume\": 4100 },\n    { \"exercise\": \"Overhead Press\", \"date\": \"2026-05-19\", \"oneRepMax\": 115, \"volume\": 2000 }\n  ],\n  \"meta\": {\n    \"total\": 4,\n    \"page\": 1,\n    \"limit\": 20,\n    \"total_pages\": 1\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Workout Consistency",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/progress/consistency",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "progress",
+                "consistency"
+              ]
+            },
+            "description": "Get workout consistency data"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/progress/consistency",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "progress",
+                    "consistency"
+                  ]
+                },
+                "description": "Get workout consistency data"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    { \"week\": \"W1\", \"workoutsCompleted\": 4, \"workoutsPlanned\": 5, \"streak\": 4 },\n    { \"week\": \"W2\", \"workoutsCompleted\": 5, \"workoutsPlanned\": 5, \"streak\": 9 },\n    { \"week\": \"W3\", \"workoutsCompleted\": 3, \"workoutsPlanned\": 5, \"streak\": 3 },\n    { \"week\": \"W4\", \"workoutsCompleted\": 5, \"workoutsPlanned\": 5, \"streak\": 8 },\n    { \"week\": \"W5\", \"workoutsCompleted\": 4, \"workoutsPlanned\": 5, \"streak\": 4 },\n    { \"week\": \"W6\", \"workoutsCompleted\": 5, \"workoutsPlanned\": 5, \"streak\": 14 }\n  ],\n  \"meta\": {\n    \"total\": 6,\n    \"page\": 1,\n    \"limit\": 20,\n    \"total_pages\": 1\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Muscle Volume",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/progress/muscle-volume",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "progress",
+                "muscle-volume"
+              ]
+            },
+            "description": "Get muscle volume data"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/progress/muscle-volume",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "progress",
+                    "muscle-volume"
+                  ]
+                },
+                "description": "Get muscle volume data"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    { \"muscleGroup\": \"Chest\", \"volume\": 4200, \"sessions\": 8, \"trend\": \"up\" },\n    { \"muscleGroup\": \"Back\", \"volume\": 3800, \"sessions\": 7, \"trend\": \"up\" },\n    { \"muscleGroup\": \"Legs\", \"volume\": 5100, \"sessions\": 6, \"trend\": \"stable\" },\n    { \"muscleGroup\": \"Shoulders\", \"volume\": 2800, \"sessions\": 5, \"trend\": \"up\" },\n    { \"muscleGroup\": \"Arms\", \"volume\": 3200, \"sessions\": 6, \"trend\": \"down\" },\n    { \"muscleGroup\": \"Core\", \"volume\": 1200, \"sessions\": 10, \"trend\": \"stable\" }\n  ],\n  \"meta\": {\n    \"total\": 6,\n    \"page\": 1,\n    \"limit\": 20,\n    \"total_pages\": 1\n  }\n}"
+            }
+          ]
+        }
+      ],
+      "description": "Progress tracking endpoints"
+    },
+    {
+      "name": "AI",
+      "item": [
+        {
+          "name": "Get Recommendations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/ai/recommendations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "ai",
+                "recommendations"
+              ]
+            },
+            "description": "Get AI workout recommendations"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/ai/recommendations",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "ai",
+                    "recommendations"
+                  ]
+                },
+                "description": "Get AI workout recommendations"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    {\n      \"id\": \"ai-rec-001\",\n      \"type\": \"workout\",\n      \"title\": \"Upper Body Power\",\n      \"description\": \"Based on your recovery data, I recommend focusing on upper body today. Your legs need another 24-48 hours of recovery. Consider a chest and back superset workout for maximum efficiency.\",\n      \"confidence\": 0.92,\n      \"createdAt\": \"2026-05-20T08:00:00.000Z\"\n    },\n    {\n      \"id\": \"ai-rec-002\",\n      \"type\": \"recovery\",\n      \"title\": \"Active Recovery Day\",\n      \"description\": \"Your fatigue levels suggest a lighter day tomorrow. Consider mobility work or light cardio.\",\n      \"confidence\": 0.85,\n      \"createdAt\": \"2026-05-20T08:00:00.000Z\"\n    },\n    {\n      \"id\": \"ai-rec-003\",\n      \"type\": \"nutrition\",\n      \"title\": \"Increase Protein Intake\",\n      \"description\": \"Based on your training volume, aim for 1.8g protein per kg bodyweight to support recovery.\",\n      \"confidence\": 0.78,\n      \"createdAt\": \"2026-05-20T08:00:00.000Z\"\n    }\n  ],\n  \"meta\": {\n    \"total\": 3,\n    \"page\": 1,\n    \"limit\": 20,\n    \"total_pages\": 1\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Chat Session",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/ai/chat",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "ai",
+                "chat"
+              ]
+            },
+            "description": "Create a new AI chat session"
+          },
+          "response": [
+            {
+              "name": "Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/ai/chat",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "ai",
+                    "chat"
+                  ]
+                },
+                "description": "Create a new AI chat session"
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"sessionId\": \"session-1234\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Chat History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/ai/chat/{{chatSessionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "ai",
+                "chat",
+                "{{chatSessionId}}"
+              ]
+            },
+            "description": "Get chat history for a session"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/ai/chat/{{chatSessionId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "ai",
+                    "chat",
+                    "{{chatSessionId}}"
+                  ]
+                },
+                "description": "Get chat history for a session"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    {\n      \"id\": \"msg-001\",\n      \"role\": \"assistant\",\n      \"content\": \"Hi Alex! I've analyzed your recent training data. Your upper body strength is improving nicely, but your legs could use more volume. How can I help you today?\",\n      \"timestamp\": \"2026-05-20T07:00:00.000Z\"\n    }\n  ],\n  \"meta\": {\n    \"total\": 1,\n    \"page\": 1,\n    \"limit\": 50,\n    \"total_pages\": 1\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Send Chat Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Should I increase my bench press volume?\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/ai/chat/{{chatSessionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "ai",
+                "chat",
+                "{{chatSessionId}}"
+              ]
+            },
+            "description": "Send a message in a chat session"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"Should I increase my bench press volume?\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/ai/chat/{{chatSessionId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "ai",
+                    "chat",
+                    "{{chatSessionId}}"
+                  ]
+                },
+                "description": "Send a message in a chat session"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    {\n      \"id\": \"msg-002\",\n      \"role\": \"user\",\n      \"content\": \"Should I increase my bench press volume?\",\n      \"timestamp\": \"2026-05-22T00:00:00Z\"\n    },\n    {\n      \"id\": \"msg-003\",\n      \"role\": \"assistant\",\n      \"content\": \"Great question! Based on your current training phase, I'd recommend increasing your bench press volume by adding 2 more working sets. Your recovery data shows your chest is at 92% recovery, so you're well-prepared for additional volume. Try 4 sets of 6-8 reps at 80% of your 1RM.\",\n      \"timestamp\": \"2026-05-22T00:00:00Z\"\n    }\n  ],\n  \"meta\": {\n    \"total\": 2,\n    \"page\": 1,\n    \"limit\": 50,\n    \"total_pages\": 1\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Fatigue Analysis",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/ai/fatigue",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "ai",
+                "fatigue"
+              ]
+            },
+            "description": "Get fatigue analysis"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/ai/fatigue",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "ai",
+                    "fatigue"
+                  ]
+                },
+                "description": "Get fatigue analysis"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"overall\": 35,\n    \"central\": 40,\n    \"peripheral\": 30,\n    \"status\": \"moderate\",\n    \"factors\": [\n      { \"name\": \"Sleep Quality\", \"value\": 85, \"impact\": \"positive\" },\n      { \"name\": \"Training Volume\", \"value\": 65, \"impact\": \"negative\" },\n      { \"name\": \"Nutrition\", \"value\": 70, \"impact\": \"positive\" },\n      { \"name\": \"Stress Level\", \"value\": 55, \"impact\": \"negative\" },\n      { \"name\": \"Hydration\", \"value\": 80, \"impact\": \"positive\" }\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Recovery Score",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/ai/recovery",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "ai",
+                "recovery"
+              ]
+            },
+            "description": "Get recovery score"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/ai/recovery",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "ai",
+                    "recovery"
+                  ]
+                },
+                "description": "Get recovery score"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"overall\": 78,\n    \"sleep\": 85,\n    \"nutrition\": 72,\n    \"stress\": 68,\n    \"muscleRecovery\": [\n      { \"muscleGroup\": \"Chest\", \"recovery\": 92, \"readyForTraining\": true },\n      { \"muscleGroup\": \"Back\", \"recovery\": 78, \"readyForTraining\": true },\n      { \"muscleGroup\": \"Legs\", \"recovery\": 45, \"readyForTraining\": false },\n      { \"muscleGroup\": \"Arms\", \"recovery\": 88, \"readyForTraining\": true },\n      { \"muscleGroup\": \"Shoulders\", \"recovery\": 70, \"readyForTraining\": true },\n      { \"muscleGroup\": \"Core\", \"recovery\": 85, \"readyForTraining\": true }\n    ],\n    \"status\": \"good\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Plateau Detection",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/ai/plateau",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "ai",
+                "plateau"
+              ]
+            },
+            "description": "Get plateau detection analysis"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/ai/plateau",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "ai",
+                    "plateau"
+                  ]
+                },
+                "description": "Get plateau detection analysis"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    {\n      \"detected\": true,\n      \"exercise\": \"Overhead Press\",\n      \"metric\": \"oneRepMax\",\n      \"currentTrend\": \"stalled\",\n      \"weeksStalled\": 3,\n      \"suggestions\": [\n        \"Try a deload week at 60% volume\",\n        \"Switch to dumbbell variations for 2 weeks\",\n        \"Increase rest between sets to 3-4 minutes\"\n      ]\n    }\n  ],\n  \"meta\": {\n    \"total\": 1,\n    \"page\": 1,\n    \"limit\": 20,\n    \"total_pages\": 1\n  }\n}"
+            }
+          ]
+        }
+      ],
+      "description": "AI-powered features endpoints"
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Get Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/analytics/dashboard",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "analytics",
+                "dashboard"
+              ]
+            },
+            "description": "Get dashboard overview"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/analytics/dashboard",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "analytics",
+                    "dashboard"
+                  ]
+                },
+                "description": "Get dashboard overview"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"stats\": {\n      \"caloriesBurned\": 2847,\n      \"caloriesTrend\": \"+12%\",\n      \"activeMinutes\": 382,\n      \"activeMinutesTrend\": \"+8%\",\n      \"goalsCompleted\": 1,\n      \"goalsTotal\": 5,\n      \"goalsTrend\": \"20%\",\n      \"avgHeartRate\": 72,\n      \"heartRateTrend\": \"Normal\"\n    },\n    \"weeklyProgress\": [\n      { \"day\": \"Mon\", \"calories\": 420, \"duration\": 45 },\n      { \"day\": \"Tue\", \"calories\": 580, \"duration\": 62 },\n      { \"day\": \"Wed\", \"calories\": 350, \"duration\": 38 },\n      { \"day\": \"Thu\", \"calories\": 620, \"duration\": 70 },\n      { \"day\": \"Fri\", \"calories\": 480, \"duration\": 52 },\n      { \"day\": \"Sat\", \"calories\": 720, \"duration\": 85 },\n      { \"day\": \"Sun\", \"calories\": 280, \"duration\": 30 }\n    ],\n    \"streak\": {\n      \"current\": 14,\n      \"personalBest\": 21,\n      \"history\": [true, true, true, true, true, true, true, true, true, true, true, true, true, true]\n    },\n    \"recentActivity\": [\n      { \"id\": \"act-001\", \"type\": \"workout\", \"title\": \"Upper Body Power completed\", \"description\": \"52 minutes, 5 exercises\", \"timestamp\": \"2026-05-19T19:00:00.000Z\" },\n      { \"id\": \"act-002\", \"type\": \"achievement\", \"title\": \"14 Day Streak!\", \"description\": \"You've worked out 14 days in a row\", \"timestamp\": \"2026-05-19T19:00:00.000Z\" },\n      { \"id\": \"act-003\", \"type\": \"goal\", \"title\": \"Volume Goal Completed\", \"description\": \"50,000 lbs weekly volume achieved\", \"timestamp\": \"2026-05-18T08:00:00.000Z\" }\n    ],\n    \"muscleRecovery\": [\n      { \"muscleGroup\": \"Chest\", \"recovery\": 92, \"readyForTraining\": true },\n      { \"muscleGroup\": \"Back\", \"recovery\": 78, \"readyForTraining\": true },\n      { \"muscleGroup\": \"Legs\", \"recovery\": 45, \"readyForTraining\": false },\n      { \"muscleGroup\": \"Shoulders\", \"recovery\": 70, \"readyForTraining\": true },\n      { \"muscleGroup\": \"Arms\", \"recovery\": 88, \"readyForTraining\": true }\n    ],\n    \"todaySchedule\": [\n      { \"id\": \"sched-1\", \"time\": \"06:30\", \"title\": \"Morning Run\", \"duration\": \"30 min\", \"type\": \"cardio\", \"completed\": true },\n      { \"id\": \"sched-2\", \"time\": \"12:00\", \"title\": \"Core Workout\", \"duration\": \"20 min\", \"type\": \"workout\", \"completed\": true },\n      { \"id\": \"sched-3\", \"time\": \"18:00\", \"title\": \"Upper Body\", \"duration\": \"45 min\", \"type\": \"workout\", \"completed\": false }\n    ],\n    \"aiRecommendation\": {\n      \"id\": \"ai-rec-001\",\n      \"type\": \"workout\",\n      \"title\": \"Upper Body Power\",\n      \"description\": \"Based on your recovery data, I recommend focusing on upper body today.\",\n      \"confidence\": 0.92\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Weekly Progress",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/analytics/weekly",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "analytics",
+                "weekly"
+              ]
+            },
+            "description": "Get weekly progress data"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/analytics/weekly",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "analytics",
+                    "weekly"
+                  ]
+                },
+                "description": "Get weekly progress data"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    { \"day\": \"Mon\", \"calories\": 420, \"duration\": 45 },\n    { \"day\": \"Tue\", \"calories\": 580, \"duration\": 62 },\n    { \"day\": \"Wed\", \"calories\": 350, \"duration\": 38 },\n    { \"day\": \"Thu\", \"calories\": 620, \"duration\": 70 },\n    { \"day\": \"Fri\", \"calories\": 480, \"duration\": 52 },\n    { \"day\": \"Sat\", \"calories\": 720, \"duration\": 85 },\n    { \"day\": \"Sun\", \"calories\": 280, \"duration\": 30 }\n  ],\n  \"meta\": {\n    \"total\": 7,\n    \"page\": 1,\n    \"limit\": 20,\n    \"total_pages\": 1\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Streak",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/analytics/streak",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "analytics",
+                "streak"
+              ]
+            },
+            "description": "Get workout streak data"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/analytics/streak",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "analytics",
+                    "streak"
+                  ]
+                },
+                "description": "Get workout streak data"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"current\": 14,\n    \"personalBest\": 21,\n    \"history\": [true, true, true, true, true, true, true, true, true, true, true, true, true, true]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Analytics Overview",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/analytics/overview",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "analytics",
+                "overview"
+              ]
+            },
+            "description": "Get analytics overview"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/analytics/overview",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "analytics",
+                    "overview"
+                  ]
+                },
+                "description": "Get analytics overview"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"totalVolume\": 80100,\n    \"totalVolumeTrend\": \"+15%\",\n    \"avgSession\": 58,\n    \"avgSessionTrend\": \"+5 min\",\n    \"sessionsPerMonth\": 22,\n    \"sessionsPerMonthTrend\": \"+3\",\n    \"goalCompletion\": 20,\n    \"goalCompletionTrend\": \"+4%\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Weekly Volume",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/analytics/volume/weekly",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "analytics",
+                "volume",
+                "weekly"
+              ]
+            },
+            "description": "Get weekly training volume"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/analytics/volume/weekly",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "analytics",
+                    "volume",
+                    "weekly"
+                  ]
+                },
+                "description": "Get weekly training volume"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    { \"week\": \"W1\", \"volume\": 12500 },\n    { \"week\": \"W2\", \"volume\": 14200 },\n    { \"week\": \"W3\", \"volume\": 13800 },\n    { \"week\": \"W4\", \"volume\": 15600 },\n    { \"week\": \"W5\", \"volume\": 16200 },\n    { \"week\": \"W6\", \"volume\": 17800 }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Muscle Volume Distribution",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/analytics/volume/muscle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "analytics",
+                "volume",
+                "muscle"
+              ]
+            },
+            "description": "Get muscle volume distribution"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/analytics/volume/muscle",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "analytics",
+                    "volume",
+                    "muscle"
+                  ]
+                },
+                "description": "Get muscle volume distribution"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    { \"muscle\": \"Chest\", \"volume\": 4200 },\n    { \"muscle\": \"Back\", \"volume\": 3800 },\n    { \"muscle\": \"Legs\", \"volume\": 5100 },\n    { \"muscle\": \"Shoulders\", \"volume\": 2800 },\n    { \"muscle\": \"Arms\", \"volume\": 3200 }\n  ]\n}"
+            }
+          ]
+        }
+      ],
+      "description": "Analytics and statistics endpoints"
+    },
+    {
+      "name": "Schedules",
+      "item": [
+        {
+          "name": "Get All Schedules",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/schedules",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "schedules"
+              ]
+            },
+            "description": "Get all schedules"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/schedules",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "schedules"
+                  ]
+                },
+                "description": "Get all schedules"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    { \"id\": \"sched-1\", \"date\": \"2026-05-20\", \"time\": \"06:30\", \"title\": \"Morning Run\", \"duration\": \"30 min\", \"type\": \"cardio\", \"completed\": true, \"notes\": \"\", \"createdAt\": \"2026-05-19T10:00:00Z\", \"updatedAt\": \"2026-05-20T06:30:00Z\" },\n    { \"id\": \"sched-2\", \"date\": \"2026-05-20\", \"time\": \"12:00\", \"title\": \"Core Workout\", \"duration\": \"20 min\", \"type\": \"workout\", \"completed\": true, \"notes\": \"\", \"createdAt\": \"2026-05-19T10:00:00Z\", \"updatedAt\": \"2026-05-20T12:00:00Z\" },\n    { \"id\": \"sched-3\", \"date\": \"2026-05-20\", \"time\": \"18:00\", \"title\": \"Upper Body\", \"duration\": \"45 min\", \"type\": \"workout\", \"completed\": false, \"notes\": \"Focus on chest\", \"createdAt\": \"2026-05-19T10:00:00Z\", \"updatedAt\": \"2026-05-19T10:00:00Z\" }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Today's Schedules",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/schedules/today",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "schedules",
+                "today"
+              ]
+            },
+            "description": "Get today's schedules"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/schedules/today",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "schedules",
+                    "today"
+                  ]
+                },
+                "description": "Get today's schedules"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    { \"id\": \"sched-1\", \"date\": \"2026-05-20\", \"time\": \"06:30\", \"title\": \"Morning Run\", \"duration\": \"30 min\", \"type\": \"cardio\", \"completed\": true, \"notes\": \"\", \"createdAt\": \"2026-05-19T10:00:00Z\", \"updatedAt\": \"2026-05-20T06:30:00Z\" },\n    { \"id\": \"sched-2\", \"date\": \"2026-05-20\", \"time\": \"12:00\", \"title\": \"Core Workout\", \"duration\": \"20 min\", \"type\": \"workout\", \"completed\": true, \"notes\": \"\", \"createdAt\": \"2026-05-19T10:00:00Z\", \"updatedAt\": \"2026-05-20T12:00:00Z\" },\n    { \"id\": \"sched-3\", \"date\": \"2026-05-20\", \"time\": \"18:00\", \"title\": \"Upper Body\", \"duration\": \"45 min\", \"type\": \"workout\", \"completed\": false, \"notes\": \"Focus on chest\", \"createdAt\": \"2026-05-19T10:00:00Z\", \"updatedAt\": \"2026-05-19T10:00:00Z\" }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Schedule",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2026-05-23\",\n  \"time\": \"07:00\",\n  \"title\": \"Morning Yoga\",\n  \"duration\": \"30 min\",\n  \"type\": \"stretching\",\n  \"notes\": \"Focus on hamstrings\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/schedules",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "schedules"
+              ]
+            },
+            "description": "Create a new schedule"
+          },
+          "response": [
+            {
+              "name": "Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"date\": \"2026-05-23\",\n  \"time\": \"07:00\",\n  \"title\": \"Morning Yoga\",\n  \"duration\": \"30 min\",\n  \"type\": \"stretching\",\n  \"notes\": \"Focus on hamstrings\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/schedules",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "schedules"
+                  ]
+                },
+                "description": "Create a new schedule"
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Created successfully\"\n  },\n  \"data\": {\n    \"id\": \"sched-new\",\n    \"date\": \"2026-05-23\",\n    \"time\": \"07:00\",\n    \"title\": \"Morning Yoga\",\n    \"duration\": \"30 min\",\n    \"type\": \"stretching\",\n    \"completed\": false,\n    \"notes\": \"Focus on hamstrings\",\n    \"createdAt\": \"2026-05-22T00:00:00Z\",\n    \"updatedAt\": \"2026-05-22T00:00:00Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Schedule By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/schedules/{{scheduleId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "schedules",
+                "{{scheduleId}}"
+              ]
+            },
+            "description": "Get a schedule by ID"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/schedules/{{scheduleId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "schedules",
+                    "{{scheduleId}}"
+                  ]
+                },
+                "description": "Get a schedule by ID"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"id\": \"sched-1\",\n    \"date\": \"2026-05-20\",\n    \"time\": \"06:30\",\n    \"title\": \"Morning Run\",\n    \"duration\": \"30 min\",\n    \"type\": \"cardio\",\n    \"completed\": true,\n    \"notes\": \"\",\n    \"createdAt\": \"2026-05-19T10:00:00Z\",\n    \"updatedAt\": \"2026-05-20T06:30:00Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Schedule",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2026-05-23\",\n  \"time\": \"08:00\",\n  \"title\": \"Updated Schedule\",\n  \"duration\": \"45 min\",\n  \"type\": \"workout\",\n  \"notes\": \"Updated notes\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/schedules/{{scheduleId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "schedules",
+                "{{scheduleId}}"
+              ]
+            },
+            "description": "Update an existing schedule"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"date\": \"2026-05-23\",\n  \"time\": \"08:00\",\n  \"title\": \"Updated Schedule\",\n  \"duration\": \"45 min\",\n  \"type\": \"workout\",\n  \"notes\": \"Updated notes\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/schedules/{{scheduleId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "schedules",
+                    "{{scheduleId}}"
+                  ]
+                },
+                "description": "Update an existing schedule"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"id\": \"sched-1\",\n    \"date\": \"2026-05-23\",\n    \"time\": \"08:00\",\n    \"title\": \"Updated Schedule\",\n    \"duration\": \"45 min\",\n    \"type\": \"workout\",\n    \"completed\": false,\n    \"notes\": \"Updated notes\",\n    \"createdAt\": \"2026-05-19T10:00:00Z\",\n    \"updatedAt\": \"2026-05-22T00:00:00Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Schedule",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/schedules/{{scheduleId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "schedules",
+                "{{scheduleId}}"
+              ]
+            },
+            "description": "Delete a schedule"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/schedules/{{scheduleId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "schedules",
+                    "{{scheduleId}}"
+                  ]
+                },
+                "description": "Delete a schedule"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Deleted successfully\"\n  },\n  \"data\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Toggle Schedule Completion",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/schedules/{{scheduleId}}/toggle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "schedules",
+                "{{scheduleId}}",
+                "toggle"
+              ]
+            },
+            "description": "Toggle schedule completion status"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/schedules/{{scheduleId}}/toggle",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "schedules",
+                    "{{scheduleId}}",
+                    "toggle"
+                  ]
+                },
+                "description": "Toggle schedule completion status"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"id\": \"sched-1\",\n    \"date\": \"2026-05-20\",\n    \"time\": \"07:00\",\n    \"title\": \"Updated Schedule\",\n    \"duration\": \"30 min\",\n    \"type\": \"workout\",\n    \"completed\": true,\n    \"notes\": \"\",\n    \"createdAt\": \"2026-05-19T10:00:00Z\",\n    \"updatedAt\": \"2026-05-22T00:00:00Z\"\n  }\n}"
+            }
+          ]
+        }
+      ],
+      "description": "Schedule management endpoints"
+    },
+    {
+      "name": "Goals",
+      "item": [
+        {
+          "name": "Get All Goals",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/goals",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "goals"
+              ]
+            },
+            "description": "Get all goals"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/goals",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "goals"
+                  ]
+                },
+                "description": "Get all goals"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": [\n    { \"id\": \"goal-1\", \"title\": \"Complete 20 workouts this month\", \"type\": \"workouts\", \"target\": 20, \"current\": 14, \"unit\": \"sessions\", \"period\": \"monthly\", \"deadline\": \"2026-05-31\", \"completed\": false, \"createdAt\": \"2026-05-01T00:00:00Z\", \"updatedAt\": \"2026-05-18T10:00:00Z\" },\n    { \"id\": \"goal-2\", \"title\": \"Burn 10,000 calories this month\", \"type\": \"calories\", \"target\": 10000, \"current\": 7200, \"unit\": \"kcal\", \"period\": \"monthly\", \"deadline\": \"2026-05-31\", \"completed\": false, \"createdAt\": \"2026-05-01T00:00:00Z\", \"updatedAt\": \"2026-05-18T10:00:00Z\" },\n    { \"id\": \"goal-3\", \"title\": \"Lift 50,000 lbs total volume this week\", \"type\": \"volume\", \"target\": 50000, \"current\": 50000, \"unit\": \"lbs\", \"period\": \"weekly\", \"deadline\": \"2026-05-25\", \"completed\": true, \"createdAt\": \"2026-05-19T00:00:00Z\", \"updatedAt\": \"2026-05-20T08:00:00Z\" },\n    { \"id\": \"goal-4\", \"title\": \"Maintain 7-day workout streak\", \"type\": \"streak\", \"target\": 7, \"current\": 5, \"unit\": \"days\", \"period\": \"one-time\", \"deadline\": \"\", \"completed\": false, \"createdAt\": \"2026-05-16T00:00:00Z\", \"updatedAt\": \"2026-05-20T06:30:00Z\" },\n    { \"id\": \"goal-5\", \"title\": \"Run 100 miles this month\", \"type\": \"custom\", \"target\": 100, \"current\": 62, \"unit\": \"miles\", \"period\": \"monthly\", \"deadline\": \"2026-05-31\", \"completed\": false, \"createdAt\": \"2026-05-01T00:00:00Z\", \"updatedAt\": \"2026-05-18T10:00:00Z\" }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Goal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Complete 20 workouts this month\",\n  \"type\": \"workouts\",\n  \"target\": 20,\n  \"unit\": \"sessions\",\n  \"period\": \"monthly\",\n  \"deadline\": \"2026-05-31\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/goals",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "goals"
+              ]
+            },
+            "description": "Create a new goal"
+          },
+          "response": [
+            {
+              "name": "Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Complete 20 workouts this month\",\n  \"type\": \"workouts\",\n  \"target\": 20,\n  \"unit\": \"sessions\",\n  \"period\": \"monthly\",\n  \"deadline\": \"2026-05-31\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/goals",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "goals"
+                  ]
+                },
+                "description": "Create a new goal"
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Created successfully\"\n  },\n  \"data\": {\n    \"id\": \"goal-new\",\n    \"title\": \"Complete 20 workouts this month\",\n    \"type\": \"workouts\",\n    \"target\": 20,\n    \"current\": 0,\n    \"unit\": \"sessions\",\n    \"period\": \"monthly\",\n    \"deadline\": \"2026-05-31\",\n    \"completed\": false,\n    \"createdAt\": \"2026-05-22T00:00:00Z\",\n    \"updatedAt\": \"2026-05-22T00:00:00Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Goal By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/goals/{{goalId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "goals",
+                "{{goalId}}"
+              ]
+            },
+            "description": "Get a goal by ID"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/goals/{{goalId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "goals",
+                    "{{goalId}}"
+                  ]
+                },
+                "description": "Get a goal by ID"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"id\": \"goal-1\",\n    \"title\": \"Complete 20 workouts this month\",\n    \"type\": \"workouts\",\n    \"target\": 20,\n    \"current\": 14,\n    \"unit\": \"sessions\",\n    \"period\": \"monthly\",\n    \"deadline\": \"2026-05-31\",\n    \"completed\": false,\n    \"createdAt\": \"2026-05-01T00:00:00Z\",\n    \"updatedAt\": \"2026-05-18T10:00:00Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Goal",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Complete 20 workouts this month\",\n  \"type\": \"workouts\",\n  \"target\": 25,\n  \"current\": 14,\n  \"unit\": \"sessions\",\n  \"period\": \"monthly\",\n  \"deadline\": \"2026-06-30\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/goals/{{goalId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "goals",
+                "{{goalId}}"
+              ]
+            },
+            "description": "Update an existing goal"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Complete 20 workouts this month\",\n  \"type\": \"workouts\",\n  \"target\": 25,\n  \"current\": 14,\n  \"unit\": \"sessions\",\n  \"period\": \"monthly\",\n  \"deadline\": \"2026-06-30\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/goals/{{goalId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "goals",
+                    "{{goalId}}"
+                  ]
+                },
+                "description": "Update an existing goal"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"id\": \"goal-1\",\n    \"title\": \"Complete 20 workouts this month\",\n    \"type\": \"workouts\",\n    \"target\": 25,\n    \"current\": 14,\n    \"unit\": \"sessions\",\n    \"period\": \"monthly\",\n    \"deadline\": \"2026-06-30\",\n    \"completed\": false,\n    \"createdAt\": \"2026-05-01T00:00:00Z\",\n    \"updatedAt\": \"2026-05-22T00:00:00Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Goal",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/goals/{{goalId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "goals",
+                "{{goalId}}"
+              ]
+            },
+            "description": "Delete a goal"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/goals/{{goalId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "goals",
+                    "{{goalId}}"
+                  ]
+                },
+                "description": "Delete a goal"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Deleted successfully\"\n  },\n  \"data\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Toggle Goal Completion",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/goals/{{goalId}}/toggle",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "goals",
+                "{{goalId}}",
+                "toggle"
+              ]
+            },
+            "description": "Toggle goal completion status"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/goals/{{goalId}}/toggle",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "goals",
+                    "{{goalId}}",
+                    "toggle"
+                  ]
+                },
+                "description": "Toggle goal completion status"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"id\": \"goal-1\",\n    \"title\": \"Updated Goal\",\n    \"type\": \"workouts\",\n    \"target\": 20,\n    \"current\": 20,\n    \"unit\": \"sessions\",\n    \"period\": \"monthly\",\n    \"deadline\": \"2026-05-31\",\n    \"completed\": true,\n    \"createdAt\": \"2026-05-01T00:00:00Z\",\n    \"updatedAt\": \"2026-05-22T00:00:00Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Goal Progress",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"current\": 16\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/goals/{{goalId}}/progress",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "goals",
+                "{{goalId}}",
+                "progress"
+              ]
+            },
+            "description": "Update goal progress value"
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{accessToken}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"current\": 16\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/goals/{{goalId}}/progress",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "goals",
+                    "{{goalId}}",
+                    "progress"
+                  ]
+                },
+                "description": "Update goal progress value"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"transaction\": {\n    \"status_code\": \"00000\",\n    \"status_desc\": \"Success\"\n  },\n  \"data\": {\n    \"id\": \"goal-1\",\n    \"title\": \"Updated Goal\",\n    \"type\": \"workouts\",\n    \"target\": 20,\n    \"current\": 16,\n    \"unit\": \"sessions\",\n    \"period\": \"monthly\",\n    \"deadline\": \"2026-05-31\",\n    \"completed\": false,\n    \"createdAt\": \"2026-05-01T00:00:00Z\",\n    \"updatedAt\": \"2026-05-22T00:00:00Z\"\n  }\n}"
+            }
+          ]
+        }
+      ],
+      "description": "Goal management endpoints"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "workoutId",
+      "value": "wo-001"
+    },
+    {
+      "key": "exerciseId",
+      "value": "ex-001"
+    },
+    {
+      "key": "scheduleId",
+      "value": "sched-1"
+    },
+    {
+      "key": "goalId",
+      "value": "goal-1"
+    },
+    {
+      "key": "chatSessionId",
+      "value": "session-1234"
+    },
+    {
+      "key": "accessAithleteToken",
+      "value": ""
+    },
+    {
+      "key": "refreshAithleteToken",
+      "value": ""
+    }
+  ]
+}

@@ -267,15 +267,15 @@ interfaces/http/handler/<domain>/<endpoint>_test.go         — Handler tests (h
 
 **Phase 2 — Application Layer**
 
-- [ ] **TDD**: Write failing use case tests for ExerciseUseCase
-- [ ] Define ExerciseUseCase interface
-- [ ] Define Exercise DTOs
-- [ ] Implement ExerciseUseCase
+- [x] **TDD**: Write failing use case tests for ExerciseUseCase
+- [x] Define ExerciseUseCase interfaces
+- [x] Define Exercise DTOs
+- [x] Implement ExerciseUseCase
 
 **Phase 3 — Dependency Injection**
 
-- [ ] Implement ExerciseRepository (infrastructure layer)
-- [ ] Replace mock provider with real ExerciseUseCase in ExerciseHandler
+- [x] Implement ExerciseRepository (infrastructure layer — PostgreSQL + mock dev fallback)
+- [x] Replace mock provider with real ExerciseUseCase in ExerciseHandler
 
 ---
 
@@ -310,7 +310,7 @@ interfaces/http/handler/<domain>/<endpoint>_test.go         — Handler tests (h
 - [ ] Implement database migrations for all entities
   └── [x] `users` — `migrations/000001_create_users_table.up.sql` (id UUID, email, name, password, avatar, birthday, gender, timestamps)
   └── [x] `workouts` — `migrations/000002_create_workouts_tables.up.sql` (id UUID, user_id FK, name, date, duration, weight_unit, notes, completed, calories, avg_heart_rate, exercises JSONB, timestamps)
-  └── [ ] `exercises` — `migrations/000003_create_exercises_table.up.sql` (id UUID, name, description, muscle_group, equipment, difficulty, instructions TEXT[], image_url, timestamps)
+  └── [x] `exercises` — `migrations/000003_create_exercises_table.up.sql` (id UUID, name, description, muscle_group, equipment, difficulty, instructions TEXT[], image_url, timestamps)
   └── [x] `schedules` — `migrations/000004_create_schedules_table.up.sql` (id UUID, user_id FK, date, time, title, duration, type, notes, completed, timestamps)
   └── [x] `goals` — `migrations/000005_create_goals_table.up.sql` (id UUID, user_id FK, title, type, target, unit, period, deadline, current, completed, timestamps)
   └── [x] `progress` — `migrations/000006_create_progress_tables.up.sql` (body_weight: id UUID, user_id FK, weight, body_fat_percentage, date, timestamps; strength_progression: id UUID, user_id FK, exercise_id FK, weight, reps, date, timestamps; consistency: id UUID, user_id FK, date, worked_out BOOLEAN, timestamps; muscle_volume: id UUID, user_id FK, date, muscle_group, total_volume, timestamps)

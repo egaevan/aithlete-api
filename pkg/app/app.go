@@ -4,6 +4,7 @@ import (
 	"context"
 
 	authuc "github.com/aithlete/aithlete-api/application/usecase/auth"
+	exerciseuc "github.com/aithlete/aithlete-api/application/usecase/exercise"
 	goaluc "github.com/aithlete/aithlete-api/application/usecase/goal"
 	profileuc "github.com/aithlete/aithlete-api/application/usecase/profile"
 	progressuc "github.com/aithlete/aithlete-api/application/usecase/progress"
@@ -17,6 +18,7 @@ import (
 	"github.com/aithlete/aithlete-api/infrastructure/logger"
 	"github.com/aithlete/aithlete-api/interfaces/http/handler"
 	authhandler "github.com/aithlete/aithlete-api/interfaces/http/handler/auth"
+	exercisehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/exercise"
 	goalhandler "github.com/aithlete/aithlete-api/interfaces/http/handler/goal"
 	progresshandler "github.com/aithlete/aithlete-api/interfaces/http/handler/progress"
 	profilehandler "github.com/aithlete/aithlete-api/interfaces/http/handler/profile"
@@ -117,6 +119,17 @@ func Bootstrap(l *logger.Logger) Dependencies {
 	toggleGoalUC := goaluc.NewToggleGoalUseCase(goalRepo)
 	updateGoalProgressUC := goaluc.NewUpdateGoalProgressUseCase(goalRepo)
 
+	var exerciseRepo repository.ExerciseRepository
+	if pool != nil {
+		exerciseRepo = database.NewExerciseRepository(pool)
+	} else {
+		exerciseRepo = repository.NewMockExerciseRepository()
+	}
+
+	listExercisesUC := exerciseuc.NewListExercisesUseCase(exerciseRepo)
+	getExerciseUC := exerciseuc.NewGetExerciseUseCase(exerciseRepo)
+	listMuscleGroupsUC := exerciseuc.NewListMuscleGroupsUseCase()
+
 	provider := mock.NewMockProvider()
 
 	return Dependencies{
@@ -144,7 +157,7 @@ func Bootstrap(l *logger.Logger) Dependencies {
 				updateGoalUC, deleteGoalUC, toggleGoalUC,
 				updateGoalProgressUC,
 			),
-			Exercise: handler.NewExerciseHandler(provider),
+			Exercise: exercisehandler.New(listExercisesUC, getExerciseUC, listMuscleGroupsUC),
 			AI:       handler.NewAIHandler(provider),
 			Analytics: handler.NewAnalyticsHandler(provider),
 		},

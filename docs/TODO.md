@@ -63,8 +63,8 @@ interfaces/http/handler/<domain>/<endpoint>_test.go         — Handler tests (h
 - [x] Profile API
 - [x] Goal API
 - [ ] AI API
-- [ ] Analytics API
-- [ ] Exercise API
+- [x] Analytics API
+- [x] Exercise API
 
 ---
 
@@ -238,21 +238,21 @@ interfaces/http/handler/<domain>/<endpoint>_test.go         — Handler tests (h
 **Phase 1 — Domain Layer**
 
 - [x] Create Analytics domain entities (Dashboard, WeeklyVolume, etc.)
-- [ ] **TDD**: Write domain tests for Analytics entities
+- [x] **TDD**: Write domain tests for Analytics entities
 - [x] Define AnalyticsRepository interface in domain layer
-- [x] Define Analytics domain errors (ErrNoData)
+- [x] Define Analytics domain errors (ErrNoAnalyticsData)
 
 **Phase 2 — Application Layer**
 
-- [ ] **TDD**: Write failing use case tests for AnalyticsUseCase
-- [ ] Define AnalyticsUseCase interface
-- [ ] Define Analytics DTOs
-- [ ] Implement AnalyticsUseCase
+- [x] **TDD**: Write failing use case tests for AnalyticsUseCase (11 use case tests)
+- [x] Define AnalyticsUseCase interfaces
+- [x] Define Analytics DTOs
+- [x] Implement AnalyticsUseCase (6 use cases: Dashboard, WeeklyProgress, Streak, Overview, WeeklyVolume, MuscleVolumeDistribution)
 
 **Phase 3 — Dependency Injection**
 
-- [ ] Implement AnalyticsRepository (infrastructure layer)
-- [ ] Replace mock provider with real AnalyticsUseCase in AnalyticsHandler
+- [x] Implement AnalyticsRepository (infrastructure layer — PostgreSQL query-based + mock dev fallback)
+- [x] Replace mock provider with real AnalyticsUseCase in AnalyticsHandler
 
 ---
 
